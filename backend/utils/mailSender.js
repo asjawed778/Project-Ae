@@ -11,7 +11,7 @@ exports.mailSender = async (email, otp, body) => {
             }
         })
         let info = await transporter.sendMail({
-            from: `UrbanSole`,
+            from: `AbilitaEdge`,
             to: `${email}`,
             subject: `OTP Varification`,
             html: `${body}`

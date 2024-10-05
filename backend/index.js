@@ -28,8 +28,8 @@ app.use(fileupload({
     tempFileDir : '/tmp/'
 }));
 
-const router = require('./routes/routes');
-app.use('/api/v1', router);
+const userRoute = require('./routes/userRoute');
+app.use('/api/v1', userRoute);
 
 app.listen(PORT, () => { 
     console.log(`Server is Running on the PORT: ${PORT}`);
