@@ -19,10 +19,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.json());
 
-// const dbConnect = require('./config/dbConnect');
-// dbConnect();
-
-
+const dbConnect = require('./config/dbConnect');
+dbConnect();
 
 const fileupload = require('express-fileupload');
 app.use(fileupload({
@@ -31,7 +29,6 @@ app.use(fileupload({
 }));
 
 const router = require('./routes/routes');
-// const { mailSender } = require('./Utils/mailSender');
 app.use('/api/v1', router);
 
 app.listen(PORT, () => { 
