@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require('body-parser');
 
 app.use(cookieParser());
- 
+
 app.use(cors({
     origin: process.env.BASE_URL,
     credentials: true,
@@ -24,14 +24,17 @@ dbConnect();
 
 const fileupload = require('express-fileupload');
 app.use(fileupload({
-    useTempFiles : true,
-    tempFileDir : '/tmp/'
+    useTempFiles: true,
+    tempFileDir: '/tmp/'
 }));
 
 const userRoute = require('./routes/userRoute');
 app.use('/api/v1', userRoute);
 
-app.listen(PORT, () => { 
+const errorMiddlerware = require('./middlewares/errorMiddleware');
+app.use(errorMiddlerware);
+
+app.listen(PORT, () => {
     console.log(`Server is Running on the PORT: ${PORT}`);
 })
 
