@@ -1,0 +1,161 @@
+
+.auth-page {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    min-height: 100vh;
+    background-color: black;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.auth-logo-section {
+    margin-bottom: 30px;
+}
+
+.auth-logo {
+    font-size: 20rem;
+    font-weight: bold;
+    color: #d9d9d9;
+}
+
+.auth-content-section {
+    text-align: center;
+    color: white;
+    width: 100%;
+    max-width: 380px;
+}
+
+.auth-main-heading {
+    font-size: 2.2rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.auth-subheading {
+    font-size: 1.3rem;
+    margin-bottom: 35px;
+}
+
+.auth-signup-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    color: #000;
+    border: none;
+    border-radius: 25px;
+    width: 100%;
+    padding: 12px 0;
+    margin-bottom: 15px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+}
+
+.auth-signup-btn img {
+    margin-right: 8px;
+    height: 20px;
+}
+
+.auth-google-btn:hover,
+.auth-apple-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.auth-divider {
+    display: flex;
+    align-items: center;
+    margin: 18px 0;
+    color: white;
+    font-size: 1rem;
+}
+
+.auth-divider hr {
+    flex-grow: 1;
+    border: none;
+    border-top: 1px solid #6e6e6e;
+}
+
+.auth-divider span {
+    padding: 0 10px;
+    color: #b0b0b0;
+}
+
+.auth-create-account-btn {
+    background-color: #1d9bf0;
+    border: none;
+    color: white;
+    border-radius: 25px;
+    width: 100%;
+    padding: 12px 0;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: background-color 0.2s;
+}
+
+.auth-create-account-btn:hover {
+    background-color: #1991e6;
+}
+
+.auth-terms {
+    font-size: 0.85rem;
+    color: #6e6e6e;
+    margin-top: 18px;
+}
+
+.auth-terms a {
+    color: #1d9bf0;
+}
+
+.auth-already-account {
+    font-size: 1.1rem;
+    color: white;
+    margin-top: 25px;
+}
+
+.auth-signin-btn {
+    background-color: transparent;
+    border: 1px solid #1d9bf0;
+    color: #1d9bf0;
+    padding: 10px 0;
+    width: 100%;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.auth-signin-btn:hover {
+    background-color: #1d9bf0;
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .auth-page {
+        padding: 20px;
+    }
+
+    .auth-logo {
+        font-size: 6rem;
+
+    }
+
+    .auth-main-heading {
+        font-size: 1.8rem;
+
+    }
+
+    .auth-subheading {
+        font-size: 1.1rem;
+    }
+
+    .auth-signup-btn,
+    .auth-create-account-btn,
+    .auth-signin-btn {
+        padding: 10px 0;
+        font-size: 0.9rem;
+    }
+}
