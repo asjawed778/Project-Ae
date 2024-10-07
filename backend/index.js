@@ -5,6 +5,7 @@ const cors = require('cors');
 const PORT = process.env.PORT || 5000;
 const cookieParser = require("cookie-parser");
 const bodyParser = require('body-parser');
+const session = require('express-session');
 
 app.use(cookieParser());
 
@@ -19,6 +20,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.json());
 
+app.use(session({
+    secret: process.env.EXPRESS_SESSSION_SECRET_KEY,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: process.env.MODE === 'production'
+    }
+}));
+
+
+
 const dbConnect = require('./config/dbConnect');
 dbConnect();
 
@@ -28,8 +40,8 @@ app.use(fileupload({
     tempFileDir: '/tmp/'
 }));
 
-const userRoute = require('./routes/userRoute');
-app.use('/api/v1', userRoute);
+const userRoutes = require('./routes/userRoutes');
+app.use('/api/v1', userRoutes);
 
 const errorMiddlerware = require('./middlewares/errorMiddleware');
 app.use(errorMiddlerware);
