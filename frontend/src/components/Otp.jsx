@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import { useNavigate } from "react-router-dom"; 
 import "./Otp.css"; 
 
@@ -38,6 +39,33 @@ function Otp() {
         alert("OTP verification failed. Please try again.");
       }
 
+import { useNavigate } from "react-router-dom";
+import "./Otp.css";
+
+function Otp() {
+
+  const [otp, setOtp] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // Loading state
+
+  const navigate = useNavigate();
+
+  const handleVerify = async (event) => {
+    event.preventDefault();
+    setIsLoading(true);
+
+    try {
+    // Send the OTP to the backend for verification
+    const response = await fetch("http://backend-url.com/verify-otp", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ otp }), 
+    });
+
+    const data = await response.json() ;
+
+
     } catch (error) {
 
       console.error("Error verifying OTP:", error);
@@ -52,10 +80,16 @@ function Otp() {
   return (
 
     <div className="otp_wrapper">
+
       
       <div className="otp_box">
         
         <p onClick={closePage}>X</p>
+
+
+      <div className="otp_box">
+
+
         <h2>Verify OTP</h2>
 
         <form onSubmit={handleVerify}>
@@ -80,7 +114,9 @@ function Otp() {
         </form>
 
       </div>
+
       
+
     </div>
 
   );

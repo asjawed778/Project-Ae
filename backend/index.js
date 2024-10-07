@@ -5,9 +5,10 @@ const cors = require('cors');
 const PORT = process.env.PORT || 5000;
 const cookieParser = require("cookie-parser");
 const bodyParser = require('body-parser');
+const session = require('express-session');
 
 app.use(cookieParser());
- 
+
 app.use(cors({
     origin: process.env.BASE_URL,
     credentials: true,
@@ -19,22 +20,33 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.json());
 
-// const dbConnect = require('./config/dbConnect');
-// dbConnect();
+app.use(session({
+    secret: process.env.EXPRESS_SESSSION_SECRET_KEY,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: process.env.MODE === 'production'
+    }
+}));
 
 
+
+const dbConnect = require('./config/dbConnect');
+dbConnect();
 
 const fileupload = require('express-fileupload');
 app.use(fileupload({
-    useTempFiles : true,
-    tempFileDir : '/tmp/'
+    useTempFiles: true,
+    tempFileDir: '/tmp/'
 }));
 
-const router = require('./routes/routes');
-// const { mailSender } = require('./Utils/mailSender');
-app.use('/api/v1', router);
+const userRoutes = require('./routes/userRoutes');
+app.use('/api/v1', userRoutes);
 
-app.listen(PORT, () => { 
+const errorMiddlerware = require('./middlewares/errorMiddleware');
+app.use(errorMiddlerware);
+
+app.listen(PORT, () => {
     console.log(`Server is Running on the PORT: ${PORT}`);
 })
 
