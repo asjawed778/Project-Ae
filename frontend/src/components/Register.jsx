@@ -11,8 +11,9 @@ function Register() {
   }
 
   const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("") ;
+  const [confirmpassword, setConfirmPassword] = useState("") ;
 
   // Function to handle form submission
   const handleSubmit = async (event) => {
@@ -20,8 +21,8 @@ function Register() {
 
     const userData = {
       name: name,
-      phone: phone,
       email: email,
+      password:password 
     };
 
     // Send the data to the backend
@@ -67,18 +68,6 @@ function Register() {
             />
           </div>
 
-          {/* Phone Input */}
-          <div className="form_group">
-            <label htmlFor="phone">Phone</label>
-            <input
-              type="text"
-              id="phone"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              required
-            />
-          </div>
-
           {/* Email Input */}
           <div className="form_group">
             <label htmlFor="email">Email</label>
@@ -91,8 +80,32 @@ function Register() {
             />
           </div>
 
+           {/* Phone Input */}
+           <div className="form_group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="phone"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+           {/* Phone Input */}
+           <div className="form_group">
+            <label htmlFor="password">Confirm Password</label>
+            <input
+              type="password"
+              id="phone"
+              value={confirmpassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+          </div>
+
           {/* Submit Button */}
-          <button type="submit" className="submit_btn">Login</button>
+          <button type="submit" className="submit_btn">Register</button>
         </form>
       </div>
     </div>

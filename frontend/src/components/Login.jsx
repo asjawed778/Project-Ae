@@ -11,16 +11,17 @@ function Login() {
     navigate('/') ;
   }
 
-  const [name, setName] = useState("");
+  
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   // Function to handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const userData = {
-      name: name,
       email: email,
+      password: password
     };
 
     // Send the data to the backend
@@ -51,17 +52,17 @@ function Login() {
       
       <div className="login_box">
         <p onClick={closeModel}>X</p>
-        
+
         <h2>Login</h2>
         <form onSubmit={handleSubmit}>
           {/* Name Input */}
           <div className="form_group">
-            <label htmlFor="name">Name</label>
+            <label htmlFor="email">Email</label>
             <input
               type="text"
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -69,12 +70,12 @@ function Login() {
 
           {/* Email Input */}
           <div className="form_group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="password">Password</label>
             <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
