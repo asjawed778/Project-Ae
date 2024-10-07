@@ -9,26 +9,37 @@
     margin: 0;
   } */
   
+
+body{
+ background-color: rgba(0, 0, 0, 0.6);
+} 
+ 
+
 /* body{
   background-color: #555;
 } */
+
   .login_container {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #555;
+
+    /* background-color: #555; */
+    
+    background-color: rgb(36,45,52,255) ;
     
     
   }
   
-  .login_box {
-    background-color: rgb(42, 26, 26);
+  .register_box {
+    /* background-color: rgb(42, 26, 26); */
+    background-color: rgba(0, 0, 0, 0.6);
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     max-width: 400px;
-    height: 500px;
+    height: 550px;
     width: 100%;
     transition: all 0.3s ease;
     
@@ -36,6 +47,55 @@
       cursor: pointer;
     }
     
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  }
+  
+  .register_box:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  }
+  
+  .register_box {
+  h2 {
+    margin-bottom: 20px;
+    font-size: 35px;
+    font-weight: 600;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: left;
+    color: white;
+  }
+}
+
+  .login_box {
+    /* background-color: rgb(42, 26, 26); */
+    background-color: rgba(0, 0, 0, 0.6);
+
+    background-color: #555;
+    
+    
+  }
+  
+  .login_box {
+    background-color: rgb(42, 26, 26);
+
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+
+    height: 400px;
+
+    height: 500px;
+
+    width: 100%;
+    transition: all 0.3s ease;
+    
+    p{
+      cursor: pointer;
+    }
+    
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+
   }
   
   .login_box:hover {
@@ -52,7 +112,7 @@
     color: white;
   }
 }
-  
+
   .form_group {
     margin-bottom: 20px;
   }
@@ -64,6 +124,7 @@
     color : white;
   }
   
+
   .form_group input {
     
     width: 90%;
@@ -71,13 +132,25 @@
     border: 1px solid #ddd;
     border-radius: 8px;
     font-size: 16px;
+
+    /* background-color: #f9f9f9; */
+    background-color: rgba(255, 255, 255, 0.9); /*White with reduced opacity */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Small shadow for detail */
+    transition: all 0.3s ease;
+    color: grey;
+    
+
     background-color: #f9f9f9;
     transition: all 0.3s ease;
     color: grey;
+
   }
   
   .form_group input:focus {
     border-color: #3498db;
+
+    border-width: 2px;
+
     background-color: #fff;
     outline: none;
   }
