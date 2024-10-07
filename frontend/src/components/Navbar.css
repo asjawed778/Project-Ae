@@ -1,0 +1,215 @@
+/* nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-top: 30vh;
+}
+
+.left {
+  img {
+    width: 30vw ;
+  }
+}
+
+.right  {
+  color: white;
+} */
+
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: black;
+  color: rgb(214, 187, 187);
+}
+
+.login-page {
+  display: flex;
+  justify-content: space-evenly;
+  margin-left: -100px;
+  
+  align-items: center;
+  min-height: 100vh;
+  background-color: black;
+}
+
+.logo-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: -150px;
+}
+
+.logo {
+  font-size: 30vw;
+  color: #ffffff;
+}
+
+.content-section {
+  text-align: center;
+  width: 20vw;
+  min-width: 300px;
+  /* max-width: 400px; */
+  
+}
+
+h1 {
+  min-width: 50px;
+  font-size: 5vw;
+  margin-bottom: 10px;
+  font-weight: 800;
+  text-align: left;
+  width: max-content;
+  
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: left;
+  color: #999999;
+  font-weight: 800;
+}
+
+.signup-btn, .create-account-btn, .signin-btn {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  height: 40px;
+}
+
+.google-btn {
+  background-color: white;
+  color: rgb(130, 93, 93);
+  border-radius: 20px;
+}
+
+.apple-btn {
+  background-color: white;
+  color: black;
+  border-radius: 20px;
+}
+
+.create-account-btn {
+  background-color: #1a81c5;
+  color: white;
+  border-radius: 20px;
+}
+
+.signin-btn {
+  background-color: transparent;
+  color: #1a81c5;
+  border: 1px solid #ffffff;
+  border-radius: 20px;
+  font-weight: bolder;
+}
+
+ .divider {
+  margin: 10px 0px ;
+  color: #cccccc;
+} 
+
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 300px;
+ 
+  hr {
+    width: 45%;
+    
+    /* min-width: 100px; */
+    height: 0.5%;
+    background-color: #999999;
+    
+  }
+}
+
+.terms {
+  font-size: 12px;
+  text-align: left;
+  color: #999999;
+  margin-top: 10px;
+}
+
+.terms a {
+  color: #1d9bf0;
+  text-decoration: none;
+}
+
+.terms a:hover {
+  text-decoration: underline;
+}
+
+h3 {
+  font-size: 16px;
+  margin-top: 30px;
+  text-align: left;
+}
+
+button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .login-page {
+    flex-direction: column; 
+    align-items: flex-start;
+    justify-content: center;
+    margin-left: 10%;/* Switch to column on smaller screens */
+
+    transition-delay: 0.5s;
+  }
+
+  .logo {
+    font-size: 80px;
+  }
+
+  .content-section {
+    display: flex;
+    align-items: flex-start;
+    justify-content: left;
+    flex-direction: column;
+    width: 40vw;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40vw; /* Make the divider full-width */
+  }
+  .divider hr {
+    width: 80vw; /* Adjust the width of the divider to make it more visible on smaller screens */
+  }
+
+  .content-section {
+    margin-top: -40px;
+  }
+
+  h1{
+    font-size: 50px;
+  }
+
+  
+}
+
+@media (max-width: 320px) {
+  
+  h1 {
+    width: auto;
+    font-size: 50px;
+  }
+
+  .login-page{
+    margin-left:10px
+  }
+}
