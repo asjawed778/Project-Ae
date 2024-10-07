@@ -3,7 +3,7 @@ const router = express.Router();
 
 
 const { auth } = require('../middlewares/auth');
-const { sendSignupOTP, signup } = require('../controllers/userAuth/registerUser');
+const { sendSignupOTP, signupUser } = require('../controllers/userAuth/registerUser');
 const { login } = require('../controllers/userAuth/loginUser');
 const { logout } = require('../controllers/userAuth/logoutUser');
 const { updatePassword } = require('../controllers/userAuth/updatePassword');
@@ -11,7 +11,7 @@ const { sendForgotPasswordOTP, verifyForgotPasswordOTP } = require('../controlle
 
 
 router.post('/send-signup-otp', sendSignupOTP);
-router.post('/signup', signup);
+router.post('/verify-signup-otp', signupUser);
 router.post('/login', login);
 router.post('/logout', logout);
 router.post('/update-password', auth, updatePassword);

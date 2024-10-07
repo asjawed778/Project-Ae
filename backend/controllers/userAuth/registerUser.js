@@ -46,7 +46,7 @@ exports.sendSignupOTP = async (req, res, next) => {
     }
 };
 
-exports.signup = async (req, res, next) => {
+exports.signupUser = async (req, res, next) => {
     try {
         const { name, email, password, confirmPassword, otp } = req.body;
 
