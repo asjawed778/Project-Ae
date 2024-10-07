@@ -6,12 +6,13 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #555;
+    /* background-color: #555; */
+    background-color: rgb(36,45,52,255) ;
     opacity: 0.9;
   }
   
   .otp_box {
-    background-color: #ffffff; /* White background for the form */
+    background-color: black; /* White background for the form */
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
@@ -20,6 +21,12 @@
     transition: all 0.3s ease;
   }
   
+  .otp_box {
+    p{
+      cursor: pointer;
+      margin: -30px 0px 0px -30px;
+    }
+  }
   .otp_box:hover {
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
   }

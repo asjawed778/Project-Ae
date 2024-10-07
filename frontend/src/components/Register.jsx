@@ -19,6 +19,11 @@ function Register() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    if( password !=  confirmpassword ){
+      alert("You have entered wrong password");
+    }
+
+
     const userData = {
       name: name,
       email: email,
@@ -51,7 +56,7 @@ function Register() {
   return (
     <div className="login_container">
 
-      <div className="login_box">
+      <div className="register_box">
         <p onClick={closeModel}>X</p>
         <h2>Create your account</h2>
 

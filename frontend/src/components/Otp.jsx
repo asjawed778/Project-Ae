@@ -9,6 +9,10 @@ function Otp() {
   
   const navigate = useNavigate(); 
 
+  const closePage = () => {
+    navigate("/register")
+  }
+
   const handleVerify = async (event) => {
     event.preventDefault();
     setIsLoading(true); 
@@ -51,6 +55,7 @@ function Otp() {
       
       <div className="otp_box">
         
+        <p onClick={closePage}>X</p>
         <h2>Verify OTP</h2>
 
         <form onSubmit={handleVerify}>

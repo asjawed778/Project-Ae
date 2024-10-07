@@ -81,7 +81,10 @@ h2 {
   border-radius: 5px;
   cursor: pointer;
   height: 40px;
+  
 }
+
+ 
 
 .google-btn {
   background-color: white;
@@ -96,6 +99,7 @@ h2 {
 }
 
 .create-account-btn {
+  text-decoration: none;
   background-color: #1a81c5;
   color: white;
   border-radius: 20px;
@@ -212,4 +216,9 @@ button {
   .login-page{
     margin-left:10px
   }
+}
+
+.btn-link{
+  color: white;
+  text-decoration: none;
 }

@@ -36,12 +36,21 @@ function Navbar() {
           or
           <hr/>
         </div>
-        <button className="create-account-btn"><Link to="/register">Create account</Link></button>
+
+        <button className="create-account-btn">
+          <Link to="/register" className="btn-link">Create account</Link>
+        </button>
+
         <p className="terms">
           By signing up, you agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>, including <a href="#">Cookie Use</a>.
         </p>
+
         <h3>Already have an account?</h3>
-        <button className="signin-btn"><Link to="/login">Sign in</Link></button>
+
+        <button className="signin-btn">
+          <Link to="/login" className="btn-link">Sign in</Link>
+        </button>
+
       </div>
 
   </div>
