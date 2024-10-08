@@ -1,16 +1,96 @@
-
-.otp-model-container {
-    position: fixed; 
+.otp-modal-overlay {
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.2); 
-    display: flex; 
+    background-color: rgba(0, 51, 102, 0.7);
+    display: flex;
     justify-content: center;
-    align-items: center; 
-    backdrop-filter: blur(5px); 
-    z-index: 1000; 
+    align-items: center;
+    z-index: 1000;
 }
 
+.otp-modal-container {
+    background-color: #000;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.4);
+    max-width: 450px;
+    text-align: center;
+    color: white;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
 
+.otp-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.otp-modal-header h3 {
+    font-size: 30px;
+    margin: 0;
+}
+
+.close-icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 28px;
+    cursor: pointer;
+    color: #fff;
+}
+
+.otp-modal-description {
+    margin-bottom: 20px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #aaa;
+    text-align: left;
+    width: 100%;
+}
+
+.otp-input-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    gap: 10px;
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.otp-input {
+    background-color: #333;
+    border: 1px solid #555;
+    color: white;
+    font-size: 22px;
+    text-align: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+}
+
+.otp-submit-btn {
+    background-color: #1DA1F2;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.otp-submit-btn:hover {
+    background-color: #1480bf;
+}

@@ -1,22 +1,50 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { RxCross1 } from "react-icons/rx";
-import './SignupModal.css'; // Link to your CSS file
+import './SignupModal.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { sendSignupOTP } from '../services/operations/authApi';
+import ButtonLoading from '../components/common/ButtonLoading';
 
-function SignupModal({ signupModal, setSignupModal }) {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+function SignupModal({ signupModal, setSignupModal, setOtpModal, setSignupData }) {
+    
+    const dispatch = useDispatch();
+    const { loading } = useSelector(store => store.loading);
+    const [signupFormData, setSignupFormData] = useState({
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+    });
 
     if (!signupModal) return null;
 
     const signupModalCloseHandler = () => {
         setSignupModal(false);
     };
-
+    const { name, email, password, confirmPassword } = signupFormData;
     const isFormValid = name && email && password && confirmPassword && (password === confirmPassword);
 
+    const signupFormChangeHandler = (e) => {
+        setSignupFormData((prev) => {
+            return {
+                ...prev,
+                [e.target.name]: e.target.value
+            }
+        })
+    };
+    const signupFormSubmitHander = (e) => {
+        e.preventDefault();
+        setSignupData(signupFormData);
+        // console.log(signupFormData);
+        dispatch(sendSignupOTP(signupFormData, setSignupModal, setOtpModal));
+        setSignupFormData({
+            name: '',
+            email: '',
+            password: '',
+            confirmPassword: ''
+        });
+    }
     return ReactDOM.createPortal(
         <div className="signup-modal-overlay">
             <div className="signup-modal-container">
@@ -25,7 +53,7 @@ function SignupModal({ signupModal, setSignupModal }) {
                 </button>
                 <h2 className="signup-title">Create your account</h2>
 
-                <div className="signup-form">
+                <form className="signup-form" onSubmit={signupFormSubmitHander}>
                     <div className="input-group">
                         <input
                             type="text"
@@ -33,7 +61,8 @@ function SignupModal({ signupModal, setSignupModal }) {
                             placeholder="Name"
                             maxLength="50"
                             value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            name='name'
+                            onChange={signupFormChangeHandler}
                         />
                         <span className="char-counter">{name.length} / 50</span>
                     </div>
@@ -44,7 +73,8 @@ function SignupModal({ signupModal, setSignupModal }) {
                             className="signup-input"
                             placeholder="Email"
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            name='email'
+                            onChange={signupFormChangeHandler}
                         />
                     </div>
 
@@ -54,7 +84,8 @@ function SignupModal({ signupModal, setSignupModal }) {
                             className="signup-input"
                             placeholder="Enter Password"
                             value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            name='password'
+                            onChange={signupFormChangeHandler}
                         />
                     </div>
 
@@ -64,7 +95,8 @@ function SignupModal({ signupModal, setSignupModal }) {
                             className="signup-input"
                             placeholder="Confirm Password"
                             value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            name='confirmPassword'
+                            onChange={signupFormChangeHandler}
                         />
                     </div>
 
@@ -72,9 +104,14 @@ function SignupModal({ signupModal, setSignupModal }) {
                         className="signup-next-btn"
                         disabled={!isFormValid}
                     >
-                        Register
+                        {loading
+                            ?
+                            <ButtonLoading />
+                            :
+                            <p>Register</p>
+                        }
                     </button>
-                </div>
+                </form>
             </div>
         </div>,
         document.getElementById('modal')

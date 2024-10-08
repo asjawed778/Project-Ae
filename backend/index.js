@@ -20,16 +20,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.json());
 
-app.use(session({
-    secret: process.env.EXPRESS_SESSSION_SECRET_KEY,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        secure: process.env.MODE === 'production'
-    }
-}));
-
-
+// app.use(session({
+//     secret: process.env.EXPRESS_SESSSION_SECRET_KEY,
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: {
+//         secure: process.env.MODE === 'production'
+//     }
+// }));
 
 const dbConnect = require('./config/dbConnect');
 dbConnect();

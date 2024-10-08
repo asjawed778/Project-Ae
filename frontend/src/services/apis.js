@@ -2,7 +2,7 @@
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 // USER AUTH ENDPOINTS
-export const endpoints = {
+export const userAuthEndpoints = {
     SEND_SIGNUP_OTP_API: SERVER_URL + "/send-signup-otp",
     VERIFY_SIGNUP_OTP_API: SERVER_URL + "/verify-signup-otp",
     LOGIN_API: SERVER_URL + "/login",

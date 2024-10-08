@@ -3,12 +3,19 @@ import googleImage from '../assets/g_p.jpeg';
 import './AuthPage.css';
 import appleImage from '../assets/a_p.png';
 import SignupModal from '../modals/SignupModal';
+import OTPModal from '../modals/OTPModals';
 
 function AuthPage() {
   const [signupModal, setSignupModal] = useState(false);
+  const [otpModal, setOtpModal] = useState(false);
+  const [signupData, setSignupData] = useState(null);
+
   const createAccountHandler = () => {
     setSignupModal(true);
-  }
+    setOtpModal(false);
+  };
+
+
   return (
     <>
       <div className="auth-page">
@@ -44,7 +51,17 @@ function AuthPage() {
           </button>
         </div>
       </div>
-      <SignupModal signupModal={signupModal} setSignupModal={setSignupModal} />
+      <SignupModal
+        signupModal={signupModal}
+        setSignupModal={setSignupModal}
+        setOtpModal={setOtpModal}
+        setSignupData={setSignupData}
+      />
+      <OTPModal
+        otpModal={otpModal}
+        setOtpModal={setOtpModal}
+        signupData={signupData} 
+      />
     </>
   );
 }
