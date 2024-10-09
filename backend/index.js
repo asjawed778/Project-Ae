@@ -38,11 +38,20 @@ app.use(fileupload({
     tempFileDir: '/tmp/'
 }));
 
-const userRoutes = require('./routes/userRoutes');
-app.use('/api/v1', userRoutes);
+const { cloudinaryConnect } = require('./config/cloudinary');
+cloudinaryConnect();
+
 
 const errorMiddlerware = require('./middlewares/errorMiddleware');
 app.use(errorMiddlerware);
+
+
+const userRoutes = require('./routes/userRoutes');
+const postRoutes = require('./routes/postRoutes');
+app.use('/api/v1', postRoutes);
+app.use('/api/v1', userRoutes);
+
+
 
 app.listen(PORT, () => {
     console.log(`Server is Running on the PORT: ${PORT}`);
