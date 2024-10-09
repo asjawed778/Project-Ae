@@ -1,5 +1,6 @@
 const Post = require('../../models/Post');
-const { uploadFileToCloudinary } = require('../../utils/fileUploader');
+const User = require('../../models/User'); // Import User model
+const { uploadFileToCloudinary } = require('../../utils/cloudinaryUtils');
 
 exports.createPost = async (req, res, next) => {
     try {
@@ -23,7 +24,7 @@ exports.createPost = async (req, res, next) => {
             err.status = 400;
             return next(err);
         }
- 
+
         // Validate content length
         if (content.length > 200) {
             const err = new Error("Content cannot exceed 200 characters.");
@@ -65,6 +66,11 @@ exports.createPost = async (req, res, next) => {
 
         // Save the post to the database
         await newPost.save();
+
+        // Push the new post's ID to the user's posts array
+        await User.findByIdAndUpdate(id, {
+            $push: { posts: newPost._id }
+        });
 
         // Return success response
         return res.status(201).json({

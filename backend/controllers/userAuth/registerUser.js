@@ -72,11 +72,13 @@ exports.signupUser = async (req, res, next) => {
         } catch (error) {
             return next(error);
         }
-
+        const avatarUrl = `${process.env.PROFILE_URL}${name}`;
         let newUser = new User({
             name,
             email,
             password: hashedPassword,
+            avatar: avatarUrl, // Set default avatar URL
+            posts: []
         });
         await newUser.save();
         let user = await User.findOne({ email });

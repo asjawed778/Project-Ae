@@ -40,3 +40,39 @@ exports.uploadFileToCloudinary = async (file, folder, quality) => {
         throw error;
     }
 };
+
+exports.getCloudinaryPublicId = (url) => {
+    const parts = url.split('/');
+    const publicIdWithExtension = parts[parts.length - 1]; 
+    const publicId = publicIdWithExtension.split('.')[0]; 
+    return parts.slice(parts.length - 2, parts.length - 1) + '/' + publicId;
+};
+
+/**
+ * Delete a file from Cloudinary using its public ID.
+ * 
+ * @param {string} publicId - The public ID of the file to delete.
+ * @param {string} resourceType - The type of resource (image, video, etc.). Defaults to 'image'.
+ * 
+ * @returns {Promise<Object>} - Returns the result of the deletion operation.
+ */
+exports.deleteFileFromCloudinary = async (publicId, resourceType = 'image') => {
+    try {
+        // Check if publicId is provided
+        if (!publicId) {
+            throw new Error("Public ID is required to delete a file from Cloudinary");
+        }
+
+        // Delete the file using the public ID
+        const result = await cloudinary.uploader.destroy(publicId, {
+            resource_type: resourceType, // Set resource type (image, video, etc.)
+        });
+
+        // Return the result of the deletion
+        return result;
+    } catch (error) {
+        console.error('Error deleting file from Cloudinary:', error);
+        throw error;
+    }
+};
+

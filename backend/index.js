@@ -42,15 +42,13 @@ const { cloudinaryConnect } = require('./config/cloudinary');
 cloudinaryConnect();
 
 
-const errorMiddlerware = require('./middlewares/errorMiddleware');
-app.use(errorMiddlerware);
-
-
 const userRoutes = require('./routes/userRoutes');
 const postRoutes = require('./routes/postRoutes');
 app.use('/api/v1', postRoutes);
 app.use('/api/v1', userRoutes);
 
+const errorMiddleware = require('./middlewares/errorMiddleware');
+app.use(errorMiddleware);
 
 
 app.listen(PORT, () => {
