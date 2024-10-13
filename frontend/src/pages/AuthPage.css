@@ -136,6 +136,8 @@
 @media (max-width: 768px) {
     .auth-page {
         padding: 20px;
+        display: flex;
+        flex-direction: column;
     }
 
     .auth-logo {

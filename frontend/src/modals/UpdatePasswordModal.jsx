@@ -1,30 +1,53 @@
-import React, { useEffect, useRef, useState } from 'react';
-import ReactDOM from 'react-dom';
+import React, {useEffect, useRef, useState} from 'react' ;
+import ReactDOM from 'react-dom' ;
 import { RxCross2 } from 'react-icons/rx';
 
-import './OTPModals.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux'; 
 import ButtonLoading from '../components/common/ButtonLoading';
-import { verifySignupOTP } from '../services/operations/authApi';
 import { useNavigate } from 'react-router-dom';
 
-function OTPModal({ otpModal, setOtpModal, signupData }) {
+import { updatePassword } from '../services/operations/authApi';
+import './OTPModals.css';
+
+function UpdatePasswordModal({ email, updatePasswordModal, setUpdatePasswordModal, setLoginModal }) {
+    
     const otpInputRefs = useRef([]);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { loading } = useSelector((store) => store.loading);
     const [isOtpComplete, setIsOtpComplete] = useState(false);
+    
+    console.log("your email id",email) ;
+    const [userData, setUserData] = useState({
+        email:email,
+        otp: '',
+        newPassword:'', 
+        confirmNewPassword:'' ,
+    })
+    
+    useEffect(() => {
+        setUserData(prevState => ({
+            ...prevState,
+            email: email // Update email whenever it changes
+        }));
+    }, [email]); // Dependency on email prop
+
+    console.log("your email id", email);
+    console.log("userData", userData.email);
+    
+
+    const { newPassword, confirmNewPassword } = userData;
 
     useEffect(() => {
-        if (otpModal) {
+        if (updatePasswordModal) {
             otpInputRefs.current[0]?.focus();
         }
-    }, [otpModal]);
+    }, [updatePasswordModal]);
 
-    if (!otpModal) return null;
+    if (!updatePasswordModal) return null;
 
     const closeModal = () => {
-        setOtpModal(false);
+        setUpdatePasswordModal(false);
     };
 
     const handleInputChange = (e, index) => {
@@ -44,7 +67,7 @@ function OTPModal({ otpModal, setOtpModal, signupData }) {
         const otpValues = otpInputRefs.current.map(ref => ref.value).join('');
         setIsOtpComplete(otpValues.length === 6);
     };
-
+    
     const handleKeyDown = (e, index) => {
         if (e.key === 'Backspace') {
             if (!otpInputRefs.current[index].value && index > 0) {
@@ -60,14 +83,26 @@ function OTPModal({ otpModal, setOtpModal, signupData }) {
         otpInputRefs.current[index].value = value.length > 1 ? value[value.length - 1] : value;
     };
 
+    const loginFormChangeHandler = (e) => {
+        setUserData( (prev) => {
+            return{
+                ...prev,
+                [e.target.name] : e.target.value
+            }
+        })
+    }
+
     const otpSubmitHandler = (e) => {
         e.preventDefault();
+        console.log("userData", userData) ;
         const otpValues = otpInputRefs.current.map(ref => ref.value).join('');
         const userRegisterData = {
-            ...signupData,
+            ...userData,
             otp: otpValues
         };
-        dispatch(verifySignupOTP(userRegisterData, setOtpModal, navigate));
+
+        console.log("ActualData",userRegisterData) ;
+        dispatch( updatePassword(userRegisterData, setUpdatePasswordModal, setLoginModal) );
     };
 
     return ReactDOM.createPortal(
@@ -92,6 +127,29 @@ function OTPModal({ otpModal, setOtpModal, signupData }) {
                         />
                     ))}
                 </div>
+
+                <div className="input-group">
+                        <input
+                            type="password"
+                            className="signup-input"
+                            placeholder="password"
+                            value={newPassword}
+                            name='newPassword'
+                            onChange={loginFormChangeHandler}
+                        />
+                </div> 
+
+                <div className="input-group">
+                        <input
+                            type="password"
+                            className="signup-input"
+                            placeholder="confirmpassword"
+                            value={confirmNewPassword}
+                            name='confirmNewPassword'
+                            onChange={loginFormChangeHandler}
+                        />
+                </div> 
+
                 <button className={` ${loading ? 'spinner':'otp-submit-btn'}`} disabled={!isOtpComplete}>
                     {loading ? <ButtonLoading /> : <p>Submit</p>}
                 </button>
@@ -101,4 +159,4 @@ function OTPModal({ otpModal, setOtpModal, signupData }) {
     );
 }
 
-export default OTPModal;
+export default UpdatePasswordModal ;

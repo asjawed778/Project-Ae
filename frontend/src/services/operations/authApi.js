@@ -80,6 +80,7 @@ export function verifySignupOTP(userRegisterData, setOtpModal, navigate) {
 }
 
 export function logoutUser(navigate) {
+
     return async (dispatch) => {
         const load = toast.loading("Please Wait");
         try {
@@ -94,8 +95,107 @@ export function logoutUser(navigate) {
         } catch (error) {
             console.log("Error in logging out: ", error);
             toast.error("Failed to log out. Please try again.");
+            return ;
         } finally {
             toast.dismiss(load);
+        }
+    }
+}
+
+export function loginUser( userLoginData , navigate ) {
+    return async (dispatch) => { 
+        dispatch(setLoading(true));
+        try {
+            const response = await apiConnector("POST", LOGIN_API, userLoginData);
+            if (!response.data.success) {
+                throw new Error(response.data.message)
+            }
+
+            dispatch(login(response.data));
+            // console.log(response.data);
+
+            toast.success("User Login successfully");
+            navigate("/");
+        } catch (error) {
+            console.log("Error in user login: ", error);
+           
+            if (error.status === 400) {
+                toast.error("Please Enter all details");
+            }
+            if (error.status === 500) {
+                toast.error("Internal Server Error");
+            }
+        } finally {
+            dispatch(setLoading(false));
+        }
+    }
+}
+
+export function resetPassword(  userEmail, setResetModal, setUpdatePasswordModal ) {
+    return async(dispatch) => {
+        console.log(userEmail) ;
+        dispatch( setLoading(true)) ;
+
+        try {
+
+           const response = await apiConnector("POST", SEND_FORGOT_PASSWORD_OTP_API, userEmail ) ;
+           if( !response.data.success ) {
+              throw new Error (response.data.message);
+           }
+
+           toast.success("OTP sent successfully") ;
+
+           // to close reset modal
+           setResetModal(false) ;
+
+           // to invoke otp modal
+           setUpdatePasswordModal(true) ;
+
+
+        } catch( error ) {
+
+           if( error.status === 500 ) {
+             toast.error("Internal Server Error");
+           }
+
+           console.log("Error in Sending OTP......", error) ;
+
+        } finally {
+
+            dispatch( setLoading(false) ) ;
+
+        }
+    }
+}
+
+export function updatePassword( userRegisterData, setUpdatePassswordModal, setLoginModal ) {
+    return async (dispatch) => {
+        dispatch(setLoading(true)) ;
+        console.log("updatePasswordAPI",userRegisterData)
+        try {
+           
+          const response = await apiConnector("POST",VERIFY_FORGOT_PASSWORD_OTP_API, userRegisterData) ;
+          if( !response.data.success ) {
+            throw new Error (response.data.message) ;
+          }
+
+          toast.success("Password Updated Successfully") ;
+
+          setUpdatePassswordModal(false) ;
+          setLoginModal(true) ;
+
+        } catch(error) {
+           
+            if( error.status === 400 ) {
+                toast.error("Please Enter all details");
+            }
+
+            if( error.status === 500 ) {
+                toast.error(" Internal Server Error " ) ;
+            }
+            console.log("there is error", error);
+        } finally {
+            dispatch( setLoading(false)) ;
         }
     }
 }

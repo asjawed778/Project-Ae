@@ -1,4 +1,4 @@
-.signup-modal-overlay {
+.login-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -11,10 +11,11 @@
     z-index: 1000;
 }
 
-.signup-modal-container {
+.login-modal-container {
     background-color: #000;
     padding: 40px;
     width: 430px;
+    max-height:350px;
     border-radius: 18px;
     box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
     position: relative;
@@ -31,17 +32,17 @@
     cursor: pointer;
 }
 
-.signup-title {
+.login-title {
     font-size: 24px;
     color: white;
     margin-bottom: 30px;
     text-align: center;
 }
 
-.signup-input {
+.login-input {
     width: 100%;
     padding: 12px;
-    border-radius: 14px;
+    border-radius: 18px;
     border: 1px solid #444;
     background-color: #111;
     color: #fff;
@@ -49,7 +50,7 @@
     margin-bottom: 20px;
 }
 
-.signup-input::placeholder {
+.login-input::placeholder {
     color: #888;
 }
 
@@ -60,11 +61,11 @@
     text-align: right;
 }
 
-.signup-next-btn {
+.login-next-btn {
     width: 100%;
     padding: 14px;
     border: none;
-    border-radius: 14px;
+    border-radius: 18px;
     background-color: #1da1f2;
     color: white;
     font-size: 16px;
@@ -75,28 +76,37 @@
     align-items: center;
 }
 
-.signup-next-btn:disabled {
+.login-next-btn:disabled {
     background-color: #444;
     cursor: not-allowed;
 }
 
-/* Media queries for responsiveness */
+.forget-password {
+    color: rgba(5, 175, 232, 0.895);
+    margin-bottom: 10px;
+    font-weight: 300;
+    font-family: 'Times New Roman', Times, serif;
+    cursor: pointer;
+
+}
+
 @media (max-width: 768px) {
-    .signup-modal-container {
+    .login-modal-container {
         width: 330px; /* Increase the width to better fit smaller screens */
+        height: 300px;
         padding: 30px;
     }
 
-    .signup-title {
+    .login-title {
         font-size: 20px; /* Slightly reduce title size */
     }
 
-    .signup-input {
+    .login-input {
         font-size: 14px;
         padding: 10px; /* Adjust input padding for smaller screens */
     }
 
-    .signup-next-btn {
+    .login-next-btn {
         font-size: 14px;
         padding: 12px; /* Adjust button padding for smaller screens */
     }
@@ -109,21 +119,22 @@
 }
 
 @media (max-width: 480px) {
-    .signup-modal-container {
+    .login-modal-container {
         width: 270px; /* Even wider on very small screens */
+        height: 250px;
         padding: 20px;
     }
 
-    .signup-title {
-        font-size: 15px; /* Further reduce title size */
+    .login-title {
+        font-size: 18px; /* Further reduce title size */
     }
 
-    .signup-input {
+    .login-input {
         font-size: 12px; /* Adjust input font size */
         padding: 8px;
     }
 
-    .signup-next-btn {
+    .login-next-btn {
         font-size: 12px; /* Reduce button font size */
         padding: 10px;
     }
@@ -131,4 +142,33 @@
     .close-btn {
         font-size: 18px; /* Adjust close button size further */
     }
+}
+
+@media (max-width: 360px) {
+    .login-modal-container {
+        width: 250px; /* Even wider on very small screens */
+        height: 250px;
+        padding: 20px;
+    }
+
+    .login-title {
+        font-size: 18px; /* Further reduce title size */
+    }
+
+    .login-input {
+        font-size: 12px; /* Adjust input font size */
+        width: 90%;
+        padding: 8px;
+    }
+
+    .login-next-btn {
+        font-size: 12px; /* Reduce button font size */
+        padding: 10px;
+    }
+
+    .close-btn {
+        font-size: 18px; /* Adjust close button size further */
+    }
+
+    
 }
