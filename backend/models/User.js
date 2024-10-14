@@ -11,6 +11,11 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    username: {
+        type: String,
+        required: true,
+        unique: true
+    },
     password: {
         type: String,
         required: true
@@ -22,7 +27,7 @@ const userSchema = new mongoose.Schema({
             ref: 'Post' // Reference to the Post model
         }
     ],
-    avatar: {
+    profilePic: {
         type: String,
     }
 });

@@ -23,9 +23,9 @@ exports.getAllPost = async (req, res, next) => {
                 select: 'name avatar _id'
             })
             .sort({ createdAt: -1 })
-            .skip(skip)  
+            .skip(skip)
             .limit(limit);
-
+            
         const formattedPosts = posts.map(post => ({
             _id: post._id,
             content: post.content,
@@ -33,13 +33,21 @@ exports.getAllPost = async (req, res, next) => {
             videos: post.videos,
             createdAt: post.createdAt,
             editedAt: post.editedAt,
-            likesCount: post.likes.length,
-            commentsCount: post.comments.length,
+            upvotesCount: post.upvotes.length,    
+            downvotesCount: post.downvotes.length, 
+            commentsCount: post.comments.length,   
             user: {
                 id: post.userId._id,
                 name: post.userId.name,
                 avatar: post.userId.avatar || null,
             },
+            comments: post.comments.map(comment => ({
+                _id: comment._id,
+                userId: comment.userId,
+                comment: comment.comment,
+                createdAt: comment.createdAt,
+                replies: comment.replies || [] 
+            }))
         }));
 
         // Return the fetched posts in a successful response

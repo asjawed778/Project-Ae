@@ -1,12 +1,13 @@
-const User = require('../../models/User');
+
 const otpGenerator = require('otp-generator');
 const emailTemplate = require('../../templates/mailOTP');
 const { mailSender } = require('../../utils/mailSender');
 const OTP = require('../../models/OTP');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const User = require('../../models/User');
+const { generateFromEmail } = require('unique-username-generator'); // Import the generator
 require('dotenv').config();
-
 
 exports.sendSignupOTP = async (req, res, next) => {
     try {
@@ -66,30 +67,50 @@ exports.signupUser = async (req, res, next) => {
         }
 
         await OTP.deleteMany({ email: email });
+
+        let username = generateFromEmail(email, 3);
+        let existingUser = await User.findOne({ username });
+
+        // Check for username uniqueness and regenerate if necessary
+        let counter = 1;
+        while (existingUser) {
+            // Regenerate username by appending additional random digits
+            username = generateFromEmail(email, 3 + counter);
+            existingUser = await User.findOne({ username });
+            counter++;
+        }
+
         let hashedPassword;
         try {
             hashedPassword = await bcrypt.hash(password, 10);
         } catch (error) {
             return next(error);
         }
+
         const avatarUrl = `${process.env.PROFILE_URL}${name}`;
         let newUser = new User({
             name,
             email,
+            username, // Set the generated unique username
             password: hashedPassword,
-            avatar: avatarUrl, // Set default avatar URL
+            profilePic: avatarUrl, // Set default avatar URL
             posts: []
         });
+
         await newUser.save();
+
         let user = await User.findOne({ email });
         const payload = {
             id: user._id,
             email: user.email,
-            name: user.name
+            name: user.name,
+            username: user.username // Include username in the payload
         };
+
         let token = jwt.sign(payload, process.env.JWT_SECRET, {
             expiresIn: "3d"
         });
+
         user = user.toObject();
         user.token = token;
         user.password = undefined;
@@ -100,6 +121,7 @@ exports.signupUser = async (req, res, next) => {
             sameSite: 'None',
             secure: true
         };
+
         res.cookie("token", token, options).status(200).json({
             success: true,
             token: token,

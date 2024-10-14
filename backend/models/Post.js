@@ -10,13 +10,31 @@ const commentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    upvotes: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: false
+        }
+    ],
+    downvotes: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: false
+        }
+    ],
+    parentCommentId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment',
+        required: false
+    },
     createdAt: {
         type: Date,
         default: Date.now
     }
 });
 
-// Define the user post schema
 const userPostSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -40,7 +58,14 @@ const userPostSchema = new mongoose.Schema({
             required: false
         }
     ],
-    likes: [
+    upvotes: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: false
+        }
+    ],
+    downvotes: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
@@ -66,3 +91,4 @@ userPostSchema.pre('save', function (next) {
 });
 
 module.exports = mongoose.model('Post', userPostSchema);
+
