@@ -61,7 +61,9 @@ exports.createPost = async (req, res, next) => {
             userId: id,
             content,
             images: imageUrls,
-            videos: videoUrls
+            videos: videoUrls,
+            likes: [],
+            comments: []
         });
 
         // Save the post to the database
