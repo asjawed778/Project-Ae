@@ -2,6 +2,13 @@ const User = require('../../models/User');
 const Post = require('../../models/Post.js');
 const { deleteFileFromCloudinary, getCloudinaryPublicId } = require('../../utils/cloudinaryUtils');
 
+// Helper function to delete files from Cloudinary
+const deleteFilesFromCloudinary = async (files, type) => {
+    return Promise.all(files.map(async (fileUrl) => {
+        const publicId = getCloudinaryPublicId(fileUrl);
+        return await deleteFileFromCloudinary(publicId, type);
+    }));
+};
 
 exports.deletePost = async (req, res, next) => {
     try {
@@ -10,52 +17,38 @@ exports.deletePost = async (req, res, next) => {
 
         // Check if postId is provided
         if (!postId) {
-            const err = new Error("Post ID is missing.");
-            err.status = 400; 
-            return next(err);
+            return next(new Error("Post ID is missing.")); 
         }
 
         // Check if user is authenticated
         if (!req.user || !req.user.id) {
-            const err = new Error("Unauthorized action.");
-            err.status = 401; 
-            return next(err);
+            return next(new Error("Unauthorized action.")); 
         }
 
         // Fetch the post from the database
         const post = await Post.findById(postId);
         if (!post) {
-            const err = new Error("Post not found.");
-            err.status = 404; 
-            return next(err);
+            return next(new Error("Post not found.")); 
+        }
+
+        // Check if the associated user exists
+        const user = await User.findById(post.userId);
+        if (!user) {
+            return next(new Error("User not found.")); 
         }
 
         // If the post has images, delete them from Cloudinary
-        if (post.images && post.images.length > 0) {
-            for (const imageUrl of post.images) {
-                const publicId = getCloudinaryPublicId(imageUrl); // Helper function to extract public ID
-                await deleteFileFromCloudinary(publicId, 'image');
-            }
+        if (post.images?.length > 0) {
+            await deleteFilesFromCloudinary(post.images, 'image');
         }
 
         // If the post has videos, delete them from Cloudinary
-        if (post.videos && post.videos.length > 0) {
-            for (const videoUrl of post.videos) {
-                const publicId = getCloudinaryPublicId(videoUrl);
-                await deleteFileFromCloudinary(publicId, 'video');
-            }
+        if (post.videos?.length > 0) {
+            await deleteFilesFromCloudinary(post.videos, 'video');
         }
 
         // Proceed to delete the post from the database
         await Post.findByIdAndDelete(postId);
-
-        // Find the associated user
-        const user = await User.findById(post.userId);
-        if (!user) {
-            const err = new Error("User not found.");
-            err.status = 404; // Not Found
-            return next(err);
-        }
 
         // Remove post ID from user's posts array
         user.posts.pull(postId);
@@ -71,4 +64,3 @@ exports.deletePost = async (req, res, next) => {
         return next(error);
     }
 };
-

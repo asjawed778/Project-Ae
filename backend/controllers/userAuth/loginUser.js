@@ -3,32 +3,47 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-
 exports.login = async (req, res, next) => {
     try {
-        const { email, password } = req.body;
+        const { identifier, password } = req.body;
 
-        if (!email || !password) {
+        if (!identifier || !password) {
             const err = new Error("Please Enter all fields");
             err.status = 400;
             return next(err);
         }
 
-        let user = await User.findOne({ email });
+        // Use regex to determine if identifier is an email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        let user;
+
+        if (emailRegex.test(identifier)) {
+            // If identifier is an email, find user by email
+            user = await User.findOne({ email: identifier });
+        } else {
+            // Otherwise, find user by username
+            user = await User.findOne({ username: identifier });
+        }
+
         if (!user) {
             const err = new Error("User Not found");
             err.status = 404;
             return next(err);
         }
+
+        // Check the password
         if (await bcrypt.compare(password, user.password)) {
             const payload = {
                 id: user._id,
                 email: user.email,
-                name: user.name
+                name: user.name,
+                username: user.username 
             };
+
             let token = jwt.sign(payload, process.env.JWT_SECRET, {
                 expiresIn: "3d"
             });
+
             user = user.toObject();
             user.token = token;
             user.password = undefined;
@@ -39,6 +54,7 @@ exports.login = async (req, res, next) => {
                 sameSite: 'None',
                 secure: true
             };
+
             res.cookie("token", token, options).status(200).json({
                 success: true,
                 token: token,

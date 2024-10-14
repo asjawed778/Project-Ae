@@ -16,9 +16,12 @@ exports.getAllComments = async (req, res, next) => {
         const limit = parseInt(req.query.limit) || 10; 
         const skip = (page - 1) * limit; 
 
-        // Find the post by ID and select only the comments
+        // Find the post by ID and populate user details for comments
         const post = await Post.findById(postId)
-            .populate('userId', 'name avatar') 
+            .populate({
+                path: 'comments.userId',
+                select: 'name avatar'
+            })
             .select('comments'); 
 
         // Check if the post exists
@@ -29,19 +32,34 @@ exports.getAllComments = async (req, res, next) => {
             });
         }
 
-        // Get the comments from the post, using slice for pagination
+        // Get the comments with pagination
         const comments = post.comments.slice(skip, skip + limit);
 
-        const formattedComments = comments.map(comment => ({
-            _id: comment._id,
-            content: comment.comment, 
-            createdAt: comment.createdAt,
-            user: {
-                id: comment.userId, 
-                name: comment.userId.name, 
-                avatar: comment.userId.avatar || null,
-            },
-        }));
+        // Format comments and their replies
+        const formattedComments = comments.map(comment => {
+            const replies = comment.replies || []; // Ensure replies exist
+
+            return {
+                _id: comment._id,
+                content: comment.comment, 
+                createdAt: comment.createdAt,
+                user: {
+                    id: comment.userId._id, 
+                    name: comment.userId.name, 
+                    avatar: comment.userId.avatar || null,
+                },
+                replies: replies.map(reply => ({
+                    _id: reply._id,
+                    content: reply.reply,
+                    createdAt: reply.createdAt,
+                    user: {
+                        id: reply.userId, 
+                        name: reply.userId.name, 
+                        avatar: reply.userId.avatar || null,
+                    }
+                }))
+            };
+        });
 
         // Return the fetched comments in a successful response
         return res.status(200).json({
@@ -49,7 +67,7 @@ exports.getAllComments = async (req, res, next) => {
             message: 'Comments fetched successfully',
             comments: formattedComments,
             page: page, 
-            hasMore: post.comments.length > skip + limit 
+            hasMore: post.comments.length > skip + limit // Check if there are more comments
         });
     } catch (error) {
         return next(error);

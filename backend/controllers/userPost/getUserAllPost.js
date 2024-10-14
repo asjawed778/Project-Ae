@@ -7,6 +7,7 @@ exports.getUserAllPost = async (req, res, next) => {
             err.status = 401;
             return next(err);
         }
+        
         const { id } = req.user;
 
         // Get page and limit from query parameters
@@ -28,13 +29,21 @@ exports.getUserAllPost = async (req, res, next) => {
             videos: post.videos,
             createdAt: post.createdAt,
             editedAt: post.editedAt,
-            likesCount: post.likes.length,
-            commentsCount: post.comments.length,
+            upvotesCount: post.upvotes.length,    // Count of upvotes
+            downvotesCount: post.downvotes.length, // Count of downvotes
+            commentsCount: post.comments.length,   // Count of comments
             user: {
                 id: post.userId._id,
                 name: post.userId.name,
                 avatar: post.userId.avatar || null,
             },
+            comments: post.comments.map(comment => ({
+                _id: comment._id,
+                userId: comment.userId,
+                comment: comment.comment,
+                createdAt: comment.createdAt,
+                replies: comment.replies || [] // Assuming replies field for nested comments
+            }))
         }));
 
         // Return the fetched posts in a successful response
