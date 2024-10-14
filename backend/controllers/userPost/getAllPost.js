@@ -1,5 +1,4 @@
 const Post = require('../../models/Post');
-const User = require('../../models/User'); // Ensure User model is imported
 
 exports.getAllPost = async (req, res, next) => {
     try {
@@ -10,23 +9,22 @@ exports.getAllPost = async (req, res, next) => {
             return next(err);
         }
 
-        // Fetch all posts from the database, populating user information
+        // Get page and limit from query parameters
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+
+        // Calculate the number of posts to skip
+        const skip = (page - 1) * limit;
+
+        // Fetch posts from the database with pagination
         const posts = await Post.find()
             .populate({
-                path: 'userId', 
-                select: 'name avatar _id' 
+                path: 'userId',
+                select: 'name avatar _id'
             })
-            .sort({ createdAt: -1 });
-
-        // Format posts to include user data
-        // const formattedPosts = posts.map(post => ({
-        //     ...post.toObject(),
-        //     user: {
-        //         id: post.userId._id,
-        //         name: post.userId.name,
-        //         avatar: post.userId.avatar,
-        //     },
-        // }));
+            .sort({ createdAt: -1 })
+            .skip(skip)  
+            .limit(limit);
 
         const formattedPosts = posts.map(post => ({
             _id: post._id,
@@ -35,7 +33,8 @@ exports.getAllPost = async (req, res, next) => {
             videos: post.videos,
             createdAt: post.createdAt,
             editedAt: post.editedAt,
-            __v: post.__v,
+            likesCount: post.likes.length,
+            commentsCount: post.comments.length,
             user: {
                 id: post.userId._id,
                 name: post.userId.name,
@@ -48,6 +47,8 @@ exports.getAllPost = async (req, res, next) => {
             success: true,
             message: 'Posts fetched successfully',
             posts: formattedPosts,
+            currentPage: page,
+            totalPosts: await Post.countDocuments(),
         });
     } catch (error) {
         // Forward any errors to the error handler middleware
