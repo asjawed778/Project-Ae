@@ -7,20 +7,20 @@ exports.getUserAllPost = async (req, res, next) => {
             err.status = 401;
             return next(err);
         }
-        
+
         const { id } = req.user;
 
         // Get page and limit from query parameters
-        const page = parseInt(req.query.page) || 1; 
-        const limit = parseInt(req.query.limit) || 10; 
-        const skip = (page - 1) * limit; 
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
 
         // Find all posts created by the user with pagination
         const posts = await Post.find({ userId: id })
-            .populate('userId', 'name avatar')
+            .populate('userId', 'name username profilePic')
             .sort({ createdAt: -1 })
             .skip(skip)
-            .limit(limit); 
+            .limit(limit);
 
         const formattedPosts = posts.map(post => ({
             _id: post._id,
@@ -29,21 +29,22 @@ exports.getUserAllPost = async (req, res, next) => {
             videos: post.videos,
             createdAt: post.createdAt,
             editedAt: post.editedAt,
-            upvotesCount: post.upvotes.length,    // Count of upvotes
-            downvotesCount: post.downvotes.length, // Count of downvotes
-            commentsCount: post.comments.length,   // Count of comments
-            user: {
-                id: post.userId._id,
-                name: post.userId.name,
-                avatar: post.userId.avatar || null,
-            },
+            upvotesCount: post.upvotes.length,
+            downvotesCount: post.downvotes.length,
+            commentsCount: post.comments.length,
             comments: post.comments.map(comment => ({
                 _id: comment._id,
                 userId: comment.userId,
                 comment: comment.comment,
                 createdAt: comment.createdAt,
-                replies: comment.replies || [] // Assuming replies field for nested comments
-            }))
+                replies: comment.replies || []
+            })),
+            user: {
+                id: post.userId._id,
+                name: post.userId.name,
+                username: post.userId.username,
+                profilePic: post.userId.profilePic || null,
+            }
         }));
 
         // Return the fetched posts in a successful response
@@ -51,8 +52,8 @@ exports.getUserAllPost = async (req, res, next) => {
             success: true,
             message: 'User posts fetched successfully',
             posts: formattedPosts,
-            page: page,       
-            hasMore: posts.length === limit 
+            page: page,
+            hasMore: posts.length === limit
         });
     } catch (error) {
         return next(error);

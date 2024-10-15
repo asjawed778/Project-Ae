@@ -10,25 +10,17 @@ const commentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    upvotes: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-            required: false
-        }
-    ],
-    downvotes: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-            required: false
-        }
-    ],
     parentCommentId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment',
-        required: false
+        default: null
     },
+    replies: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Comment'
+        }
+    ],
     createdAt: {
         type: Date,
         default: Date.now

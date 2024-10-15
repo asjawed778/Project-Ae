@@ -42,6 +42,7 @@ exports.updateUsername = async (req, res, next) => {
             message: "Username updated successfully",
             user: {
                 id: updatedUser._id,
+                name: updatedUser.name,
                 email: updatedUser.email,
                 username: updatedUser.username,
             }

@@ -3,14 +3,25 @@ const Post = require('../../models/Post');
 exports.replyToComment = async (req, res, next) => {
     try {
         if (!req.user || !req.user.id) {
-            return res.status(401).json({ message: "Unauthorized action." });
+            const err = new Error("Please login to view posts");
+            err.status = 401;
+            return next(err);
         }
+        const { id } = req.user;
 
         const { postId, commentId } = req.params;
         const { reply } = req.body;
 
+        // return res.status(200).json({
+        //     postId,
+        //     commentId,
+        //     id
+        // })
+
         if (!postId || !commentId || !reply) {
-            return res.status(400).json({ message: "Post ID, comment ID, and reply are required." });
+            const err = new Error("Post ID, comment ID, and reply are required.");
+            err.status = 400;
+            return next(err);
         }
 
         const post = await Post.findById(postId);
