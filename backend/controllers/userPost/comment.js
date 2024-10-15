@@ -21,7 +21,7 @@ exports.addComment = async (req, res, next) => {
         const newComment = {
             userId: req.user.id,
             comment,
-            parentCommentId: null, // Set to null for top-level comments
+            parentCommentId: null,
         };
 
         post.comments.push(newComment);

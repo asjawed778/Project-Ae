@@ -20,12 +20,12 @@ exports.getAllPost = async (req, res, next) => {
         const posts = await Post.find()
             .populate({
                 path: 'userId',
-                select: 'name avatar _id'
+                select: 'name profilePic _id username'
             })
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit);
-            
+
         const formattedPosts = posts.map(post => ({
             _id: post._id,
             content: post.content,
@@ -33,21 +33,22 @@ exports.getAllPost = async (req, res, next) => {
             videos: post.videos,
             createdAt: post.createdAt,
             editedAt: post.editedAt,
-            upvotesCount: post.upvotes.length,    
-            downvotesCount: post.downvotes.length, 
-            commentsCount: post.comments.length,   
-            user: {
-                id: post.userId._id,
-                name: post.userId.name,
-                avatar: post.userId.avatar || null,
-            },
+            upvotesCount: post.upvotes.length,
+            downvotesCount: post.downvotes.length,
+            commentsCount: post.comments.length,
             comments: post.comments.map(comment => ({
                 _id: comment._id,
                 userId: comment.userId,
                 comment: comment.comment,
                 createdAt: comment.createdAt,
-                replies: comment.replies || [] 
-            }))
+                replies: comment.replies || []
+            })),
+            user: {
+                id: post.userId._id,
+                name: post.userId.name,
+                username: post.userId.username,
+                profilePic: post.userId.profilePic || null,
+            }
         }));
 
         // Return the fetched posts in a successful response

@@ -91,9 +91,9 @@ exports.signupUser = async (req, res, next) => {
         let newUser = new User({
             name,
             email,
-            username, // Set the generated unique username
+            username,
             password: hashedPassword,
-            profilePic: avatarUrl, // Set default avatar URL
+            profilePic: avatarUrl,
             posts: []
         });
 
@@ -104,7 +104,7 @@ exports.signupUser = async (req, res, next) => {
             id: user._id,
             email: user.email,
             name: user.name,
-            username: user.username // Include username in the payload
+            username: user.username
         };
 
         let token = jwt.sign(payload, process.env.JWT_SECRET, {
@@ -124,9 +124,9 @@ exports.signupUser = async (req, res, next) => {
 
         res.cookie("token", token, options).status(200).json({
             success: true,
+            message: "User Created successfully",
             token: token,
             user: user,
-            message: "User Created successfully"
         });
 
     } catch (error) {
