@@ -94,3 +94,100 @@
 .otp-submit-btn:hover {
     background-color: #1480bf;
 }
+
+
+.input-group {
+    width: 350px;
+}
+
+@media (max-width: 768px) {
+    .otp-modal-container {
+        padding: 30px; /* Adjust padding on smaller screens */
+        max-width: 350px; /* Make sure it fits within screen width */
+    }
+
+    .otp-modal-header h3 {
+        font-size: 24px; /* Reduce header font size for tablets */
+    }
+
+    .otp-input {
+        width: 35px;
+        height: 35px; /* Adjust input size for smaller screens */
+        font-size: 20px;
+    }
+
+    .otp-submit-btn {
+        font-size: 14px; /* Adjust button font size for smaller screens */
+        padding: 10px 15px;
+    }
+
+    .input-group {
+        width: 270px;
+    }
+}
+
+@media (max-width: 480px) {
+    .otp-modal-container {
+        padding: 20px; /* Further reduce padding on mobile */
+        max-width: 300px; /* Make sure it fits on small mobile screens */
+    }
+
+    .otp-modal-header h3 {
+        font-size: 15px; /* Reduce header font size for mobiles */
+    }
+
+    .otp-input {
+        width: 25px;
+        height: 25px; /* Adjust input size for mobile */
+        font-size: 18px;
+    }
+
+    .otp-input-container{
+        width: 250px;
+        
+    }
+
+    .otp-submit-btn {
+        font-size: 12px; /* Adjust button font size for mobile */
+        padding: 8px 12px;
+        width: 230px;
+    }
+
+    .close-icon {
+        font-size: 22px; /* Reduce size of the close icon for mobile */
+    }
+
+    .input-group {
+        width: 230px;
+    }
+
+    .otp-modal-description {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 320px) {
+    .otp-modal-container {
+        padding: 20px; /* Further reduce padding on mobile */
+        max-width: 300px; /* Make sure it fits on small mobile screens */
+    }
+
+    .otp-modal-header h3 {
+        font-size: 15px; /* Reduce header font size for mobiles */
+    }
+
+    .otp-input {
+        width: 25px;
+        height: 25px; /* Adjust input size for mobile */
+        font-size: 18px;
+    }
+
+    .otp-submit-btn {
+        font-size: 12px; /* Adjust button font size for mobile */
+        padding: 8px 12px;
+    }
+
+    .close-icon {
+        font-size: 22px; /* Reduce size of the close icon for mobile */
+    }
+}

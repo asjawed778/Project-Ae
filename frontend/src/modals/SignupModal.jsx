@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { sendSignupOTP } from '../services/operations/authApi';
 import ButtonLoading from '../components/common/ButtonLoading';
 
+
 function SignupModal({ signupModal, setSignupModal, setOtpModal, setSignupData }) {
     
     const dispatch = useDispatch();
