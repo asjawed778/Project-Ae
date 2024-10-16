@@ -10,15 +10,25 @@ const commentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    parentCommentId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Comment',
-        default: null
-    },
     replies: [
         {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Comment'
+            userId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User',
+                required: true
+            },
+            commentId: {
+                type: mongoose.Schema.Types.ObjectId,
+                required: true
+            },
+            reply: {
+                type: String,
+                required: true
+            },
+            createdAt: {
+                type: Date,
+                default: Date.now
+            }
         }
     ],
     createdAt: {
@@ -83,4 +93,3 @@ userPostSchema.pre('save', function (next) {
 });
 
 module.exports = mongoose.model('Post', userPostSchema);
-

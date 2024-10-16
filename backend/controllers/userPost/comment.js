@@ -21,7 +21,7 @@ exports.addComment = async (req, res, next) => {
         const newComment = {
             userId: req.user.id,
             comment,
-            parentCommentId: null,
+            replies: [],
         };
 
         post.comments.push(newComment);
@@ -198,7 +198,3 @@ exports.editComment = async (req, res, next) => {
         return next(error);
     }
 };
-
-
-
-
