@@ -17,6 +17,10 @@ const commentSchema = new mongoose.Schema({
                 ref: 'User',
                 required: true
             },
+            tagUsername: {
+                type: String,
+                required: true
+            },
             commentId: {
                 type: mongoose.Schema.Types.ObjectId,
                 required: true
@@ -25,13 +29,41 @@ const commentSchema = new mongoose.Schema({
                 type: String,
                 required: true
             },
+            upvotes: [{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User',
+                required: false
+            }],
+            downvotes: [{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User',
+                required: false
+            }],
             createdAt: {
+                type: Date,
+                default: Date.now
+            },
+            editedAt: {
                 type: Date,
                 default: Date.now
             }
         }
     ],
+    upvotes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: false
+    }],
+    downvotes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: false
+    }],
     createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    editedAt: {
         type: Date,
         default: Date.now
     }
@@ -48,39 +80,32 @@ const userPostSchema = new mongoose.Schema({
         maxlength: 200,
         required: true
     },
-    images: [
-        {
-            type: String,
-            required: false
-        }
-    ],
-    videos: [
-        {
-            type: String,
-            required: false
-        }
-    ],
-    upvotes: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-            required: false
-        }
-    ],
-    downvotes: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-            required: false
-        }
-    ],
+    images: [{
+        type: String,
+        required: false
+    }],
+    videos: [{
+        type: String,
+        required: false
+    }],
+    upvotes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: false
+    }],
+    downvotes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: false
+    }],
     comments: [commentSchema],
     createdAt: {
         type: Date,
         default: Date.now
     },
     editedAt: {
-        type: Date
+        type: Date,
+        default: Date.now
     }
 });
 

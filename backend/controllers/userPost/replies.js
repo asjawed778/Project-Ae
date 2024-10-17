@@ -1,5 +1,6 @@
 const Post = require('../../models/Post');
 
+// Reply to a Comment
 exports.replyToComment = async (req, res, next) => {
     try {
         if (!req.user || !req.user.id) {
@@ -9,10 +10,10 @@ exports.replyToComment = async (req, res, next) => {
         }
 
         const { postId, commentId } = req.params;
-        const { reply } = req.body;
+        const { reply, username } = req.body;
 
-        if (!postId || !commentId || !reply) {
-            const err = new Error("Post ID, comment ID, and reply are required.");
+        if (!postId || !commentId || !reply || !username) {
+            const err = new Error("Post ID, comment ID, reply, and username are required.");
             err.status = 400;
             return next(err);
         }
@@ -40,20 +41,25 @@ exports.replyToComment = async (req, res, next) => {
 
         const replyComment = {
             userId: req.user.id,
-            commentId: commentId, // Linking the reply to the comment
+            commentId: commentId,
             reply: trimmedReply,
+            tagUsername: username,
             createdAt: new Date(),
         };
 
         comment.replies.push(replyComment);
         await post.save();
 
-        return res.status(201).json({ success: true, replies: comment.replies });
+        return res.status(201).json({ 
+            success: true, 
+            replies: comment.replies 
+        });
     } catch (error) {
         return next(error);
     }
 };
 
+// Edit a Reply
 exports.editReply = async (req, res, next) => {
     try {
         if (!req.user || !req.user.id) {
@@ -63,10 +69,10 @@ exports.editReply = async (req, res, next) => {
         }
 
         const { postId, commentId, replyId } = req.params;
-        const { reply } = req.body;
+        const { reply, username } = req.body;
 
-        if (!postId || !commentId || !replyId || !reply) {
-            const err = new Error("Post ID, comment ID, reply ID, and new reply are required.");
+        if (!postId || !commentId || !replyId || !reply || !username) {
+            const err = new Error("Post ID, comment ID, reply ID, new reply, and username are required.");
             err.status = 400;
             return next(err);
         }
@@ -107,6 +113,8 @@ exports.editReply = async (req, res, next) => {
         }
 
         replyObj.reply = trimmedReply;
+        replyObj.tagUsername = username; // Update the username if necessary
+        replyObj.editedAt = new Date();
         await post.save();
 
         return res.status(200).json({ success: true, reply: replyObj });
@@ -115,6 +123,7 @@ exports.editReply = async (req, res, next) => {
     }
 };
 
+// Delete a Reply
 exports.deleteReply = async (req, res, next) => {
     try {
         if (!req.user || !req.user.id) {
@@ -124,9 +133,10 @@ exports.deleteReply = async (req, res, next) => {
         }
 
         const { postId, commentId, replyId } = req.params;
+        const { username } = req.body;
 
-        if (!postId || !commentId || !replyId) {
-            const err = new Error("Post ID, comment ID, and reply ID are required.");
+        if (!postId || !commentId || !replyId || !username) {
+            const err = new Error("Post ID, comment ID, reply ID, and username are required.");
             err.status = 400;
             return next(err);
         }

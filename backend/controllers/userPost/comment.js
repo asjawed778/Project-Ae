@@ -1,41 +1,55 @@
 const Post = require('../../models/Post');
 
+// Add a comment to a post
 exports.addComment = async (req, res, next) => {
     try {
         if (!req.user || !req.user.id) {
-            return res.status(401).json({ message: "Unauthorized action." });
+            const err = new Error("Please login to view posts");
+            err.status = 401;
+            return next(err);
         }
+        const { id } = req.user;
 
         const { postId } = req.params;
         const { comment } = req.body;
 
         if (!postId || !comment) {
-            return res.status(400).json({ message: "Post ID and comment are required." });
+            const err = new Error("Post ID and comment are required.");
+            err.status = 400;
+            return next(err);
         }
 
         const post = await Post.findById(postId);
         if (!post) {
-            return res.status(404).json({ message: "Post not found." });
+            const err = new Error("Post not found.");
+            err.status = 404;
+            return next(err);
         }
 
         const newComment = {
-            userId: req.user.id,
+            userId: id,
             comment,
             replies: [],
+            upvotes: [],
+            downvotes: []
         };
 
         post.comments.push(newComment);
         await post.save();
 
-        return res.status(201).json({ success: true, comments: post.comments });
+        res.status(201).json({
+            success: true,
+            message: "Comment added successfully",
+            comments: post.comments
+        });
     } catch (error) {
-        return next(error);
+        next(error);
     }
 };
 
+// Delete a comment
 exports.deleteComment = async (req, res, next) => {
     try {
-        // Check if user is authenticated
         if (!req.user || !req.user.id) {
             const err = new Error("Unauthorized action.");
             err.status = 401;
@@ -44,14 +58,12 @@ exports.deleteComment = async (req, res, next) => {
 
         const { postId, commentId } = req.params;
 
-        // Check if postId and commentId are provided
         if (!postId || !commentId) {
             const err = new Error("Post ID or Comment ID is missing.");
             err.status = 400;
             return next(err);
         }
 
-        // Fetch the post from the database
         const post = await Post.findById(postId);
         if (!post) {
             const err = new Error("Post not found.");
@@ -59,12 +71,10 @@ exports.deleteComment = async (req, res, next) => {
             return next(err);
         }
 
-        // Find the index of the comment to delete
         const commentIndex = post.comments.findIndex(
-            comment => comment._id.toString() === commentId.toString()
+            comment => comment._id.toString() === commentId
         );
 
-        // Check if the comment exists
         if (commentIndex === -1) {
             const err = new Error("Comment not found.");
             err.status = 404;
@@ -72,10 +82,6 @@ exports.deleteComment = async (req, res, next) => {
         }
 
         const comment = post.comments[commentIndex];
-
-        // Ensure that the user deleting the comment is either:
-        // 1. The comment's author
-        // 2. The post's owner
         const isCommentOwner = comment.userId.toString() === req.user.id;
         const isPostOwner = post.userId.toString() === req.user.id;
 
@@ -85,42 +91,34 @@ exports.deleteComment = async (req, res, next) => {
             return next(err);
         }
 
-        // Check if the comment is a parent comment
         if (!comment.parentCommentId) {
-            // If it's a parent comment, remove it and all its replies
             post.comments.splice(commentIndex, 1);
         } else {
-            // If it's a reply, find the parent comment and remove this reply
             const parentCommentIndex = post.comments.findIndex(
                 parentComment => parentComment._id.toString() === comment.parentCommentId.toString()
             );
 
             if (parentCommentIndex !== -1) {
-                // Remove the reply from the parent comment's replies array
                 post.comments[parentCommentIndex].replies = post.comments[parentCommentIndex].replies.filter(
-                    reply => reply._id.toString() !== commentId.toString()
+                    reply => reply._id.toString() !== commentId
                 );
             }
         }
 
-        // Save the updated post
         await post.save();
-
-        // Return a success response with the updated comments
-        return res.status(200).json({
+        res.status(200).json({
             success: true,
             message: 'Comment deleted successfully',
-            comments: post.comments  // Return the updated comments array
+            comments: post.comments
         });
-
     } catch (error) {
-        return next(error);  // Forward any errors to the error handler middleware
+        next(error);
     }
 };
 
+// Edit a comment
 exports.editComment = async (req, res, next) => {
     try {
-        // Check if user is authenticated
         if (!req.user || !req.user.id) {
             const err = new Error("Unauthorized action.");
             err.status = 401;
@@ -128,15 +126,14 @@ exports.editComment = async (req, res, next) => {
         }
 
         const { postId, commentId } = req.params;
+        const { updatedComment } = req.body;
 
-        // Check if postId and commentId are provided
-        if (!postId || !commentId) {
-            const err = new Error("Post ID or Comment ID is missing.");
+        if (!postId || !commentId || !updatedComment) {
+            const err = new Error("Post ID, Comment ID, and updated comment text are required.");
             err.status = 400;
             return next(err);
         }
 
-        // Fetch the post from the database
         const post = await Post.findById(postId);
         if (!post) {
             const err = new Error("Post not found.");
@@ -144,12 +141,10 @@ exports.editComment = async (req, res, next) => {
             return next(err);
         }
 
-        // Find the comment to edit
         const commentIndex = post.comments.findIndex(
-            comment => comment._id.toString() === commentId.toString()
+            comment => comment._id.toString() === commentId
         );
 
-        // Check if the comment exists
         if (commentIndex === -1) {
             const err = new Error("Comment not found.");
             err.status = 404;
@@ -157,10 +152,6 @@ exports.editComment = async (req, res, next) => {
         }
 
         const comment = post.comments[commentIndex];
-
-        // Ensure that the user editing the comment is either:
-        // 1. The comment's author
-        // 2. The post's owner
         const isCommentOwner = comment.userId.toString() === req.user.id;
         const isPostOwner = post.userId.toString() === req.user.id;
 
@@ -170,31 +161,24 @@ exports.editComment = async (req, res, next) => {
             return next(err);
         }
 
-        // Get the updated comment text from the request body
-        const { updatedComment } = req.body;
-        const updatedCommentText = updatedComment ? updatedComment.trim() : null;
-
+        const updatedCommentText = updatedComment.trim();
         if (!updatedCommentText) {
             const err = new Error("Updated comment text cannot be empty.");
             err.status = 400;
             return next(err);
         }
 
-        // Update the comment
-        post.comments[commentIndex].comment = updatedCommentText;
-        post.comments[commentIndex].updatedAt = new Date(); // Add an updatedAt field
+        comment.comment = updatedCommentText;
+        comment.updatedAt = new Date();
 
-        // Save the updated post
         await post.save();
 
-        // Return a success response with the edited comment
-        return res.status(200).json({
+        res.status(200).json({
             success: true,
             message: 'Comment edited successfully',
-            comment: post.comments[commentIndex] // Return only the edited comment
+            comment: comment
         });
-
     } catch (error) {
-        return next(error);
+        next(error);
     }
 };

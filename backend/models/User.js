@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
     posts: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Post' // Reference to the Post model
+            ref: 'Post'
         }
     ],
     profilePic: {
