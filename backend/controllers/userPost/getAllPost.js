@@ -1,4 +1,5 @@
 const Post = require('../../models/Post');
+const { AvatarGenerator } = require('random-avatar-generator');
 
 exports.getAllPost = async (req, res, next) => {
     try {
@@ -9,8 +10,8 @@ exports.getAllPost = async (req, res, next) => {
             return next(err);
         }
 
-        // Get page and limit from query parameters
-        const page = parseInt(req.query.page) || 1;
+        // Get page and limit from query parameters (default values provided)
+        const page = Math.max(1, parseInt(req.query.page) || 1);
         const limit = parseInt(req.query.limit) || 10;
 
         // Calculate the number of posts to skip
@@ -22,9 +23,11 @@ exports.getAllPost = async (req, res, next) => {
                 path: 'userId',
                 select: 'name profilePic _id username'
             })
-            .sort({ createdAt: -1 })
+            .sort({ createdAt: -1 }) 
             .skip(skip)
             .limit(limit);
+
+        const generator = new AvatarGenerator();
 
         const formattedPosts = posts.map(post => ({
             _id: post._id,
@@ -36,20 +39,21 @@ exports.getAllPost = async (req, res, next) => {
             upvotesCount: post.upvotes.length,
             downvotesCount: post.downvotes.length,
             commentsCount: post.comments.length,
-            comments: post.comments.map(comment => ({
-                _id: comment._id,
-                userId: comment.userId,
-                comment: comment.comment,
-                createdAt: comment.createdAt,
-                replies: comment.replies || []
-            })),
             user: {
                 id: post.userId._id,
                 name: post.userId.name,
                 username: post.userId.username,
-                profilePic: post.userId.profilePic || null,
+                profilePic: post.userId.profilePic || generator.generateRandomAvatar(),
             }
         }));
+
+        // Get total post count for pagination (wrapped in try-catch)
+        let totalPosts;
+        try {
+            totalPosts = await Post.countDocuments();
+        } catch (err) {
+            totalPosts = 0;  
+        }
 
         // Return the fetched posts in a successful response
         return res.status(200).json({
@@ -57,7 +61,7 @@ exports.getAllPost = async (req, res, next) => {
             message: 'Posts fetched successfully',
             posts: formattedPosts,
             currentPage: page,
-            totalPosts: await Post.countDocuments(),
+            totalPosts,
         });
     } catch (error) {
         // Forward any errors to the error handler middleware

@@ -1,6 +1,12 @@
 const Post = require('../../models/Post');
-const User = require('../../models/User'); // Import User model
+const User = require('../../models/User');
 const { uploadFileToCloudinary } = require('../../utils/cloudinaryUtils');
+
+// Allowed file types and size limits
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/mov', 'video/avi'];
+const MAX_IMAGE_SIZE_MB = 5 * 1024 * 1024; // 5 MB per image
+const MAX_VIDEO_SIZE_MB = 20 * 1024 * 1024; // 20 MB per video
 
 exports.createPost = async (req, res, next) => {
     try {
@@ -46,6 +52,36 @@ exports.createPost = async (req, res, next) => {
             return next(err);
         }
 
+        // Validate image file types and sizes
+        for (let image of images) {
+            if (!ALLOWED_IMAGE_TYPES.includes(image.mimetype)) {
+                const err = new Error("Invalid image format. Allowed formats: jpg, jpeg, png, gif.");
+                err.status = 400;
+                return next(err);
+            }
+
+            if (image.size > MAX_IMAGE_SIZE_MB) {
+                const err = new Error(`Image size cannot exceed ${MAX_IMAGE_SIZE_MB / (1024 * 1024)} MB.`);
+                err.status = 400;
+                return next(err);
+            }
+        }
+
+        // Validate video file types and sizes
+        for (let video of videos) {
+            if (!ALLOWED_VIDEO_TYPES.includes(video.mimetype)) {
+                const err = new Error("Invalid video format. Allowed formats: mp4, mov, avi.");
+                err.status = 400;
+                return next(err);
+            }
+
+            if (video.size > MAX_VIDEO_SIZE_MB) {
+                const err = new Error(`Video size cannot exceed ${MAX_VIDEO_SIZE_MB / (1024 * 1024)} MB.`);
+                err.status = 400;
+                return next(err);
+            }
+        }
+
         // Upload images to Cloudinary if any
         const imagePaths = images.length > 0 ? await uploadFileToCloudinary(images, 'UrbanSole', 80) : [];
 
@@ -62,9 +98,9 @@ exports.createPost = async (req, res, next) => {
             content,
             images: imageUrls,
             videos: videoUrls,
-            upvotes: [],  // Initialize upvotes array
-            downvotes: [], // Initialize downvotes array
-            comments: []   // Initialize comments array for threaded comments
+            upvotes: [],
+            downvotes: [],
+            comments: []
         });
 
         // Save the post to the database

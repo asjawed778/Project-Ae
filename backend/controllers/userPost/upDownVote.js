@@ -9,14 +9,16 @@ exports.vote = async (req, res, next) => {
             return next(err);
         }
 
-        const { id } = req.user;  
+        const { id } = req.user;
         const { postId } = req.params;
-        const { action } = req.body; // Expecting either "upvote" or "downvote"
+
+        // Expecting either "upvote" or "downvote" for vote a post
+        const { action } = req.body;
 
         // Check if postId is provided
         if (!postId) {
             const err = new Error("Post ID is missing.");
-            err.status = 400; 
+            err.status = 400;
             return next(err);
         }
 
@@ -56,7 +58,7 @@ exports.vote = async (req, res, next) => {
             }
         } else {
             const err = new Error("Invalid action. Must be 'upvote' or 'downvote'.");
-            err.status = 400; 
+            err.status = 400;
             return next(err);
         }
 
@@ -66,8 +68,8 @@ exports.vote = async (req, res, next) => {
         // Return success response with updated vote counts
         return res.status(200).json({
             success: true,
-            message: action === "upvote" ? 
-                (isUpvoted ? 'Post upvote removed successfully' : 'Post upvoted successfully') : 
+            message: action === "upvote" ?
+                (isUpvoted ? 'Post upvote removed successfully' : 'Post upvoted successfully') :
                 (isDownvoted ? 'Post downvote removed successfully' : 'Post downvoted successfully'),
             upvotesCount: post.upvotes.length,
             downvotesCount: post.downvotes.length,
@@ -78,6 +80,6 @@ exports.vote = async (req, res, next) => {
             }
         });
     } catch (error) {
-        return next(error); 
+        return next(error);
     }
 };
