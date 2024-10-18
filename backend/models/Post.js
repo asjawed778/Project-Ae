@@ -1,75 +1,6 @@
 const mongoose = require('mongoose');
 
-const commentSchema = new mongoose.Schema({
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
-    comment: {
-        type: String,
-        required: true
-    },
-    replies: [
-        {
-            userId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'User',
-                required: true
-            },
-            tagUsername: {
-                type: String,
-                required: true
-            },
-            commentId: {
-                type: mongoose.Schema.Types.ObjectId,
-                required: true
-            },
-            reply: {
-                type: String,
-                required: true
-            },
-            upvotes: [{
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'User',
-                required: false
-            }],
-            downvotes: [{
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'User',
-                required: false
-            }],
-            createdAt: {
-                type: Date,
-                default: Date.now
-            },
-            editedAt: {
-                type: Date,
-                default: Date.now
-            }
-        }
-    ],
-    upvotes: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: false
-    }],
-    downvotes: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: false
-    }],
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
-    editedAt: {
-        type: Date,
-        default: Date.now
-    }
-});
-
-const userPostSchema = new mongoose.Schema({
+const postSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -91,14 +22,21 @@ const userPostSchema = new mongoose.Schema({
     upvotes: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+        default: [],
         required: false
     }],
     downvotes: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+        default: [],
         required: false
     }],
-    comments: [commentSchema],
+    comments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment',
+        default: [],
+        required: false
+    }],
     createdAt: {
         type: Date,
         default: Date.now
@@ -110,11 +48,11 @@ const userPostSchema = new mongoose.Schema({
 });
 
 // Automatically update the 'editedAt' field when a post is modified
-userPostSchema.pre('save', function (next) {
+postSchema.pre('save', function (next) {
     if (this.isModified()) {
         this.editedAt = Date.now();
     }
     next();
 });
 
-module.exports = mongoose.model('Post', userPostSchema);
+module.exports = mongoose.model('Post', postSchema);
