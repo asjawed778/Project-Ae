@@ -13,7 +13,7 @@ function LoginModal({ loginModal, setLoginModal, setResetModal }) {
     const {loading } = useSelector( store => store.loading ) ;
 
     const [loginFormData, setLoginFormData] = useState({
-        email:'' ,
+        identifier:'' ,
         password:''
     }) ;
 
@@ -30,9 +30,9 @@ function LoginModal({ loginModal, setLoginModal, setResetModal }) {
         setLoginModal(false) ;
     }
     
-    const { email, password } = loginFormData ;
+    const { identifier, password } = loginFormData ;
     // validation
-    const isFormValid = email && password ;
+    const isFormValid = identifier && password ;
     
     //saved data
     const loginFormChangeHandler = (e) => {
@@ -48,10 +48,12 @@ function LoginModal({ loginModal, setLoginModal, setResetModal }) {
     const loginFormSubmitHandler = (e) => {
         e.preventDefault() ;
         
+        console.log( loginFormData ) ;
+
         // calling utlity function to call login api
         dispatch( loginUser( loginFormData )) ;
         setLoginFormData({
-           email:'', 
+           identifier:'', 
            password:''
 
         })
@@ -75,8 +77,8 @@ function LoginModal({ loginModal, setLoginModal, setResetModal }) {
                             className="login-input"
                             placeholder="email"
                             maxLength="50"
-                            value={email}
-                            name='email'
+                            value={identifier}
+                            name='identifier'
                             onChange={loginFormChangeHandler}
                         />
                         

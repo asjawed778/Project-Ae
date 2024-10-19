@@ -3,7 +3,7 @@ import { userAuthEndpoints } from '../apis';
 import { setLoading } from '../../redux/slices/loadingSlice';
 import { apiConnector } from '../apiConnector';
 import { login, logout } from '../../redux/slices/authSlice';
-
+import Cookies from "js-cookie" ;
 
 // Endpoints for user Auth methods
 const {
@@ -113,6 +113,11 @@ export function loginUser( userLoginData , navigate ) {
 
             dispatch(login(response.data));
             // console.log(response.data);
+            
+            console.log("token",response.data);
+
+            const token = response.data.token;
+            Cookies.set("token", token, { expires: 7 }); // Token valid for 7 days
 
             toast.success("User Login successfully");
             navigate("/");

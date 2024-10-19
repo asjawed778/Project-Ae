@@ -1,3 +1,6 @@
+import Cookies from "js-cookie" ;
+
+const token = Cookies.get("token") ;
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -12,8 +15,16 @@ export const userAuthEndpoints = {
     VERIFY_FORGOT_PASSWORD_OTP_API: SERVER_URL + "/verify-forgotPassword-otp"
 }
 
+// CREATE POST ENDPOINTS
 export const createPostEndpoints = {
     CREATE_POST_API: SERVER_URL + "/create-post" ,
     EDIT_POST_API: (postId) => `${SERVER_URL}/update-post/${postId}`,
     DELETE_POST_API: (postId) => `${SERVER_URL}/delete-post/${postId}`
+}
+
+//POST ENDPOINTS
+export const postEndpoints = {
+   GET_ALL_POSTS:  SERVER_URL + `/get-all-post?token=${token}`,
+   GET_USER_ALL_POST: SERVER_URL + "/get-user-all-post"
+
 }

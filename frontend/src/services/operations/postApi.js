@@ -1,51 +1,61 @@
-import { toast } from 'react-hot-toast';
-import { createPostEndpoints } from '../apis';
-import { setLoading } from '../../redux/slices/loadingSlice';
-import { apiConnector } from '../apiConnector';
+import { postEndpoints } from "../apis";
+import {toast} from 'react-hot-toast' ;
+import { setLoading } from "../../redux/slices/loadingSlice";
+import { apiConnector } from "../apiConnector";
+import { setPosts, setError } from "../../redux/slices/postSlice";
 
-//Endpoints to create post 
-const  {
 
-    CREATE_POST_API,
-    EDIT_POST_API ,
-    DELETE_POST_API,
+const {
 
-} = createPostEndpoints ;
+    GET_ALL_POSTS ,
+    GET_USER_ALL_POST
 
-export function createPost( postData ) {
-    return async (dispatch) => {
-      dispatch(setLoading(true));
-      try {
+} = postEndpoints ;
 
-        // Send POST request to create a new post
-        const response = await apiConnector("POST", CREATE_POST_API, postData);
-  
-        // Check if response is unsuccessful
-        if (!response.data.success) {
-          throw new Error(response.data.message);
-        }
-  
-        // On success, show a toast notification
-        toast.success("Post created successfully");
-  
+export function getAllPost() {
+
+    return async( dispatch, getState ) => {
        
-      } catch (error) {
+        console.log("get all function called") ;
+        const token = getState().auth.token ;
+        console.log("token of get all post", token) ;
+        dispatch(setLoading(true)) ;
 
-        // Error handling based on status codes
-        if (error.response && error.response.status === 400) {
-          toast.error("Invalid input or missing required fields.");
-        } else if (error.response && error.response.status === 401) {
-          toast.error("Unauthorized. Please log in.");
-        } else if (error.response && error.response.status === 500) {
-          toast.error("Internal server error. Please try again later.");
-        } else {
-          toast.error("Something went wrong. Please try again.");
+        try{
+
+            if( !token ) {
+                throw new Error("Token is missing! Please login") ;
+            }
+
+            const response = await apiConnector("GET", GET_ALL_POSTS,{
+                headers: {
+                    'Authorization': `Bearer ${token}`  // Send token in Authorization header
+                }
+            })
+
+            if( !response.data.success) {
+                throw new Error(response.data.message) ;
+            }
+            
+            console.log("response of get all post",response.data.posts);
+            dispatch(setPosts(response.data.posts)) ;
+        
+        } catch(error) {
+            if (error.response && error.response.status === 400) {
+                toast.error("Invalid input or missing required fields.");
+              } else if (error.response && error.response.status === 401) {
+                toast.error("Unauthorized. Please log in.");
+              } else if (error.response && error.response.status === 500) {
+                toast.error("Internal server error. Please try again later.");
+              } else {
+                toast.error("Something went wrong. Please try again.");
+              }
+              console.log("Error creating post:", error);
+            dispatch(setError(error.message)) ;
+        } finally {
+            dispatch(setLoading(false)) ;
         }
-  
-        console.log("Error creating post:", error);
+    } ;
 
-      } finally {
-        dispatch(setLoading(false));
-      }
-    }
 }
+
