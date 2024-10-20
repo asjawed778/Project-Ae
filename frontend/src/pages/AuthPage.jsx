@@ -39,7 +39,11 @@ function AuthPage() {
       <div className="auth-page">
 
         <div className="auth-logo-section">
-          <div className="auth-logo">X</div>
+          <div className="auth-info">
+            <div className='name'>AbilitaEdge</div>
+            <h3>Transforming Your Abilities</h3>
+            <h3>into Capabilities</h3>
+          </div>
         </div>
 
         <div className="auth-content-section">

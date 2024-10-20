@@ -6,8 +6,6 @@ import ReactDOM from 'react-dom';
 import { loginUser } from "../services/operations/authApi";
 import './LoginModal.css';
 
-//import reset modal to invoke
-import ResetPasswordModal from "./ResetPasswordModal";
 
 function LoginModal({ loginModal, setLoginModal, setResetModal }) {
     

@@ -11,3 +11,9 @@ export const userAuthEndpoints = {
     SEND_FORGOT_PASSWORD_OTP_API: SERVER_URL + "/send-forgotPassword-otp",
     VERIFY_FORGOT_PASSWORD_OTP_API: SERVER_URL + "/verify-forgotPassword-otp"
 }
+
+export const createPostEndpoints = {
+    CREATE_POST_API: SERVER_URL + "/create-post" ,
+    EDIT_POST_API: (postId) => `${SERVER_URL}/update-post/${postId}`,
+    DELETE_POST_API: (postId) => `${SERVER_URL}/delete-post/${postId}`
+}

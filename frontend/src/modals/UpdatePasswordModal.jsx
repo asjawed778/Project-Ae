@@ -4,7 +4,7 @@ import { RxCross2 } from 'react-icons/rx';
 
 import { useDispatch, useSelector } from 'react-redux'; 
 import ButtonLoading from '../components/common/ButtonLoading';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 import { updatePassword } from '../services/operations/authApi';
 import './OTPModals.css';
@@ -13,7 +13,7 @@ function UpdatePasswordModal({ email, updatePasswordModal, setUpdatePasswordModa
     
     const otpInputRefs = useRef([]);
     const dispatch = useDispatch();
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const { loading } = useSelector((store) => store.loading);
     const [isOtpComplete, setIsOtpComplete] = useState(false);
     
