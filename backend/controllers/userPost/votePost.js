@@ -1,6 +1,6 @@
 const Post = require('../../models/Post');
 
-exports.vote = async (req, res, next) => {
+exports.votePost = async (req, res, next) => {
     try {
         // Check if user is authenticated
         if (!req.user || !req.user.id) {

@@ -217,7 +217,6 @@ exports.deleteReply = async (req, res, next) => {
     }
 };
 
-
 // Vote on a Reply
 exports.voteReply = async (req, res, next) => {
     try {

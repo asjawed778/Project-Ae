@@ -13,7 +13,7 @@ const {
     getComments,
     voteComment
 } = require('../controllers/userPost/comment');
-const { vote } = require('../controllers/userPost/upDownVote');
+const { votePost } = require('../controllers/userPost/votePost');
 
 const {
     replyToComment,
@@ -21,7 +21,7 @@ const {
     deleteReply,
     voteReply
 } = require('../controllers/userPost/replies');
-
+ 
 // post routes 
 router.post('/create-post', auth, createPost);
 router.get('/get-all-post', auth, getAllPost);
@@ -30,7 +30,7 @@ router.delete('/delete-post/:postId', auth, deletePost);
 router.put('/update-post/:postId', auth, updatePost);
 
 // voting on post routes
-router.post('/vote-post/:postId', auth, vote);
+router.post('/vote-post/:postId', auth, votePost);
 
 
 // comments routes 
