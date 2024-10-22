@@ -53,7 +53,6 @@ function LoginModal({ loginModal, setLoginModal, setResetModal }) {
         setLoginFormData({
            email:'', 
            password:''
-
         })
     }
     
