@@ -1,0 +1,30 @@
+/* Hide text on screens smaller than 768px */
+.hide-text-on-small {
+    display: inline;
+    
+  }
+  
+.side-bar {
+    margin-left: 4%;
+
+}
+  @media (max-width: 768px) {
+    /* Show text on screens 768px and larger */
+    .hide-text-on-small {
+      display: none;
+    }
+    
+    .side-bar {
+        margin-left: 0px
+    
+    }
+    
+  }
+
+  @media (max-width: 768px) {
+    .responsive-component {
+      margin-right: 10%; /* 90% of the viewport width */
+      margin-left: 0;
+
+    }
+  }

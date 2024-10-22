@@ -1,14 +1,31 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import './App.css';
 import PageNotFound from './pages/PageNotFound';
-import Home from './pages/Home';
+import Home from './pages/home/HomePage.jsx';
 import AuthPage from './pages/AuthPage';
 import PublicRoute from './components/core/PublicRoute';
 import PrivateRoute from './components/core/PrivateRoute';
+import './index.css';
+import Sidebar from './components/common/Sidebar.jsx';
+
 
 function App() {
+
+  const location = useLocation() ;
+
   return (
-    <>
+    // <div className='flex max-w-6xl items-start'>
+    <div className='flex max-w-6xl mx-auto items-start'>
+     
+
+      {/* Sidebar */}
+      {location.pathname !== '/auth' && (
+        <div className="w-[250px] md:w-[300px] h-screen">
+          <Sidebar />
+        </div>
+      )}
+
+    <div className='flex-1 flex justify-center home-component'>
       <Routes>
         <Route path='/' element={
           <PrivateRoute>
@@ -22,7 +39,8 @@ function App() {
         } />
         <Route path='*' element={<PageNotFound />} />
       </Routes>
-    </>
+      </div>
+    </div>
   );
 }
 
