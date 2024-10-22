@@ -155,6 +155,7 @@ exports.editComment = async (req, res, next) => {
     }
 };
 
+// get comments 
 exports.getComments = async (req, res, next) => {
     try {
         // Check if the user is authenticated
