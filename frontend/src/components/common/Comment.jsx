@@ -1,79 +1,243 @@
-import React, { useState } from 'react';
+import { useState } from "react";
+import { FaRegComment, FaRegThumbsDown, FaRegThumbsUp, FaReply } from "react-icons/fa";
+import { timeAgo } from "../../utils/db/timestamp";
+import { useDispatch , useSelector} from "react-redux";
+import { useSearchParams } from "react-router-dom";
+import { editReply, replyOnComment,deleteReply, voteOnReply } from "../../services/operations/commentApi";
 
-const Comment = ({ comment, handleReply, replyCommentId, handlePostReply }) => {
-  const [replyText, setReplyText] = useState('');
+
+const CommentSection = ( {comments, postId } ) => {
+
+  const [replies, setReplies] = useState({}); // Manage replies for each comment
+  const [votes, setVotes] = useState({}); // Manage upvotes/downvotes
+  
+  console.log("upvote", comments.replies) ;
+
+  const handleReply = (commentId, replyText) => {
+    setReplies((prevReplies) => ({
+      ...prevReplies,
+      [commentId]: [...(prevReplies[commentId] || []), replyText], // Add reply to the specific comment
+    }));
+  };
+
+   // Filter comments for the specific post
+  //  const filteredComments = comments.filter(comment => comment.postId === postId);
+  // console.log("filtered_comments", comments) ;
+
+  const handleVote = (commentId, type) => {
+    setVotes((prevVotes) => ({
+      ...prevVotes,
+      [commentId]: (prevVotes[commentId] || 0) + (type === "upvote" ? 1 : -1),
+    }));
+  };
 
   return (
-    <div className='flex gap-2 items-start'>
-      <div className='avatar'>
-        <div className='w-8 rounded-full'>
-          <img src={comment.user.profileImg || '/avatar-placeholder.png'} />
-        </div>
-      </div>
-      <div className='flex flex-col w-full'>
-        <div className='flex items-center gap-1'>
-          <span className='font-bold'>{comment.user.fullName}</span>
-          <span className='text-gray-700 text-sm'>@{comment.user.username}</span>
-        </div>
-        <div className='text-sm'>{comment.text}</div>
+    <div className="comment-section border border-gray-700 p-4 w-[700px] mx-auto mr-4" style={{ borderColor: '#D8D8D8' , borderWidth:'0.1px', borderBottom:'none', borderTop:'none'}}>
+      {comments.map((comment) => (
+        <Comment
+          key={comment._id}
+          comment={comment}
+          postId={postId}
+          handleReply={handleReply}
+          handleVote={handleVote}
+          replies={ comment.replies || []}
+          voteCount={votes[comment.id] || 0}
+        />
+      ))}
+    </div>
+  );
+};
+ 
+const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount }) => {
+  
+  const dispatch = useDispatch() ;
 
-        {/* Reply and Like option */}
-        <div className='flex gap-4 mt-2'>
-          <span
-            className='text-sm text-gray-500 cursor-pointer'
-            onClick={() => handleReply(comment._id)}
-          >
-            Reply
-          </span>
-          <span className='text-sm text-gray-500 cursor-pointer'>Like</span>
+  const { user } = useSelector((state) => state.auth);
+  const [showReplyInput, setShowReplyInput] = useState(false);
+  const [showReplies, setShowReplies] = useState(false); // To toggle replies visibility
+  const [replyText, setReplyText] = useState("");
+  const [isEditingReply, setIsEditingReply] = useState(null); // Tracks which reply is being edited
+  const [editedReplyText, setEditedReplyText] = useState(""); // Holds the edited reply text
+
+  // Toggle for reply input
+  const handleReplyClick = () => {
+    setShowReplyInput(!showReplyInput);
+  };
+  
+  // Toggle replies visibility
+  const toggleReplies = () => {
+    setShowReplies(!showReplies);
+  };
+
+  // Submit a new reply
+  const handleReplySubmit = (e) => {
+    e.preventDefault();
+    dispatch(replyOnComment(postId, comment._id, replyText, user.username));
+    setReplyText('');
+    setShowReplyInput(false);
+  };
+
+  // Submit the edited reply
+  const handleEditReplySubmit = (replyId) => {
+    dispatch(editReply(postId, comment._id, replyId, editedReplyText, user.username));
+    setIsEditingReply(null);
+    setEditedReplyText('');
+  };
+
+  // Delete the reply
+  const handleDeleteReply = (replyId) => {
+    dispatch(deleteReply(postId, comment._id, replyId));
+  };
+
+  // Upvote/Downvote Reply
+  const handleUpvoteReply = (replyId) => {
+    dispatch(voteOnReply(postId, comment._id, replyId, 'upvote'));
+  };
+
+  const handleDownvoteReply = (replyId) => {
+    dispatch(voteOnReply(postId, comment._id, replyId, 'downvote'));
+  };
+
+  return (
+    <div className="comment p-4">
+      <div className="flex items-start gap-2">
+        {/* Avatar */}
+        <div className="avatar w-8 h-8 rounded-full overflow-hidden">
+          <img
+            src={comment.user.profilePic || "/avatar-placeholder.png"}
+            alt="avatar"
+          />
         </div>
 
-        {/* Nested Replies */}
-        {comment.replies && comment.replies.length > 0 && (
-          <div className='ml-8 mt-2'>
-            {comment.replies.map((reply) => (
-              <div key={reply._id} className='flex gap-2 items-start'>
-                <div className='avatar'>
-                  <div className='w-6 rounded-full'>
-                    <img src={reply.user.profileImg || '/avatar-placeholder.png'} />
-                  </div>
-                </div>
-                <div className='flex flex-col'>
-                  <div className='flex items-center gap-1'>
-                    <span className='font-bold'>{reply.user.fullName}</span>
-                    <span className='text-gray-700 text-sm'>@{reply.user.username}</span>
-                  </div>
-                  <div className='text-sm'>{reply.text}</div>
-                </div>
-              </div>
-            ))}
+        {/* Comment Content */}
+        <div className="flex-grow">
+          <div className="flex items-center gap-1">
+            <span className="font-bold">{comment.user.name}</span>
+            <span className="text-sm">{timeAgo(comment.createdAt)}</span>
           </div>
-        )}
+          <p className="text-gray-800">{comment.comment}</p>
 
-        {/* Reply Form */}
-        {replyCommentId === comment._id && (
-          <form
-            className='mt-2 flex gap-2 items-center'
-            onSubmit={(e) => {
-              e.preventDefault();
-              handlePostReply(replyText, comment._id);
-              setReplyText('');
-            }}
-          >
-            <textarea
-              className='textarea w-full p-1 rounded text-md resize-none border focus:outline-none border-gray-800'
-              placeholder='Write a reply...'
-              value={replyText}
-              onChange={(e) => setReplyText(e.target.value)}
-            />
-            <button className='btn btn-primary rounded-full btn-sm text-white px-4'>
-              Post
+          {/* Voting */}
+          <div className="flex justify-between mt-3">
+            <div className="flex gap-4 items-center w-full">
+              <div className="flex gap-1 items-center group cursor-pointer" onClick={handleUpvoteReply}>
+                <FaRegThumbsUp className="w-4 h-4 cursor-pointer text-slate-500" />
+                <span>{voteCount.upvotes}</span>
+              </div>
+
+              <div className="flex gap-1 items-center group cursor-pointer" onClick={handleDownvoteReply}>
+                <FaRegThumbsDown className="w-4 h-4 cursor-pointer text-slate-500" />
+                <span>{voteCount.downvotes}</span>
+              </div>
+
+              <div className="flex gap-1 items-center cursor-pointer group" onClick={handleReplyClick}>
+                <FaReply className="w-4 h-4 text-slate-500 group-hover:text-sky-400" />
+              </div>
+            </div>
+          </div>
+
+          {/* Conditional rendering of the input box */}
+          {showReplyInput && (
+            <form onSubmit={handleReplySubmit} className="mt-2">
+              <input
+                type="text"
+                value={replyText}
+                onChange={(e) => setReplyText(e.target.value)}
+                placeholder="write your reply..."
+                className="border-b border-gray-400 rounded-none px-2 py-1 w-full"
+              />
+              <button type="submit" className="bg-blue-500 text-white rounded px-3 py-1 mt-2">
+                Submit
+              </button>
+            </form>
+          )}
+
+          {/* Show Replies Button */}
+          {replies.length > 0 && (
+            <button onClick={toggleReplies} className="text-blue-500 text-sm mt-2">
+              {showReplies ? `Hide Replies (${replies.length})` : `Show Replies (${replies.length})`}
             </button>
-          </form>
-        )}
+          )}
+
+          {/* Conditional rendering of replies */}
+          {showReplies && (
+            <div className="ml-8 mt-2">
+              {replies.map((reply) => (
+                <div key={reply._id} className="reply p-2 bg-gray-100 rounded mt-1">
+                  <div className="flex items-start gap-2">
+                    <div className="avatar w-6 h-6 rounded-full overflow-hidden">
+                      <img
+                        src={"/avatar-placeholder.png"}
+                        alt="avatar"
+                      />
+                    </div>
+                    <div className="flex-grow">
+                      <div className="flex items-center gap-1">
+                        <span className="font-bold">{reply.tagUsername}</span>
+                        <span className="text-sm">{timeAgo(reply.createdAt)}</span>
+                      </div>
+
+                      {/* Edit Mode for Reply */}
+                      {isEditingReply === reply.userId ? (
+                        <form onSubmit={() => handleEditReplySubmit(reply._id)} className="mt-2">
+                          <input
+                            type="text"
+                            value={editedReplyText}
+                            onChange={(e) => setEditedReplyText(e.target.value)}
+                            className="border-b border-gray-400 rounded-none px-2 py-1 w-full"
+                          />
+                          <button type="submit" className="bg-blue-500 text-white rounded px-3 py-1 mt-2">
+                            Save
+                          </button>
+                        </form>
+                      ) : (
+                        <p className="text-gray-700">{reply.reply}</p>
+                      )}
+
+                      {/* Upvote/Downvote for Reply */}
+                      <div className="flex gap-1 items-center">
+                        <FaRegThumbsUp
+                          className="w-4 h-4 cursor-pointer text-slate-500"
+                          onClick={() => handleUpvoteReply(reply._id)}
+                        />
+                        <span>{reply.upvotes}</span>
+
+                        <FaRegThumbsDown
+                          className="w-4 h-4 cursor-pointer text-slate-500"
+                          onClick={() => handleDownvoteReply(reply._id)}
+                        />
+                        <span>{reply.downvotes}</span>
+
+                        {/* Edit/Delete Buttons for Own Reply */}
+                        {user._id === reply.userId && (
+                          <>
+                            <button onClick={() => {
+                              setIsEditingReply(reply.userId);
+                              setEditedReplyText(reply.reply);
+                            }} className="text-sm text-blue-500 ml-2">
+                              Edit
+                            </button>
+                            <button onClick={() => handleDeleteReply(reply._id)} className="text-sm text-red-500 ml-2">
+                              Delete
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
-export default Comment;
+
+
+
+
+
+export default CommentSection;

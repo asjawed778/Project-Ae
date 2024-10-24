@@ -15,7 +15,9 @@ function App() {
 
   return (
     // <div className='flex max-w-6xl items-start'>
-    <div className='flex max-w-6xl mx-auto items-start'>
+    <div className='flex max-w-6xl mx-auto items-start justify-around bg-white home'
+      
+     >
      
 
       {/* Sidebar */}
@@ -25,7 +27,7 @@ function App() {
         </div>
       )}
 
-    <div className='flex-1 flex justify-center home-component'>
+    <div className='flex-1 flex justify-center home-component mr-32' >
       <Routes>
         <Route path='/' element={
           <PrivateRoute>

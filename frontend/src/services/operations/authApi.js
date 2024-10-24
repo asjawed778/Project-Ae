@@ -93,8 +93,8 @@ export function logoutUser(navigate) {
             toast.success("Logged out successfully");
             navigate("/auth");
         } catch (error) {
-            console.log("Error in logging out: ", error);
-            toast.error("Failed to log out. Please try again.");
+            // console.log("Error in logging out: ", error);
+            toast.error("Error", error);
             return ;
         } finally {
             toast.dismiss(load);
@@ -110,13 +110,16 @@ export function loginUser( userLoginData , navigate ) {
             if (!response.data.success) {
                 throw new Error(response.data.message)
             }
+            
+            const token = response.data.token;
+            const user = response.data.user;
 
-            dispatch(login(response.data));
-            // console.log(response.data);
+            dispatch(login({ token, user }));
+            console.log("loginUser",response.data);
             
             console.log("token",response.data);
 
-            const token = response.data.token;
+            
             Cookies.set("token", token, { expires: 7 }); // Token valid for 7 days
 
             toast.success("User Login successfully");

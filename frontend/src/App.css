@@ -1,5 +1,24 @@
 @media (max-width: 768px) {
     .home-component {
       margin-left: 20%; /* 90% of the viewport width */
+      
+    }
+   
+    body {
+      background-color: white;
     }
   }
+
+@media(min-width: 1024px) {
+  .home {
+      box-shadow: 4px 0px 8px rgba(0, 0, 0, 0.1), -4px 0 8px rgba(0, 0, 0, 0.1),
+  }
+}
+
+
+/* @media( max-width:) */
+/* @media (max-width: ) */
+
+body {
+  background: #f0f0f0;
+}
