@@ -251,7 +251,7 @@ exports.voteComment = async (req, res, next) => {
         }
 
         if (!action) {
-            const err = new Error("Action is required.");
+            const err = new Error("Action(Vote Type) is required.");
             err.status = 400;
             return next(err);
         }

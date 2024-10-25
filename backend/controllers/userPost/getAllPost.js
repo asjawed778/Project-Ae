@@ -3,12 +3,6 @@ const { AvatarGenerator } = require('random-avatar-generator');
 
 exports.getAllPost = async (req, res, next) => {
     try {
-        // Check if the user is authenticated
-        if (!req.user || !req.user.id) {
-            const err = new Error("Please login to view posts");
-            err.status = 401;
-            return next(err);
-        }
 
         // Get page and limit from query parameters (default values provided)
         const page = Math.max(1, parseInt(req.query.page) || 1);
