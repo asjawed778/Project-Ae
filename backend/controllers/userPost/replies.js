@@ -62,7 +62,8 @@ exports.replyToComment = async (req, res, next) => {
 
         return res.status(201).json({
             success: true,
-            replies: comment.replies
+            message: "Replied successfully",
+            reply: replyComment
         });
     } catch (error) {
         return next(error);

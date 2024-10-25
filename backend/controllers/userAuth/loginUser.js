@@ -37,7 +37,7 @@ exports.login = async (req, res, next) => {
                 id: user._id,
                 email: user.email,
                 name: user.name,
-                username: user.username 
+                username: user.username
             };
 
             let token = jwt.sign(payload, process.env.JWT_SECRET, {
@@ -47,6 +47,7 @@ exports.login = async (req, res, next) => {
             user = user.toObject();
             user.token = token;
             user.password = undefined;
+            user.posts = undefined;
 
             const options = {
                 expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),

@@ -26,7 +26,7 @@ exports.getUserAllPost = async (req, res, next) => {
 
 
         const generator = new AvatarGenerator();
-        
+
         const formattedPosts = posts.map(post => ({
             _id: post._id,
             content: post.content,
@@ -34,8 +34,8 @@ exports.getUserAllPost = async (req, res, next) => {
             videos: post.videos,
             createdAt: post.createdAt,
             editedAt: post.editedAt,
-            upvotesCount: post.upvotes.length,
-            downvotesCount: post.downvotes.length,
+            upvotes: post.upvotes,
+            downvotes: post.downvotes,
             commentsCount: post.comments.length,
             user: {
                 id: post.userId._id,
@@ -50,7 +50,7 @@ exports.getUserAllPost = async (req, res, next) => {
             success: true,
             message: 'User posts fetched successfully',
             posts: formattedPosts,
-            page: page,
+            currentPage: page,
             hasMore: posts.length === limit
         });
     } catch (error) {

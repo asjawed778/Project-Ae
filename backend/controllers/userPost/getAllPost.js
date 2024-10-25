@@ -36,9 +36,9 @@ exports.getAllPost = async (req, res, next) => {
             videos: post.videos,
             createdAt: post.createdAt,
             editedAt: post.editedAt,
-            upvotesCount: post.upvotes.length,
-            downvotesCount: post.downvotes.length,
-            commentsCount: post.comments.length,
+            upvotes: post.upvotes,
+            downvotes: post.downvotes,
+            commentsCounts: post.comments.length,
             user: {
                 id: post.userId._id,
                 name: post.userId.name,
@@ -61,7 +61,7 @@ exports.getAllPost = async (req, res, next) => {
             message: 'Posts fetched successfully',
             posts: formattedPosts,
             currentPage: page,
-            totalPosts,
+            hasMore: posts.length === limit
         });
     } catch (error) {
         // Forward any errors to the error handler middleware

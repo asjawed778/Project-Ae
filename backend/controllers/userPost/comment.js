@@ -94,12 +94,13 @@ exports.deleteComment = async (req, res, next) => {
 
         post.comments = post.comments.filter(c => c._id.toString() !== commentId);
         await post.save();
-        await comment.remove();
+
+        // Delete the comment using deleteOne()
+        await Comment.deleteOne({ _id: commentId });
 
         res.status(200).json({
             success: true,
             message: 'Comment deleted successfully',
-            comments: post.comments
         });
     } catch (error) {
         next(error);
@@ -212,8 +213,8 @@ exports.getComments = async (req, res, next) => {
                 username: comment.userId.username,
                 profilePic: comment.userId.profilePic || generator.generateRandomAvatar(),
             },
-            upvotesCount: comment.upvotes.length,
-            downvotesCount: comment.downvotes.length,
+            upvotes: comment.upvotes,
+            downvotes: comment.downvotes,
         }));
 
         // Return the fetched comments in a successful response
@@ -293,7 +294,7 @@ exports.voteComment = async (req, res, next) => {
 
         return res.status(200).json({
             success: true,
-            message: action === "upvote" ? 
+            message: action === "upvote" ?
                 (isUpvoted ? 'Comment upvote removed successfully' : 'Comment upvoted successfully') :
                 (isDownvoted ? 'Comment downvote removed successfully' : 'Comment downvoted successfully'),
             upvotesCount: comment.upvotes.length,

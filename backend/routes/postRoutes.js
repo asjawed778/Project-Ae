@@ -24,7 +24,7 @@ const {
  
 // post routes 
 router.post('/create-post', auth, createPost);
-router.get('/get-all-post', auth, getAllPost);
+router.get('/get-all-post', getAllPost);
 router.get('/get-user-all-post', auth, getUserAllPost);
 router.delete('/delete-post/:postId', auth, deletePost);
 router.put('/update-post/:postId', auth, updatePost);

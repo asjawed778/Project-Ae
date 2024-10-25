@@ -20,6 +20,21 @@ exports.updatePassword = async (req, res, next) => {
             return next(err);
         }
 
+        if (oldPassword === newPassword) {
+            const err = new Error("Old password and New password should be different");
+            err.status = 400;
+            return next(err);
+        }
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+        if (!passwordRegex.test(newPassword)) {
+            const err = new Error(
+                "New Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number."
+            );
+            err.status = 400;
+            return next(err);
+        }
+
         const user = await User.findById(id);
 
         if (!user) {
