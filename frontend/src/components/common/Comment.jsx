@@ -3,7 +3,7 @@ import { FaRegComment, FaRegThumbsDown, FaRegThumbsUp, FaReply, FaThumbsDown, Fa
 import { timeAgo } from "../../utils/db/timestamp";
 import { useDispatch , useSelector} from "react-redux";
 import { useSearchParams } from "react-router-dom";
-import { editReply, replyOnComment,deleteReply, voteOnReply, voteComment } from "../../services/operations/commentApi";
+import { editReply, replyOnComment,deleteReply, voteOnReply, voteComment, deleteComment, editComment } from "../../services/operations/commentApi";
 
 
 const CommentSection = ( {comments, postId } ) => {
@@ -51,15 +51,20 @@ const CommentSection = ( {comments, postId } ) => {
 const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount }) => {
   
   const dispatch = useDispatch() ;
-  console.log(comment) ;
+  console.log("comment",comment) ;
   console.log("repliesid", replies) ;
   const { user } = useSelector((state) => state.auth);
   
-  const [showReplyInput, setShowReplyInput] = useState(false);
-  const [showReplies, setShowReplies] = useState(false); // To toggle replies visibility
-  const [replyText, setReplyText] = useState("");
-  const [isEditingReply, setIsEditingReply] = useState(null); // Tracks which reply is being edited
-  const [editedReplyText, setEditedReplyText] = useState(""); // Holds the edited reply text
+  // reply states
+  const [showReplyInput, setShowReplyInput] = useState(false) ;
+  const [showReplies, setShowReplies] = useState(false) ; // To toggle replies visibility
+  const [replyText, setReplyText] = useState("") ;
+  const [isEditingReply, setIsEditingReply] = useState(null) ; // Tracks which reply is being edited
+  const [editedReplyText, setEditedReplyText] = useState("") ; // Holds the edited reply text
+
+  // comment states
+  const [isEditingComment, setIsEditingComment] = useState(false) ; // Tracks which comment is being edited
+  const [editedCommentText, setEditedCommentText] = useState("") ;   // holds the edited comment text
 
 
   // Track user vote: 'upvote', 'downvote', or null in comment
@@ -84,6 +89,13 @@ const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount 
       setUserVote('downvote');
     }
    
+  };
+
+  // submit the edited comment
+  const handleEditCommentSubmit = () => {
+    dispatch(editComment(postId, comment._id, editedCommentText ));
+    setIsEditingComment(null);
+    setEditedCommentText('');
   };
 
   // Handle upvote
@@ -134,6 +146,11 @@ const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount 
     dispatch(deleteReply(postId, comment._id, replyId));
   };
 
+  //delete comment
+  const handleDeleteComment = (commentId) => {
+    dispatch(deleteComment(postId, commentId));
+  };
+
 
   return (
     <div className="comment p-4">
@@ -152,7 +169,22 @@ const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount 
             <span className="font-bold">{comment.user.name}</span>
             <span className="text-sm">{timeAgo(comment.createdAt)}</span>
           </div>
-          <p className="text-gray-800">{comment.comment}</p>
+            {/* Edit Mode for Comment */}
+            { isEditingComment === comment.user.id ? (
+                        <form onSubmit={() => handleEditCommentSubmit( user._id )} className="mt-2">
+                          <input
+                            type="text"
+                            value={editedCommentText}
+                            onChange={(e) => setEditedCommentText(e.target.value)}
+                            className="border-b border-gray-400 rounded-none px-2 py-1 w-full"
+                          />
+                          <button type="submit" className="bg-blue-500 text-white rounded px-3 py-1 mt-2">
+                            Save
+                          </button>
+                        </form>
+                      ) : (
+                        <p className="text-gray-700">{comment.comment}</p>
+            )} 
 
           {/* Voting */}
           <div className="flex justify-between mt-3">
@@ -187,6 +219,25 @@ const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount 
               <div className="flex gap-1 items-center cursor-pointer group" onClick={handleReplyClick}>
                 <FaReply className="w-4 h-4 text-slate-500 group-hover:text-sky-400" />
               </div>
+
+              <div className="flex gap-1 items-center">
+                  {/* Edit/Delete Buttons for Own Reply */}
+                    {user._id === comment.user.id && (
+                      <>
+                        <button onClick={() => {
+                           setIsEditingComment(user._id);
+                           setEditedCommentText(comment.comment);
+                        }} className="text-sm text-blue-500 ml-2">
+                              Edit
+                        </button>
+                      
+                       <button onClick={() => handleDeleteComment(comment._id)} className="text-sm text-red-500 ml-2">
+                             Delete
+                       </button>
+                      </>
+                     )}
+              </div>
+
             </div>
           </div>
 
@@ -232,7 +283,7 @@ const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount 
                       </div>
 
                       {/* Edit Mode for Reply */}
-                      {isEditingReply === reply.userId ? (
+                      {isEditingReply === reply._id ? (
                         <form onSubmit={() => handleEditReplySubmit(reply._id)} className="mt-2">
                           <input
                             type="text"
@@ -278,10 +329,10 @@ const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount 
 
                       <div className="flex gap-1 items-center">
                         {/* Edit/Delete Buttons for Own Reply */}
-                        {user._id === reply.userId && (
+                        { user._id === reply.userId && (
                           <>
                             <button onClick={() => {
-                              setIsEditingReply(reply.userId);
+                              setIsEditingReply( reply._id);
                               setEditedReplyText(reply.reply);
                             }} className="text-sm text-blue-500 ml-2">
                               Edit
