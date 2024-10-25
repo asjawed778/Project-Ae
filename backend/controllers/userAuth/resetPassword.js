@@ -68,6 +68,15 @@ exports.verifyForgotPasswordOTP = async (req, res, next) => {
             err.status = 400;
             return next(err);
         }
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+        if (!passwordRegex.test(newPassword)) {
+            const err = new Error(
+                "New Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number."
+            );
+            err.status = 400;
+            return next(err);
+        }
 
         const userOTP = await OTP.findOne({ email: email }).sort({ createdAt: -1 }).limit(1);
 

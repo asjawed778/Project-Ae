@@ -19,6 +19,23 @@ exports.sendSignupOTP = async (req, res, next) => {
             return next(err);
         }
 
+        if (password !== confirmPassword) {
+            const err = new Error("Password and confirm password do not match");
+            err.status = 400;
+            return next(err);
+        }
+
+        // Regex for password: At least 8 characters, 1 uppercase, 1 lowercase, and 1 number
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+        if (!passwordRegex.test(password)) {
+            const err = new Error(
+                "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number."
+            );
+            err.status = 400;
+            return next(err);
+        }
+
         const existingUser = await User.findOne({ email: email });
         if (existingUser) {
             const err = new Error("User Already Exists, Please login");
@@ -53,6 +70,22 @@ exports.signupUser = async (req, res, next) => {
 
         if (!name || !email || !password || !confirmPassword || !otp) {
             const err = new Error("Please Enter OTP and all the details to register");
+            err.status = 400;
+            return next(err);
+        }
+
+        if (password !== confirmPassword) {
+            const err = new Error("Password and confirm password do not match");
+            err.status = 400;
+            return next(err);
+        }
+
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+        if (!passwordRegex.test(password)) {
+            const err = new Error(
+                "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number."
+            );
             err.status = 400;
             return next(err);
         }
@@ -114,6 +147,7 @@ exports.signupUser = async (req, res, next) => {
         user = user.toObject();
         user.token = token;
         user.password = undefined;
+        user.posts = undefined;
 
         const options = {
             expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
