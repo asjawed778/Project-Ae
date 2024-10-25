@@ -3,7 +3,7 @@ import { userAuthEndpoints } from '../apis';
 import { setLoading } from '../../redux/slices/loadingSlice';
 import { apiConnector } from '../apiConnector';
 import { login, logout } from '../../redux/slices/authSlice';
-
+import Cookies from "js-cookie" ;
 
 // Endpoints for user Auth methods
 const {
@@ -93,32 +93,40 @@ export function logoutUser(navigate) {
             toast.success("Logged out successfully");
             navigate("/auth");
         } catch (error) {
-            console.log("Error in logging out: ", error);
-            toast.error("Failed to log out. Please try again.");
-            return;
+            // console.log("Error in logging out: ", error);
+            toast.error("Error", error);
+            return ;
         } finally {
             toast.dismiss(load);
         }
     }
 }
 
-export function loginUser(userLoginData, navigate) {
-    return async (dispatch) => {
+export function loginUser( userLoginData , navigate ) {
+    return async (dispatch) => { 
         dispatch(setLoading(true));
         try {
             const response = await apiConnector("POST", LOGIN_API, userLoginData);
             if (!response.data.success) {
                 throw new Error(response.data.message)
             }
+            
+            const token = response.data.token;
+            const user = response.data.user;
 
-            dispatch(login(response.data));
-            // console.log(response.data);
+            dispatch(login({ token, user }));
+            console.log("loginUser",response.data);
+            
+            console.log("token",response.data);
+
+            
+            Cookies.set("token", token, { expires: 7 }); // Token valid for 7 days
 
             toast.success("User Login successfully");
             navigate("/");
         } catch (error) {
             console.log("Error in user login: ", error);
-
+           
             if (error.status === 400) {
                 toast.error("Please Enter all details");
             }
@@ -131,69 +139,71 @@ export function loginUser(userLoginData, navigate) {
     }
 }
 
-export function resetPassword(userEmail, setResetModal, setUpdatePasswordModal) {
-    return async (dispatch) => {
-        dispatch(setLoading(true));
+export function resetPassword(  userEmail, setResetModal, setUpdatePasswordModal ) {
+    return async(dispatch) => {
+        console.log(userEmail) ;
+        dispatch( setLoading(true)) ;
 
         try {
 
-            const response = await apiConnector("POST", SEND_FORGOT_PASSWORD_OTP_API, userEmail);
-            if (!response.data.success) {
-                throw new Error(response.data.message);
-            }
+           const response = await apiConnector("POST", SEND_FORGOT_PASSWORD_OTP_API, userEmail ) ;
+           if( !response.data.success ) {
+              throw new Error (response.data.message);
+           }
 
-            toast.success("OTP sent successfully");
+           toast.success("OTP sent successfully") ;
 
-            // to close reset modal
-            setResetModal(false);
+           // to close reset modal
+           setResetModal(false) ;
 
-            // to invoke otp modal
-            setUpdatePasswordModal(true);
+           // to invoke otp modal
+           setUpdatePasswordModal(true) ;
 
 
-        } catch (error) {
+        } catch( error ) {
 
-            if (error.status === 500) {
-                toast.error("Internal Server Error");
-            }
+           if( error.status === 500 ) {
+             toast.error("Internal Server Error");
+           }
 
-            console.log("Error in Sending OTP......", error);
+           console.log("Error in Sending OTP......", error) ;
 
         } finally {
 
-            dispatch(setLoading(false));
+            dispatch( setLoading(false) ) ;
 
         }
     }
 }
 
-export function updatePassword(userRegisterData, setUpdatePassswordModal, setLoginModal) {
+export function updatePassword( userRegisterData, setUpdatePassswordModal, setLoginModal ) {
     return async (dispatch) => {
-        dispatch(setLoading(true));
-        console.log("updatePasswordAPI", userRegisterData)
+        dispatch(setLoading(true)) ;
+        console.log("updatePasswordAPI",userRegisterData)
         try {
-            const response = await apiConnector("POST", VERIFY_FORGOT_PASSWORD_OTP_API, userRegisterData);
-            if (!response.data.success) {
-                throw new Error(response.data.message);
-            }
+           
+          const response = await apiConnector("POST",VERIFY_FORGOT_PASSWORD_OTP_API, userRegisterData) ;
+          if( !response.data.success ) {
+            throw new Error (response.data.message) ;
+          }
 
-            toast.success("Password Updated Successfully");
+          toast.success("Password Updated Successfully") ;
 
-            setUpdatePassswordModal(false);
-            setLoginModal(true);
+          setUpdatePassswordModal(false) ;
+          setLoginModal(true) ;
 
-        } catch (error) {
-
-            if (error.status === 400) {
+        } catch(error) {
+           
+            if( error.status === 400 ) {
                 toast.error("Please Enter all details");
             }
 
-            if (error.status === 500) {
-                toast.error(" Internal Server Error ");
+            if( error.status === 500 ) {
+                toast.error(" Internal Server Error " ) ;
             }
             console.log("there is error", error);
         } finally {
-            dispatch(setLoading(false));
+            dispatch( setLoading(false)) ;
         }
     }
 }

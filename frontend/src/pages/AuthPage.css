@@ -1,45 +1,49 @@
 
 .auth-page {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
+    display: flex; 
     align-items: center;
+    justify-content: space-between;
+    
     min-height: 100vh;
-    background-color: white;
-    font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
-.auth-logo-section {
-    margin-bottom: 30px;
+.auth-content-section {
+    
+    max-width: 403px;
+    height: 316px;
+    gap: 0px;
+    opacity: 0px;
+    margin-left: 80px;
+    margin-right: 50px;
+    
 }
 
 .auth-info {
-    color: #d9d9d9;
+   
+    max-width: 503px;
     font-size: medium;
+    margin-right: 80px;
+    margin-left: 90px;
 
-    h3{
-        font-size: 40px;
+    p {
+        font-size: 20px;
         font-weight: 900;
-        line-height: 46.88px;
-        color: #505051;
-        
-    }
+        color:#505051;
+        ;
+    }   
+    
+    
 }
 
 .auth-info .name{
-    font-size: 84px;
+    font-size: 64px;
     font-weight: 900;
     color:#0B66C3;
     
 }
 
-
-
-.auth-content-section {
-    text-align: center;
-    color: white;
-    width: 100%;
-    max-width: 380px;
+p{
+    color: #000;
 }
 
 .auth-main-heading {
@@ -149,32 +153,23 @@
     color: white;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
+@media(max-width:768px) {
     .auth-page {
-        padding: 20px;
         display: flex;
         flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-left: -14%; 
+        margin-top: 10%;
+        margin-bottom: 10%;
     }
 
-    .auth-logo {
-        font-size: 6rem;
-
+    .auth-content-section {
+        height: 400px;
+        margin-top: 30px;
     }
 
-    .auth-main-heading {
-        font-size: 1.8rem;
-
-    }
-
-    .auth-subheading {
-        font-size: 1.1rem;
-    }
-
-    .auth-signup-btn,
-    .auth-create-account-btn,
-    .auth-signin-btn {
-        padding: 10px 0;
-        font-size: 0.9rem;
+    .auth-info {
+        margin-top: 30px;
     }
 }

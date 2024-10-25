@@ -3,12 +3,11 @@ import { IoCloseSharp } from "react-icons/io5";
 import { CiImageOn } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
 import { createPost } from "../../services/operations/createPostApi.js";
-import Cookies from "js-cookie" ;
+
 
 const CreatePost = () => {
 
-  const token = Cookies.get("token") ;
-  console.log("token on cookies", token) ;
+  
 
   const dispatch = useDispatch() ;
   const {loading} = useSelector( store => store.loading ) ;
@@ -83,28 +82,20 @@ const CreatePost = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Prepare post data to send to the API
-    // const postData = {
-    //   content,
-    //   images: images.map((img) => img.file),
-    //   videos: videos.map((vid) => vid.file),
-    //   token: token
-    // };
-
     const formData = new FormData();
-  formData.append('content', content); // Add text content
+    formData.append('content', content); // Add text content
 
-  // Add images to the formData object
-  images.forEach((img, index) => {
-    formData.append('images', img.file); // Images will be sent as 'images' key
-  });
+    // Add images to the formData object
+    images.forEach((img, index) => {
+     formData.append('images', img.file); // Images will be sent as 'images' key
+    });
 
-  // Add videos to the formData object
-  videos.forEach((vid, index) => {
-    formData.append('videos', vid.file); // Videos will be sent as 'videos' key
-  });
+    // Add videos to the formData object
+    videos.forEach((vid, index) => {
+      formData.append('videos', vid.file); // Videos will be sent as 'videos' key
+    });
 
-  formData.append('token', token) ;
+  // formData.append('token', token) ;
     
     dispatch( createPost( formData) )
     .then ( () => {
@@ -122,8 +113,15 @@ const CreatePost = () => {
 
   return (
     <div
-      className="md:flex-[2_2_0] flex p-4 items-start gap-2 w-[500px] mx-auto mt-5"
-      style={{ borderColor: "#D8D8D8", borderWidth: "0.1px", borderBottom: "none", borderTop: "none" }}
+      className="md:flex-[2_2_0] flex p-4 items-start gap-2 w-[700px] mx-auto mt-5 mr-4 border-b  border-gray-700"
+      style={{ 
+        borderColor: "#D8D8D8",
+        borderWidth: "0.1px", 
+        borderBottom: "none", 
+        borderTop: "none"  ,
+        
+       
+      }}
     >
       <div className="avatar">
         <div className="w-8 rounded-full">
@@ -132,6 +130,17 @@ const CreatePost = () => {
       </div>
 
       <form className="flex flex-col gap-2 w-full" onSubmit={handleSubmit}>
+          
+          {/* Conditionally show loading spinner */}
+        {loading ? (
+          <div className="flex justify-center items-center">
+            <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-blue-500"></div>
+            <p className="ml-2">Posting...</p>
+          </div>
+        ) : (
+          <>
+        
+        
         <textarea
           className="textarea w-full p-0 text-lg resize-none border-none focus:outline-none border-gray-800"
           style={{ borderColor: "#D8D8D8" }}
@@ -198,6 +207,10 @@ const CreatePost = () => {
             Post
           </button>
         </div>
+        </>
+        )
+        }
+
       </form>
     </div>
   );

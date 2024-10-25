@@ -15,7 +15,7 @@
     background-color: #000;
     padding: 40px;
     width: 430px;
-    max-height:350px;
+    max-height:380px;
     border-radius: 18px;
     box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
     position: relative;
@@ -93,7 +93,7 @@
 @media (max-width: 768px) {
     .login-modal-container {
         width: 330px; /* Increase the width to better fit smaller screens */
-        height: 300px;
+        height: 320px;
         padding: 30px;
     }
 
@@ -121,7 +121,7 @@
 @media (max-width: 480px) {
     .login-modal-container {
         width: 270px; /* Even wider on very small screens */
-        height: 250px;
+        height: 280px;
         padding: 20px;
     }
 
@@ -147,7 +147,7 @@
 @media (max-width: 360px) {
     .login-modal-container {
         width: 250px; /* Even wider on very small screens */
-        height: 250px;
+        height: 280px;
         padding: 20px;
     }
 

@@ -38,18 +38,15 @@ function AuthPage() {
     <>
       <div className="auth-page">
 
-        <div className="auth-logo-section">
+        
           <div className="auth-info">
             <div className='name'>AbilitaEdge</div>
-            <h3>Transforming Your Abilities</h3>
-            <h3>into Capabilities</h3>
+            <p>Transforming Your Abilities</p>
+            <p>into Capabilities</p>
           </div>
-        </div>
+        
 
         <div className="auth-content-section">
-
-          <h1 className="auth-main-heading">Happening now</h1>
-          <h2 className="auth-subheading">Join today.</h2>
 
           <button className="auth-signup-btn auth-google-btn">
             <img src={googleImage} alt="Google" />
@@ -75,7 +72,7 @@ function AuthPage() {
             By signing up, you agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>, including <a href="#">Cookie Use</a>.
           </p>
 
-          <h3 className="auth-already-account">Already have an account?</h3>
+          {/* <h3 className="auth-already-account">Already have an account?</h3> */}
 
           <button className="auth-signin-btn" onClick={loginAccountHandler}>
             SignIn

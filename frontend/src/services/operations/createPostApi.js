@@ -3,6 +3,7 @@ import { createPostEndpoints } from '../apis';
 import { setLoading } from '../../redux/slices/loadingSlice';
 import { apiConnector } from '../apiConnector';
 import Cookies from "js-cookie" ;
+import { getAllPost } from './postApi';
 
 //Endpoints to create post 
 const  {
@@ -19,7 +20,7 @@ export function createPost( postData ) {
     return async (dispatch, getState) => {
       // Step 1: Retrieve token from Redux state
       const token = getState().auth.token; // Ensure the correct slice name (auth) is used here
-      console.log("Token from Redux:", token);
+     // console.log("Token from Redux:", token);
   
       dispatch(setLoading(true));
       
@@ -31,17 +32,22 @@ export function createPost( postData ) {
   
         // Step 3: Send POST request to create a new post with the token in headers
         // Auhtorization is not working
-        const response = await apiConnector("POST", CREATE_POST_API, postData, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
+        const response = await apiConnector(
+          "POST", 
+          CREATE_POST_API, 
+          postData, 
+          {
+            'Authorization': `Bearer ${token}`  // Send token in Authorization header
           }
-        });
+          
+        );
         
-        console.log(response) ;
+       // console.log(response) ;
         // Step 4: Check if response is unsuccessful
         if (!response.data.success) {
           throw new Error(response.data.message);
+        } else {
+          dispatch(getAllPost()) ;
         }
   
         // On success, show a toast notification
@@ -58,7 +64,7 @@ export function createPost( postData ) {
         } else {
           toast.error("Something went wrong. Please try again.");
         }
-        console.log("Error creating post:", error);
+       // console.log("Error creating post:", error);
   
       } finally {
         // Step 6: Stop loading spinner/action
