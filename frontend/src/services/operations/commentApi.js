@@ -16,6 +16,8 @@ const  {
 
 } = commentEndpoints ;
 
+//add comment 
+
 export function addComment(postId, commentText) {
     return async( dispatch, getState ) => {
       
@@ -69,6 +71,8 @@ export function addComment(postId, commentText) {
     }
 }
 
+
+//get all comments 
 
 export function getAllComments( postId ) {
     return async( dispatch, getState ) => {
@@ -129,7 +133,9 @@ export function voteComment(postId, commentId, action) {
            if( !response.data.success ) {
              throw new Error ( response.data.message ) ;
            }
-
+           
+           console.log("vote comemnt", response) ;
+           toast.success("your successfully voted up");
            dispatch( getAllComments(postId) ) ;
 
         } catch (error ) {
@@ -137,6 +143,8 @@ export function voteComment(postId, commentId, action) {
             if( error.response && error.response.status === 404 ) {
                 toast.error( "Page not found" ) ;
             }
+            toast.error("there is error") ;
+            console.log(error) ;
 
         } finally {
            dispatch( setLoading(false) ) ; 
@@ -268,6 +276,8 @@ export function deleteReply(postId, commentId, replyId) {
 
 export function voteOnReply( postId, commentId, replyId, voteType ) {
     return async (dispatch, getState) => {
+
+        console.log("vote on reply",postId, commentId, replyId, voteType) ;
         const token = getState().auth.token;
         dispatch(setLoading(true));
 
@@ -276,10 +286,10 @@ export function voteOnReply( postId, commentId, replyId, voteType ) {
                 "POST",
                 VOTE_REPLY(postId, commentId, replyId),
                 { 
-                    voteType 
+                    "voteType": `${voteType}` 
                 }, // The voteType could be 'upvote' or 'downvote'
                 {
-                    Authorization: `Bearer ${token}`
+                    "Authorization": `Bearer ${token}`
                 }
             );
 
@@ -295,7 +305,7 @@ export function voteOnReply( postId, commentId, replyId, voteType ) {
             } else {
                 toast.error("Failed to vote on reply");
             }
-            //console.error("Error in voting on reply:", error);
+            console.error("Error in voting on reply:", error);
         } finally {
             dispatch(setLoading(false));
         }

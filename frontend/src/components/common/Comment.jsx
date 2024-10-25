@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { FaRegComment, FaRegThumbsDown, FaRegThumbsUp, FaReply } from "react-icons/fa";
+import { FaRegComment, FaRegThumbsDown, FaRegThumbsUp, FaReply, FaThumbsDown, FaThumbsUp } from "react-icons/fa";
 import { timeAgo } from "../../utils/db/timestamp";
 import { useDispatch , useSelector} from "react-redux";
 import { useSearchParams } from "react-router-dom";
-import { editReply, replyOnComment,deleteReply, voteOnReply } from "../../services/operations/commentApi";
+import { editReply, replyOnComment,deleteReply, voteOnReply, voteComment } from "../../services/operations/commentApi";
 
 
 const CommentSection = ( {comments, postId } ) => {
@@ -51,13 +51,58 @@ const CommentSection = ( {comments, postId } ) => {
 const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount }) => {
   
   const dispatch = useDispatch() ;
-
+  console.log(comment) ;
+  console.log("repliesid", replies) ;
   const { user } = useSelector((state) => state.auth);
+  
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [showReplies, setShowReplies] = useState(false); // To toggle replies visibility
   const [replyText, setReplyText] = useState("");
   const [isEditingReply, setIsEditingReply] = useState(null); // Tracks which reply is being edited
   const [editedReplyText, setEditedReplyText] = useState(""); // Holds the edited reply text
+
+
+  // Track user vote: 'upvote', 'downvote', or null in comment
+  const [userVote, setUserVote] = useState(null);
+
+   // Track user vote: 'upvote', 'downvote', or null in reply
+   const [userVoteReply, setUserVoteReply] = useState(null);
+
+   // Handle upvote
+   const handleUpvote = () => {
+    if (userVote !== 'upvote') {
+      dispatch(voteComment(postId, comment._id, 'upvote'));
+      setUserVote('upvote');
+    }
+    
+  };
+  
+   // Handle downvote
+   const handleDownvote = () => {
+    if (userVote !== 'downvote') {
+      dispatch(voteComment(postId, comment._id, 'downvote'));
+      setUserVote('downvote');
+    }
+   
+  };
+
+  // Handle upvote
+  const handleReplyUpvote = ( replyId) => {
+    if (userVoteReply !== 'upvote') {
+      dispatch(voteOnReply(postId, comment._id, replyId ,'upvote'));
+      setUserVoteReply('upvote');
+    }
+    
+  };
+  
+   // Handle downvote
+   const handleReplyDownvote = (replyId) => {
+    if (userVoteReply !== 'downvote') {
+      dispatch(voteOnReply(postId, comment._id, replyId ,'downvote'));
+      setUserVoteReply('downvote');
+    }
+   
+  };
 
   // Toggle for reply input
   const handleReplyClick = () => {
@@ -89,14 +134,6 @@ const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount 
     dispatch(deleteReply(postId, comment._id, replyId));
   };
 
-  // Upvote/Downvote Reply
-  const handleUpvoteReply = (replyId) => {
-    dispatch(voteOnReply(postId, comment._id, replyId, 'upvote'));
-  };
-
-  const handleDownvoteReply = (replyId) => {
-    dispatch(voteOnReply(postId, comment._id, replyId, 'downvote'));
-  };
 
   return (
     <div className="comment p-4">
@@ -120,16 +157,33 @@ const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount 
           {/* Voting */}
           <div className="flex justify-between mt-3">
             <div className="flex gap-4 items-center w-full">
-              <div className="flex gap-1 items-center group cursor-pointer" onClick={handleUpvoteReply}>
-                <FaRegThumbsUp className="w-4 h-4 cursor-pointer text-slate-500" />
+              {/* Upvote */}
+              <div className="flex gap-1 items-center cursor-pointer" onClick={handleUpvote}>
+                
+                { userVote == 'upvote' ? (
+                  <FaThumbsUp className='w-4 h-4 cursor-pointer text-blue-600 '/>
+                 ) : (
+                  <FaRegThumbsUp className='w-4 h-4 text-slate-500'/>
+                  
+                ) 
+                }
+                
                 <span>{voteCount.upvotes}</span>
               </div>
 
-              <div className="flex gap-1 items-center group cursor-pointer" onClick={handleDownvoteReply}>
-                <FaRegThumbsDown className="w-4 h-4 cursor-pointer text-slate-500" />
+               {/* Downvote */}
+               <div className="flex gap-1 items-center cursor-pointer" onClick={handleDownvote}>
+               { userVote == 'downvote' ? (
+                  <FaThumbsDown className='w-4 h-4 cursor-pointer text-blue-600 '/>
+                 ) : (
+                  <FaRegThumbsDown className='w-4 h-4 text-slate-500'/>
+                  
+                ) 
+                }
                 <span>{voteCount.downvotes}</span>
               </div>
 
+              {/* Reply Section */}
               <div className="flex gap-1 items-center cursor-pointer group" onClick={handleReplyClick}>
                 <FaReply className="w-4 h-4 text-slate-500 group-hover:text-sky-400" />
               </div>
@@ -167,7 +221,7 @@ const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount 
                   <div className="flex items-start gap-2">
                     <div className="avatar w-6 h-6 rounded-full overflow-hidden">
                       <img
-                        src={"/avatar-placeholder.png"}
+                        src={user.profilePic}
                         alt="avatar"
                       />
                     </div>
@@ -195,19 +249,34 @@ const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount 
                       )}
 
                       {/* Upvote/Downvote for Reply */}
-                      <div className="flex gap-1 items-center">
-                        <FaRegThumbsUp
-                          className="w-4 h-4 cursor-pointer text-slate-500"
-                          onClick={() => handleUpvoteReply(reply._id)}
-                        />
-                        <span>{reply.upvotes}</span>
+                      <div className="flex items-start gap-4 mt-4">
+                       
+                        <div className="flex gap-1 items-center" onClick={ () => handleReplyUpvote(reply._id)}>
+                          
+                          { userVoteReply == 'upvote' ? (
+                            <FaThumbsUp className='w-4 h-4 cursor-pointer text-blue-600 '/>
+                               ) : (
+                            <FaRegThumbsUp className='w-4 h-4 text-slate-500'/>
+                  
+                            ) 
+                          }
 
-                        <FaRegThumbsDown
-                          className="w-4 h-4 cursor-pointer text-slate-500"
-                          onClick={() => handleDownvoteReply(reply._id)}
-                        />
+                          <span>{reply.upvotes}</span>
+                        </div>
+                        
+                      <div className="flex gap-1 items-center" onClick={ () => handleReplyDownvote(reply._id)}>
+
+                         { userVoteReply == 'downvote' ? (
+                           <FaThumbsDown className='w-4 h-4 cursor-pointer text-blue-600 '/>
+                           ) : (
+                           <FaRegThumbsDown className='w-4 h-4 text-slate-500'/>
+                          ) 
+                         } 
+
                         <span>{reply.downvotes}</span>
+                      </div>
 
+                      <div className="flex gap-1 items-center">
                         {/* Edit/Delete Buttons for Own Reply */}
                         {user._id === reply.userId && (
                           <>
@@ -223,6 +292,10 @@ const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount 
                           </>
                         )}
                       </div>
+
+                  </div>
+
+
                     </div>
                   </div>
                 </div>
