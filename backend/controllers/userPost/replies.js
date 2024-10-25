@@ -138,9 +138,9 @@ exports.editReply = async (req, res, next) => {
         // Save the updated comment
         await comment.save();
 
-        return res.status(200).json({ 
-            success: true, 
-            reply: replyObj 
+        return res.status(200).json({
+            success: true,
+            reply: replyObj
         });
     } catch (error) {
         return next(error);
@@ -204,14 +204,14 @@ exports.deleteReply = async (req, res, next) => {
 
         // Remove the reply from the replies array
         comment.replies.splice(replyIndex, 1);
-        
+
         // Save the updated comment
         await comment.save();
 
-        return res.status(200).json({ 
-            success: true, 
-            message: 'Reply deleted successfully', 
-            replies: comment.replies 
+        return res.status(200).json({
+            success: true,
+            message: 'Reply deleted successfully',
+            replies: comment.replies
         });
     } catch (error) {
         return next(error);
@@ -228,7 +228,7 @@ exports.voteReply = async (req, res, next) => {
         }
 
         const { postId, commentId, replyId } = req.params;
-        const { voteType } = req.body; 
+        const { voteType } = req.body;
 
         if (!postId || !commentId || !replyId || !voteType) {
             const err = new Error("Post ID, comment ID, reply ID, and vote type are required.");
@@ -243,6 +243,7 @@ exports.voteReply = async (req, res, next) => {
             return next(err);
         }
 
+        // Retrieve the comment and reply
         const comment = post.comments.find(comment => comment._id.toString() === commentId);
         if (!comment) {
             const err = new Error("Comment not found.");
@@ -250,39 +251,46 @@ exports.voteReply = async (req, res, next) => {
             return next(err);
         }
 
-        const replyObj = comment.replies.find(reply => reply._id.toString() === replyId);
+        const commentObj = await Comment.findById(commentId);
+        if (!commentObj) {
+            const err = new Error("Comment not found.");
+            err.status = 404;
+            return next(err);
+        }
+
+        const replyObj = commentObj.replies.find(reply => reply._id.toString() === replyId);
         if (!replyObj) {
             const err = new Error("Reply not found.");
             err.status = 404;
             return next(err);
         }
 
-        // Update votes based on vote type
+        // Handle upvote and downvote logic
+        const userId = req.user.id;
+        const hasUpvoted = replyObj.upvotes.includes(userId);
+        const hasDownvoted = replyObj.downvotes.includes(userId);
+
         if (voteType === 'upvote') {
-            if (!replyObj.upvotes.includes(req.user.id)) {
-                replyObj.upvotes.push(req.user.id);
-                // Remove downvote if it exists
-                const downvoteIndex = replyObj.downvotes.indexOf(req.user.id);
-                if (downvoteIndex !== -1) {
-                    replyObj.downvotes.splice(downvoteIndex, 1);
-                }
+            if (hasUpvoted) {
+                // Remove upvote if already upvoted
+                replyObj.upvotes = replyObj.upvotes.filter(id => id !== userId);
             } else {
-                const err = new Error("You have already upvoted this reply.");
-                err.status = 400;
-                return next(err);
+                // Add upvote and remove downvote if necessary
+                replyObj.upvotes.push(userId);
+                if (hasDownvoted) {
+                    replyObj.downvotes = replyObj.downvotes.filter(id => id !== userId);
+                }
             }
         } else if (voteType === 'downvote') {
-            if (!replyObj.downvotes.includes(req.user.id)) {
-                replyObj.downvotes.push(req.user.id);
-                // Remove upvote if it exists
-                const upvoteIndex = replyObj.upvotes.indexOf(req.user.id);
-                if (upvoteIndex !== -1) {
-                    replyObj.upvotes.splice(upvoteIndex, 1);
-                }
+            if (hasDownvoted) {
+                // Remove downvote if already downvoted
+                replyObj.downvotes = replyObj.downvotes.filter(id => id !== userId);
             } else {
-                const err = new Error("You have already downvoted this reply.");
-                err.status = 400;
-                return next(err);
+                // Add downvote and remove upvote if necessary
+                replyObj.downvotes.push(userId);
+                if (hasUpvoted) {
+                    replyObj.upvotes = replyObj.upvotes.filter(id => id !== userId);
+                }
             }
         } else {
             const err = new Error("Invalid vote type. Use 'upvote' or 'downvote'.");
@@ -290,7 +298,8 @@ exports.voteReply = async (req, res, next) => {
             return next(err);
         }
 
-        await post.save();
+        // Save changes to comment
+        await commentObj.save();
 
         return res.status(200).json({
             success: true,
@@ -301,3 +310,4 @@ exports.voteReply = async (req, res, next) => {
         return next(error);
     }
 };
+
