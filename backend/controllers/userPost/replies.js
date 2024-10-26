@@ -226,6 +226,7 @@ exports.voteReply = async (req, res, next) => {
             err.status = 401;
             return next(err);
         }
+        
 
         const { postId, commentId, replyId } = req.params;
         const { voteType } = req.body;
@@ -235,6 +236,7 @@ exports.voteReply = async (req, res, next) => {
             err.status = 400;
             return next(err);
         }
+        
 
         const post = await Post.findById(postId);
         if (!post) {
@@ -243,14 +245,15 @@ exports.voteReply = async (req, res, next) => {
             return next(err);
         }
 
-        // Retrieve the comment and reply
+        
+
         const comment = post.comments.find(comment => comment._id.toString() === commentId);
         if (!comment) {
             const err = new Error("Comment not found.");
             err.status = 404;
             return next(err);
         }
-
+        
         const commentObj = await Comment.findById(commentId);
         if (!commentObj) {
             const err = new Error("Comment not found.");
@@ -258,38 +261,41 @@ exports.voteReply = async (req, res, next) => {
             return next(err);
         }
 
+        
+
         const replyObj = commentObj.replies.find(reply => reply._id.toString() === replyId);
         if (!replyObj) {
             const err = new Error("Reply not found.");
             err.status = 404;
             return next(err);
         }
+        
 
-        // Handle upvote and downvote logic
         const userId = req.user.id;
         const hasUpvoted = replyObj.upvotes.includes(userId);
         const hasDownvoted = replyObj.downvotes.includes(userId);
-
+        
         if (voteType === 'upvote') {
             if (hasUpvoted) {
-                // Remove upvote if already upvoted
-                replyObj.upvotes = replyObj.upvotes.filter(id => id !== userId);
+                // Remove upvote
+                replyObj.upvotes = replyObj.upvotes.filter(id => id.toString() !== userId.toString());
+                
             } else {
-                // Add upvote and remove downvote if necessary
+                // Add upvote, remove downvote if necessary
                 replyObj.upvotes.push(userId);
                 if (hasDownvoted) {
-                    replyObj.downvotes = replyObj.downvotes.filter(id => id !== userId);
+                    replyObj.downvotes = replyObj.downvotes.filter(id => id.toString() !== userId.toString());
                 }
             }
         } else if (voteType === 'downvote') {
             if (hasDownvoted) {
-                // Remove downvote if already downvoted
-                replyObj.downvotes = replyObj.downvotes.filter(id => id !== userId);
+                // Remove downvote
+                replyObj.downvotes = replyObj.downvotes.filter(id => id.toString() !== userId.toString());
             } else {
-                // Add downvote and remove upvote if necessary
+                // Add downvote, remove upvote if necessary
                 replyObj.downvotes.push(userId);
                 if (hasUpvoted) {
-                    replyObj.upvotes = replyObj.upvotes.filter(id => id !== userId);
+                    replyObj.upvotes = replyObj.upvotes.filter(id => id.toString() !== userId.toString());
                 }
             }
         } else {
@@ -298,7 +304,7 @@ exports.voteReply = async (req, res, next) => {
             return next(err);
         }
 
-        // Save changes to comment
+        // Save the comment document to update the reply
         await commentObj.save();
 
         return res.status(200).json({
@@ -310,4 +316,6 @@ exports.voteReply = async (req, res, next) => {
         return next(error);
     }
 };
+
+
 
