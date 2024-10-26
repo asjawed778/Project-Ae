@@ -9,13 +9,14 @@ import Comment from "./Comment";
 import { useDispatch, useSelector } from "react-redux";
 import { addComment, getAllComments } from "../../services/operations/commentApi";
 import CommentSection from "./Comment";
-import { voteOnPost } from "../../services/operations/postApi";
+import { deletePost, voteOnPost } from "../../services/operations/postApi";
 
 const Post = ({ post }) => {
 
 	const dispatch = useDispatch() ;
-    console.log(post) ;
+    //console.log(post) ;
 	// fetching comment of specific post from redux store
+	const { user } = useSelector( (store) =>  store.auth ) ;
 	const { commentsByPost, loading, error } = useSelector( (store) => store.comments) ;
 	
 	const comments = commentsByPost[post._id] || []; //get comments for this post
@@ -58,7 +59,7 @@ const Post = ({ post }) => {
 	
 	  const handlePostReply = (replyText, commentId) => {
 		// Logic to post a reply to a specific comment
-		console.log(`Reply to comment ${commentId}:`, replyText);
+		//console.log(`Reply to comment ${commentId}:`, replyText);
 	  };
 
 
@@ -69,7 +70,9 @@ const Post = ({ post }) => {
 
 	const isCommenting = false;
 
-	const handleDeletePost = () => {};
+	const handleDeletePost = () => {
+		dispatch(deletePost(post._id)) ;
+	};
 
 	const handlePostComment = (e) => {
 		e.preventDefault();
@@ -129,7 +132,7 @@ const Post = ({ post }) => {
 			  }}>
 				<div className='avatar'>
 					<Link to={`/profile/${postOwner.username}`} className='w-8 rounded-full overflow-hidden'>
-						<img src={post.user.profilePic || "/avatar-placeholder.png"} />
+						<img src={post.user.profilePic } alt="sorry" />
 					</Link>
 				</div>
 				<div className='flex flex-col flex-1'>
@@ -138,9 +141,9 @@ const Post = ({ post }) => {
 							{post.user.name}
 						</Link>
 						<span className='text-gray-700 flex gap-1 text-sm'>
-							<Link to={`/profile/${postOwner.username}`}>@{post.user.name}</Link>
+							<Link to={`/profile/${postOwner.username}`}>@{post.user.username}</Link>
 						</span>
-						{isMyPost && (
+						{ user._id === post.user.id && (
 							<span className='flex justify-end flex-1'>
 								<FaTrash className='cursor-pointer hover:text-red-500' onClick={handleDeletePost} />
 							</span>
@@ -153,6 +156,15 @@ const Post = ({ post }) => {
 								src={post.images[0]}
 								className='h-80 object-contain rounded-lg border border-gray-700' style={{ borderColor: '#D8D8D8' }}
 								alt=''
+							/>
+						)}
+
+                        {post.videos[0] && (
+							<video
+								src={post.videos[0]}
+								className='h-80 object-contain rounded-lg border border-gray-700' style={{ borderColor: '#D8D8D8' }}
+								alt=''
+								controls
 							/>
 						)}
 					</div>
@@ -195,7 +207,8 @@ const Post = ({ post }) => {
 
 								<FaRegComment className='w-4 h-4  text-slate-500 group-hover:text-sky-400' />
 								<span className='text-sm text-slate-500 group-hover:text-sky-400'>
-									{post.commentsCounts}
+									{post.commentsCount ?  post.commentsCount : post.commentsCounts}
+
 								</span>
 							</div>
 							

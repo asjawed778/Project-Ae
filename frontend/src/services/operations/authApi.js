@@ -115,7 +115,7 @@ export function loginUser( userLoginData , navigate ) {
             const user = response.data.user;
 
             dispatch(login({ token, user }));
-            console.log("loginUser",response.data);
+            console.log("loginUser",response);
             
             console.log("token",response.data);
 

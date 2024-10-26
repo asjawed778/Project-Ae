@@ -28,7 +28,7 @@ export const postEndpoints = {
    GET_ALL_POSTS: SERVER_URL + `/get-all-post`,
    GET_USER_ALL_POST: SERVER_URL + "/get-user-all-post" ,
    VOTE_POST:(postId) => SERVER_URL + `/vote-post/${postId}`,
-
+   DELETE_POST:(postId) => SERVER_URL + `/delete-post/${postId}` ,
 }
 
 //COMMENT ENDPOINTS

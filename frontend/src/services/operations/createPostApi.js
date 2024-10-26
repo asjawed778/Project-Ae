@@ -64,7 +64,7 @@ export function createPost( postData ) {
         } else {
           toast.error("Something went wrong. Please try again.");
         }
-       // console.log("Error creating post:", error);
+        console.log("Error creating post:", error);
   
       } finally {
         // Step 6: Stop loading spinner/action

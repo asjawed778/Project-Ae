@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 
 const Posts = () => {
+
 	const isLoading = false;
 
 	const dispatch = useDispatch() ;

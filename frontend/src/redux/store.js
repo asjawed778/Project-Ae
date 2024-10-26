@@ -21,6 +21,7 @@ import loadingSlice from './slices/loadingSlice';
 import postSlice from './slices/postSlice';
 import commentSlice from './slices/commentSlice';
 import { combineReducers } from 'redux';
+import userPostSlice from './slices/userPostSlice';
 
 // Create a persist configuration
 const persistConfig = {
@@ -33,6 +34,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   auth: authSlice,
   posts: postSlice,
+  userposts: userPostSlice ,
   comments: commentSlice,
   loading: loadingSlice
 });
