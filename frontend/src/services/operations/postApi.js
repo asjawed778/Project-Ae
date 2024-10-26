@@ -8,7 +8,8 @@ import { setPosts, setError } from "../../redux/slices/postSlice";
 const {
 
     GET_ALL_POSTS ,
-    GET_USER_ALL_POST
+    GET_USER_ALL_POST ,
+    VOTE_POST ,
 
 } = postEndpoints ;
 
@@ -38,7 +39,7 @@ export function getAllPost() {
                 throw new Error(response.data.message) ;
             }
             
-           // console.log("response of get all post",response.data.posts);
+            //console.log("response of get all post",response.data.posts);
             dispatch(setPosts(response.data.posts)) ;
         
         } catch(error) {
@@ -59,4 +60,46 @@ export function getAllPost() {
     } ;
 
 }
+
+//VOTE ON POST
+
+export function voteOnPost( postId, voteType ) {
+    return async (dispatch, getState) => {
+        
+        console.log(voteType) ;
+        const token = getState().auth.token;
+        dispatch(setLoading(true));
+
+        try {
+            const response = await apiConnector(
+                "POST",
+                VOTE_POST( postId ),
+                { 
+                    "action": `${voteType}` 
+                }, // The voteType could be 'upvote' or 'downvote'
+                {
+                    "Authorization": `Bearer ${token}`
+                }
+            );
+
+            if (!response.data.success) {
+                throw new Error(response.data.message);
+            }
+
+            dispatch(getAllPost()) ; // Refresh the post to update vote counts
+            toast.success("Voted successfully on the reply!"); 
+
+        } catch (error) {
+            if (error.response && error.response.status === 404) {
+                toast.error("Reply not found");
+            } else {
+                toast.error("Failed to vote on reply");
+            }
+            //console.error("Error in voting on reply:", error);
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
+}
+
 

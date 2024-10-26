@@ -9,11 +9,12 @@ import Comment from "./Comment";
 import { useDispatch, useSelector } from "react-redux";
 import { addComment, getAllComments } from "../../services/operations/commentApi";
 import CommentSection from "./Comment";
+import { voteOnPost } from "../../services/operations/postApi";
 
 const Post = ({ post }) => {
 
 	const dispatch = useDispatch() ;
-
+    console.log(post) ;
 	// fetching comment of specific post from redux store
 	const { commentsByPost, loading, error } = useSelector( (store) => store.comments) ;
 	
@@ -24,8 +25,8 @@ const Post = ({ post }) => {
 	const [isLiked, setIsLiked] = useState(false);
 	const [disLiked,  setDisLiked] = useState(false);
 
-	const [upvotes, setUpVotes] = useState(post.upvotesCount) ;
-	const [downvotes, setDownVotes] = useState(post.downvotesCount) ;
+	const [upvotes, setUpVotes] = useState(post.upvotes.length) ;
+	const [downvotes, setDownVotes] = useState(post.downvotes.length) ;
 
     // comment section logic
 	const [commentText, setCommentText] = useState({
@@ -85,6 +86,7 @@ const Post = ({ post }) => {
 
 		setIsLiked(!isLiked) ;
 		isLiked ?  setUpVotes(upvotes - 1) : setUpVotes(upvotes+1) ;
+		dispatch(voteOnPost(post._id, 'upvote')) ;
 
 	};
 
@@ -99,7 +101,7 @@ const Post = ({ post }) => {
 
 		setDisLiked(!disLiked) ;
 		disLiked ? setDownVotes( downvotes - 1) : setDownVotes( downvotes + 1 ) ;
-
+        dispatch(voteOnPost(post._id, 'downvote')) ;
 
 	}
 
@@ -193,7 +195,7 @@ const Post = ({ post }) => {
 
 								<FaRegComment className='w-4 h-4  text-slate-500 group-hover:text-sky-400' />
 								<span className='text-sm text-slate-500 group-hover:text-sky-400'>
-									{post.commentsCount}
+									{post.commentsCounts}
 								</span>
 							</div>
 							

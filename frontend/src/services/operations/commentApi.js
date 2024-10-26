@@ -8,6 +8,8 @@ const  {
 
     ADD_COMMENT ,
     GET_COMMENTS ,
+    EDIT_COMMENT ,
+    DELETE_COMMENT ,
     VOTE_COMMENT,
     REPLY_TO_COMMENT ,
     EDIT_REPLY ,
@@ -15,6 +17,8 @@ const  {
     VOTE_REPLY
 
 } = commentEndpoints ;
+
+//add comment 
 
 export function addComment(postId, commentText) {
     return async( dispatch, getState ) => {
@@ -44,6 +48,7 @@ export function addComment(postId, commentText) {
 
             )
             
+            dispatch(getAllComments(postId)) ;
             toast.success("You scueesfully added the comment")
             // console 
             //console.log("the response of add comment", response) ;
@@ -69,6 +74,7 @@ export function addComment(postId, commentText) {
     }
 }
 
+//get all comments 
 
 export function getAllComments( postId ) {
     return async( dispatch, getState ) => {
@@ -106,6 +112,84 @@ export function getAllComments( postId ) {
     }
 }
 
+// edit comment 
+
+export function editComment(postId, commentId, updatedComment ) {
+    return async (dispatch, getState) => {
+        const token = getState().auth.token;
+        dispatch(setLoading(true));
+
+        try {
+            const response = await apiConnector(
+                "PUT",
+                EDIT_COMMENT( postId, commentId ),
+                { 
+                    "updatedComment" : updatedComment ,
+
+                },
+                {
+                    Authorization: `Bearer ${token}`
+                }
+            );
+
+            if (!response.data.success) {
+                throw new Error(response.data.message);
+            }
+
+            dispatch(getAllComments(postId)); // Refresh the comments after editing
+            toast.success("Reply updated successfully!");
+        } catch (error) {
+            if (error.response && error.response.status === 404) {
+                toast.error("Reply not found");
+            } else {
+                toast.error("Failed to update reply");
+            }
+            console.error("Error in editing comment:", error);
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
+}
+
+// delete comment 
+
+export function deleteComment(postId, commentId ) {
+    return async (dispatch, getState) => {
+        const token = getState().auth.token;
+        dispatch(setLoading(true));
+        
+        console.log("delete comment", postId, commentId) ;
+        try {
+            const response = await apiConnector(
+                "DELETE",
+                DELETE_COMMENT(postId, commentId ),
+                null,
+                {
+                    Authorization: `Bearer ${token}`
+                }
+            );
+
+            if (!response.data.success) {
+                throw new Error(response.data.message);
+            }
+
+            dispatch(getAllComments(postId)); // Refresh the comments after deletion
+            toast.success("comment deleted successfully!");
+        } catch (error) {
+            if (error.response && error.response.status === 404) {
+                toast.error("Reply not found");
+            } else {
+                toast.error("Failed to delete comment");
+            }
+           console.error("Error in deleting comment:", error);
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
+}
+
+//vote on comment
+
 export function voteComment(postId, commentId, action) {
     return async( dispatch, getState) => {
 
@@ -129,7 +213,9 @@ export function voteComment(postId, commentId, action) {
            if( !response.data.success ) {
              throw new Error ( response.data.message ) ;
            }
-
+           
+           console.log("vote comemnt", response) ;
+           toast.success("your successfully voted up");
            dispatch( getAllComments(postId) ) ;
 
         } catch (error ) {
@@ -137,6 +223,8 @@ export function voteComment(postId, commentId, action) {
             if( error.response && error.response.status === 404 ) {
                 toast.error( "Page not found" ) ;
             }
+            toast.error("there is error") ;
+            console.log(error) ;
 
         } finally {
            dispatch( setLoading(false) ) ; 
@@ -268,6 +356,8 @@ export function deleteReply(postId, commentId, replyId) {
 
 export function voteOnReply( postId, commentId, replyId, voteType ) {
     return async (dispatch, getState) => {
+
+        console.log("vote on reply",postId, commentId, replyId, voteType) ;
         const token = getState().auth.token;
         dispatch(setLoading(true));
 
@@ -276,10 +366,10 @@ export function voteOnReply( postId, commentId, replyId, voteType ) {
                 "POST",
                 VOTE_REPLY(postId, commentId, replyId),
                 { 
-                    voteType 
+                    "voteType": `${voteType}` 
                 }, // The voteType could be 'upvote' or 'downvote'
                 {
-                    Authorization: `Bearer ${token}`
+                    "Authorization": `Bearer ${token}`
                 }
             );
 
@@ -295,7 +385,7 @@ export function voteOnReply( postId, commentId, replyId, voteType ) {
             } else {
                 toast.error("Failed to vote on reply");
             }
-            //console.error("Error in voting on reply:", error);
+            console.error("Error in voting on reply:", error);
         } finally {
             dispatch(setLoading(false));
         }
