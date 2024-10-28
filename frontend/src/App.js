@@ -7,6 +7,7 @@ import PublicRoute from './components/core/PublicRoute';
 import PrivateRoute from './components/core/PrivateRoute';
 import './index.css';
 import Sidebar from './components/common/Sidebar.jsx';
+import UserPost from './components/common/UserPost.jsx';
 
 
 function App() {
@@ -29,16 +30,25 @@ function App() {
 
     <div className='flex-1 flex justify-center home-component mr-32' >
       <Routes>
+       
         <Route path='/' element={
           <PrivateRoute>
             <Home />
           </PrivateRoute>
         } />
+
         <Route path='/auth' element={
           <PublicRoute>
             <AuthPage />
           </PublicRoute>
         } />
+
+        <Route path='/user' element={
+          <PrivateRoute>
+            <UserPost />
+          </PrivateRoute>
+        } />
+
         <Route path='*' element={<PageNotFound />} />
       </Routes>
       </div>

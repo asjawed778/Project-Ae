@@ -11,7 +11,7 @@ const CommentSection = ( {comments, postId } ) => {
   const [replies, setReplies] = useState({}); // Manage replies for each comment
   const [votes, setVotes] = useState({}); // Manage upvotes/downvotes
   
-  console.log("upvote", comments.replies) ;
+  //console.log("upvote", comments.replies) ;
 
   const handleReply = (commentId, replyText) => {
     setReplies((prevReplies) => ({
@@ -51,10 +51,10 @@ const CommentSection = ( {comments, postId } ) => {
 const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount }) => {
   
   const dispatch = useDispatch() ;
-  console.log("comment",comment) ;
-  console.log("repliesid", replies) ;
+  //console.log("comment",comment) ;
+  //console.log("repliesid", replies) ;
   const { user } = useSelector((state) => state.auth);
-  
+  //console.log("user",user) ;
   // reply states
   const [showReplyInput, setShowReplyInput] = useState(false) ;
   const [showReplies, setShowReplies] = useState(false) ; // To toggle replies visibility
@@ -71,7 +71,7 @@ const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount 
   const [userVote, setUserVote] = useState(null);
 
    // Track user vote: 'upvote', 'downvote', or null in reply
-   const [userVoteReply, setUserVoteReply] = useState(null);
+   const [userVoteReply, setUserVoteReply] = useState({});
 
    // Handle upvote
    const handleUpvote = () => {
@@ -100,18 +100,18 @@ const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount 
 
   // Handle upvote
   const handleReplyUpvote = ( replyId) => {
-    if (userVoteReply !== 'upvote') {
+    if (userVoteReply[replyId] !== 'upvote') {
       dispatch(voteOnReply(postId, comment._id, replyId ,'upvote'));
-      setUserVoteReply('upvote');
+      setUserVoteReply((prevVotes) => ({ ...prevVotes, [replyId]: 'upvote' }));
     }
     
   };
   
    // Handle downvote
    const handleReplyDownvote = (replyId) => {
-    if (userVoteReply !== 'downvote') {
+    if (userVoteReply[replyId] !== 'downvote') {
       dispatch(voteOnReply(postId, comment._id, replyId ,'downvote'));
-      setUserVoteReply('downvote');
+      setUserVoteReply((prevVotes) => ({ ...prevVotes, [replyId]: 'downvote' }));
     }
    
   };
@@ -200,7 +200,7 @@ const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount 
                 ) 
                 }
                 
-                <span>{voteCount.upvotes}</span>
+                <span>{comment.upvotes.length}</span>
               </div>
 
                {/* Downvote */}
@@ -212,7 +212,7 @@ const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount 
                   
                 ) 
                 }
-                <span>{voteCount.downvotes}</span>
+                <span>{comment.downvotes.length}</span>
               </div>
 
               {/* Reply Section */}
@@ -304,7 +304,7 @@ const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount 
                        
                         <div className="flex gap-1 items-center" onClick={ () => handleReplyUpvote(reply._id)}>
                           
-                          { userVoteReply == 'upvote' ? (
+                          { userVoteReply[reply._id] === 'upvote' ? (
                             <FaThumbsUp className='w-4 h-4 cursor-pointer text-blue-600 '/>
                                ) : (
                             <FaRegThumbsUp className='w-4 h-4 text-slate-500'/>
@@ -312,19 +312,19 @@ const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount 
                             ) 
                           }
 
-                          <span>{reply.upvotes}</span>
+                          <span>{reply.upvotes.length}</span>
                         </div>
                         
                       <div className="flex gap-1 items-center" onClick={ () => handleReplyDownvote(reply._id)}>
 
-                         { userVoteReply == 'downvote' ? (
+                         { userVoteReply[reply._id] === 'downvote' ? (
                            <FaThumbsDown className='w-4 h-4 cursor-pointer text-blue-600 '/>
                            ) : (
                            <FaRegThumbsDown className='w-4 h-4 text-slate-500'/>
                           ) 
                          } 
 
-                        <span>{reply.downvotes}</span>
+                        <span>{reply.downvotes.length}</span>
                       </div>
 
                       <div className="flex gap-1 items-center">

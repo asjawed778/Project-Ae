@@ -63,9 +63,9 @@ const Sidebar = () => {
 						</Link>
 					</li>
 				</ul>
-				{data && (
+				{ user && (
 					<Link
-						to={"/auth"}
+						to='/user'
 						className='mt-auto mb-10 flex gap-2 items-center transition-all duration-300 hover:bg-sky-300 py-2 px-2 rounded-full'
 					>
 						<div className='avatar hidden md:inline-flex'>
@@ -78,7 +78,7 @@ const Sidebar = () => {
 								<p className='text-black font-bold text-sm w-20 truncate'>{user?.name}</p>
 								<p className='text-slate-500 text-sm'>@{user?.username}</p>
 							</div>
-							<BiLogOut className='w-5 h-5 cursor-pointer ' onClick={handleLogout}/>
+							<BiLogOut className='w-5 h-5 cursor-pointer '  onClick={handleLogout}/>
 						</div>
 					</Link>
 				)}

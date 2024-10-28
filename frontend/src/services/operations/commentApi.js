@@ -239,7 +239,7 @@ export function replyOnComment( postId, commentId, reply, tagUsername ) {
 
         const token = getState().auth.token ;
         dispatch(setLoading(true)) ;
-        //console.log("comemntid in reply", commentId) ;
+        console.log("comemntid in reply", postId,commentId, reply, tagUsername) ;
 
         try {
 
@@ -267,7 +267,7 @@ export function replyOnComment( postId, commentId, reply, tagUsername ) {
             if( error.response && error.response.status === 404 ) {
                 toast.error( "Page not found" ) ;
             }
-            //console.log("error in reply", error) ;
+            console.log("error in reply", error) ;
 
         } finally {
            dispatch( setLoading(false) ) ; 
