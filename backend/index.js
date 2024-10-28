@@ -29,6 +29,10 @@ app.use(express.json());
 //     }
 // }));
 
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 const dbConnect = require('./config/dbConnect');
 dbConnect();
 
@@ -53,8 +57,9 @@ app.use(errorMiddleware);
 
 app.listen(PORT, () => {
     console.log(`Server is Running on the PORT: ${PORT}`);
+    console.log(`visit for API Doc: http://localhost:${PORT}/api-docs`)
 })
 
 app.get('/', (req, res) => {
-    res.send(`<h1>Hi App is Running baby...</h1>`)
+    res.send(`<h1>AbilitaEdge - App is Running...</h1>`)
 }) 
