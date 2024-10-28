@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addComment, getAllComments } from "../../services/operations/commentApi";
 import CommentSection from "./Comment";
 import { deletePost, voteOnPost } from "../../services/operations/postApi";
+import boy from './boy1.png' ;
 
 const Post = ({ post }) => {
 
@@ -132,10 +133,10 @@ const Post = ({ post }) => {
 			  }}>
 				<div className='avatar'>
 					<Link to={`/profile/${postOwner.username}`} className='w-8 rounded-full overflow-hidden'>
-						<img src={post.user.profilePic } alt="sorry" />
+						<img src={ boy } alt="sorry" />
 					</Link>
 				</div>
-				<div className='flex flex-col flex-1'>
+				<div className='flex flex-col flex-1 '>
 					<div className='flex gap-1 items-center'>
 						<Link to={`/profile/${postOwner.username}`} className='font-bold'>
 							{post.user.name}
@@ -149,12 +150,14 @@ const Post = ({ post }) => {
 							</span>
 						)}
 					</div>
-					<div className='flex flex-col gap-3 overflow-hidden'>
+					<div className='flex flex-col gap-3 overflow-hidden items-start'>
 						<span>{post.content}</span>
 						{post.images[0] && (
 							<img
 								src={post.images[0]}
-								className='h-80 object-contain rounded-lg border border-gray-700' style={{ borderColor: '#D8D8D8' }}
+								className="max-h-[500px] object-contain rounded-2xl border border-gray-700"
+								style={{ borderColor: '#D8D8D8' }}
+								
 								alt=''
 							/>
 						)}
@@ -236,7 +239,7 @@ const Post = ({ post }) => {
           {/* Avatar */}
              <div className='avatar'>
              <Link to={`/profile/${postOwner.username}`} className='w-8 rounded-full overflow-hidden'>
-             <img src={post.user.profilePic || '/avatar-placeholder.png'} />
+             <img src={boy} />
              </Link>
              </div>
 

@@ -7,6 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../services/operations/authApi";
 import { useNavigate } from "react-router-dom";
 
+//by default image
+import boy from './boy1.png' ;
+
 const Sidebar = () => {
 
 	const dispatch = useDispatch() ;
@@ -70,7 +73,7 @@ const Sidebar = () => {
 					>
 						<div className='avatar hidden md:inline-flex'>
 							<div className='w-6 rounded-full'>
-								<img src={data?.profileImg || "/avatar-placeholder.png"} />
+								<img src={ boy } />
 							</div>
 						</div>
 						<div className='flex justify-around flex-1'>
