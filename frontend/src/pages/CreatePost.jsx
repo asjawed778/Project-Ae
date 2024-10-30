@@ -3,7 +3,7 @@ import './CreatePost.css'; // Add your custom CSS here
 import React, { useState } from 'react';
 import { CiImageOn } from "react-icons/ci";
 import { CiCircleRemove } from "react-icons/ci";
-import Avatar from "../assets/g_p.jpeg";
+import avatar from "./boy2.png";
 
 import { useDispatch } from 'react-redux';
 import { createPost } from '../services/operations/postApi';
@@ -76,7 +76,7 @@ const CreatePost = () => {
        
         {/* Profile picture */}
       <img 
-        src={Avatar}
+        src={ avatar }
         alt="Profile" 
         className="profile-pic"
       />

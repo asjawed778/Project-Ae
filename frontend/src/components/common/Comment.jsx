@@ -4,7 +4,8 @@ import { timeAgo } from "../../utils/db/timestamp";
 import { useDispatch , useSelector} from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { editReply, replyOnComment,deleteReply, voteOnReply, voteComment, deleteComment, editComment } from "../../services/operations/commentApi";
-
+import Reply from "./Reply";
+import boy from './boy1.png' ;
 
 const CommentSection = ( {comments, postId } ) => {
 
@@ -51,7 +52,7 @@ const CommentSection = ( {comments, postId } ) => {
 const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount }) => {
   
   const dispatch = useDispatch() ;
-  //console.log("comment",comment) ;
+  console.log("comment",comment) ;
   //console.log("repliesid", replies) ;
   const { user } = useSelector((state) => state.auth);
   //console.log("user",user) ;
@@ -68,26 +69,40 @@ const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount 
 
 
   // Track user vote: 'upvote', 'downvote', or null in comment
-  const [userVote, setUserVote] = useState(null);
+ // const [userVote, setUserVote] = useState(null);
+
+ // method to look up the userid present in upvote or not 
+ // change array to set to optimise the lookup from O(n) -> O(1) ;
+  const upvoteSet = new Set( comment.upvotes) ;
+  const downvoteSet = new Set(comment.downvotes) ; 
+  const hasUserUpvoted = upvoteSet.has( user._id) ;
+  const hasUserDownvoted = downvoteSet.has(user._id) ;
+
+  const [upvote, setUpvote] = useState( hasUserUpvoted ) ;
+  const [downvote, setDownvote] = useState( hasUserDownvoted) ;
 
    // Track user vote: 'upvote', 'downvote', or null in reply
    const [userVoteReply, setUserVoteReply] = useState({});
 
    // Handle upvote
    const handleUpvote = () => {
-    if (userVote !== 'upvote') {
-      dispatch(voteComment(postId, comment._id, 'upvote'));
-      setUserVote('upvote');
-    }
+
+    dispatch(voteComment(postId, comment._id, 'upvote'));
+    setUpvote(!upvote); 
+
+    if( downvote )
+     setDownvote(!downvote) ;
     
   };
   
    // Handle downvote
    const handleDownvote = () => {
-    if (userVote !== 'downvote') {
-      dispatch(voteComment(postId, comment._id, 'downvote'));
-      setUserVote('downvote');
-    }
+    
+    dispatch(voteComment(postId, comment._id, 'downvote'));
+    setDownvote(!downvote);
+
+    if( upvote )
+    setUpvote(!upvote) ;
    
   };
 
@@ -158,8 +173,8 @@ const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount 
         {/* Avatar */}
         <div className="avatar w-8 h-8 rounded-full overflow-hidden">
           <img
-            src={comment.user.profilePic || "/avatar-placeholder.png"}
-            alt="avatar"
+            src={boy}
+            
           />
         </div>
 
@@ -192,7 +207,7 @@ const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount 
               {/* Upvote */}
               <div className="flex gap-1 items-center cursor-pointer" onClick={handleUpvote}>
                 
-                { userVote == 'upvote' ? (
+                { upvote ? (
                   <FaThumbsUp className='w-4 h-4 cursor-pointer text-blue-600 '/>
                  ) : (
                   <FaRegThumbsUp className='w-4 h-4 text-slate-500'/>
@@ -205,7 +220,7 @@ const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount 
 
                {/* Downvote */}
                <div className="flex gap-1 items-center cursor-pointer" onClick={handleDownvote}>
-               { userVote == 'downvote' ? (
+               { downvote ? (
                   <FaThumbsDown className='w-4 h-4 cursor-pointer text-blue-600 '/>
                  ) : (
                   <FaRegThumbsDown className='w-4 h-4 text-slate-500'/>
@@ -264,95 +279,10 @@ const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount 
             </button>
           )}
 
-          {/* Conditional rendering of replies */}
-          {showReplies && (
-            <div className="ml-8 mt-2">
-              {replies.map((reply) => (
-                <div key={reply._id} className="reply p-2 bg-gray-100 rounded mt-1">
-                  <div className="flex items-start gap-2">
-                    <div className="avatar w-6 h-6 rounded-full overflow-hidden">
-                      <img
-                        src={user.profilePic}
-                        alt="avatar"
-                      />
-                    </div>
-                    <div className="flex-grow">
-                      <div className="flex items-center gap-1">
-                        <span className="font-bold">{reply.tagUsername}</span>
-                        <span className="text-sm">{timeAgo(reply.createdAt)}</span>
-                      </div>
+         {showReplies && comment.replies.map((reply) => (
+            <Reply key={reply._id} reply={reply} postId={postId} commentId={comment._id} />
+          ))}
 
-                      {/* Edit Mode for Reply */}
-                      {isEditingReply === reply._id ? (
-                        <form onSubmit={() => handleEditReplySubmit(reply._id)} className="mt-2">
-                          <input
-                            type="text"
-                            value={editedReplyText}
-                            onChange={(e) => setEditedReplyText(e.target.value)}
-                            className="border-b border-gray-400 rounded-none px-2 py-1 w-full"
-                          />
-                          <button type="submit" className="bg-blue-500 text-white rounded px-3 py-1 mt-2">
-                            Save
-                          </button>
-                        </form>
-                      ) : (
-                        <p className="text-gray-700">{reply.reply}</p>
-                      )}
-
-                      {/* Upvote/Downvote for Reply */}
-                      <div className="flex items-start gap-4 mt-4">
-                       
-                        <div className="flex gap-1 items-center" onClick={ () => handleReplyUpvote(reply._id)}>
-                          
-                          { userVoteReply[reply._id] === 'upvote' ? (
-                            <FaThumbsUp className='w-4 h-4 cursor-pointer text-blue-600 '/>
-                               ) : (
-                            <FaRegThumbsUp className='w-4 h-4 text-slate-500'/>
-                  
-                            ) 
-                          }
-
-                          <span>{reply.upvotes.length}</span>
-                        </div>
-                        
-                      <div className="flex gap-1 items-center" onClick={ () => handleReplyDownvote(reply._id)}>
-
-                         { userVoteReply[reply._id] === 'downvote' ? (
-                           <FaThumbsDown className='w-4 h-4 cursor-pointer text-blue-600 '/>
-                           ) : (
-                           <FaRegThumbsDown className='w-4 h-4 text-slate-500'/>
-                          ) 
-                         } 
-
-                        <span>{reply.downvotes.length}</span>
-                      </div>
-
-                      <div className="flex gap-1 items-center">
-                        {/* Edit/Delete Buttons for Own Reply */}
-                        { user._id === reply.userId && (
-                          <>
-                            <button onClick={() => {
-                              setIsEditingReply( reply._id);
-                              setEditedReplyText(reply.reply);
-                            }} className="text-sm text-blue-500 ml-2">
-                              Edit
-                            </button>
-                            <button onClick={() => handleDeleteReply(reply._id)} className="text-sm text-red-500 ml-2">
-                              Delete
-                            </button>
-                          </>
-                        )}
-                      </div>
-
-                  </div>
-
-
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
         </div>
       </div>
     </div>
