@@ -1,4 +1,4 @@
-/**
+/*
  * API Documentation for User Routes
  *
  * This module exports the OpenAPI (Swagger) documentation for various post-related routes in the application.
