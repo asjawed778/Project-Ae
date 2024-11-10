@@ -187,6 +187,7 @@ const Post = ({ post }) => {
 								>
 									{upvotes}
 								</span>
+								
 							</div>
 
 							<div className='flex gap-1 items-center group cursor-pointer' onClick={handleDislikedPost}>
@@ -202,6 +203,7 @@ const Post = ({ post }) => {
 								>
 									{downvotes}
 								</span>
+								
 							</div>
 
 						    

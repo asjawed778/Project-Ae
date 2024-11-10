@@ -8,6 +8,9 @@ import PrivateRoute from './components/core/PrivateRoute';
 import './index.css';
 import Sidebar from './components/common/Sidebar.jsx';
 import UserPost from './components/common/UserPost.jsx';
+import Learning from './pages/Learning.jsx' ;
+
+
 
 
 function App() {
@@ -16,10 +19,8 @@ function App() {
 
   return (
     // <div className='flex max-w-6xl items-start'>
-    <div className='flex max-w-6xl mx-auto items-start justify-around bg-white home'
-      
-     >
-     
+    //<div className='flex max-w-6xl mx-auto items-start justify-around bg-white home' > 
+     <> 
 
       {/* Sidebar */}
       {location.pathname !== '/auth' && (
@@ -28,7 +29,7 @@ function App() {
         </div>
       )}
 
-    <div className='flex-1 flex justify-center home-component mr-32' >
+    {/* <div className='flex-1 flex justify-center home-component mr-32' > */}
       <Routes>
        
         <Route path='/' element={
@@ -39,7 +40,8 @@ function App() {
 
         <Route path='/auth' element={
           <PublicRoute>
-            <AuthPage />
+            {/* <AuthPage /> */}
+            <Learning/>
           </PublicRoute>
         } />
 
@@ -51,8 +53,11 @@ function App() {
 
         <Route path='*' element={<PageNotFound />} />
       </Routes>
-      </div>
-    </div>
+      {/* </div> */}
+      
+    </>
+    //</div>
+    // </div> 
   );
 }
 
