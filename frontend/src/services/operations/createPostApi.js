@@ -2,15 +2,12 @@ import { toast } from 'react-hot-toast';
 import { createPostEndpoints } from '../apis';
 import { setLoading } from '../../redux/slices/loadingSlice';
 import { apiConnector } from '../apiConnector';
-import Cookies from "js-cookie" ;
 import { getAllPost } from './postApi';
 
 //Endpoints to create post 
 const  {
 
     CREATE_POST_API,
-    EDIT_POST_API ,
-    DELETE_POST_API,
 
 } = createPostEndpoints ;
 

@@ -19,7 +19,7 @@ function App() {
 
   return (
     // <div className='flex max-w-6xl items-start'>
-    //<div className='flex max-w-6xl mx-auto items-start justify-around bg-white home' > 
+    // <div className='flex max-w-6xl mx-auto items-start justify-around bg-white home' > 
      <> 
 
       {/* Sidebar */}
@@ -40,7 +40,7 @@ function App() {
 
         <Route path='/auth' element={
           <PublicRoute>
-            {/* <AuthPage /> */}
+            {/* <AuthPage />  */}
             <Learning/>
           </PublicRoute>
         } />
@@ -56,8 +56,8 @@ function App() {
       {/* </div> */}
       
     </>
-    //</div>
-    // </div> 
+    // </div>
+    // </div>  
   );
 }
 

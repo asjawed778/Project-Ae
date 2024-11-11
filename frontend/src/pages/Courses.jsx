@@ -56,8 +56,9 @@ export default function Courses() {
 
       {/* Title and Subtitle */}
       <div className=" mb-10 items-center lg:ml-[15%]">
-        <h2 className="text-2xl font-semibold text-blue-600">All the skills you need in one place</h2>
-        <p className="text-gray-600">From critical skills to technical topics, AbilitaEdge supports your professional development.</p>
+        <h2 className="text-2xl font-sans text-blue-600">All the skills you need in one place</h2>
+        <p className="text-gray-600 font-sans"
+        >From critical skills to technical topics, AbilitaEdge supports your professional development.</p>
       </div>
 
       {/* Tab Menu */}
@@ -72,8 +73,8 @@ export default function Courses() {
             }}
             
            // min-w-fit font-semibold px-4 py-2 flex justify-center items-center
-            className={` min-w-fit font-semibold px-0 py-2 flex justify-center items-center  ${
-              activeTab === tab ? "border-b-2 border-blue-600" : "text-gray-600 carousel-item"
+            className={` min-w-fit font-sans px-0 py-2 flex justify-center items-center  ${
+              activeTab === tab ? "border-b-2 border-blue-600 text-blue-500" : "text-gray-600 carousel-item"
             }`}
           >
             {tab}
@@ -96,16 +97,16 @@ export default function Courses() {
               className="flex flex-col bg-white rounded-lg shadow-md p-0  carousel-item min-w-[80%] sm:min-w-[40%] md:min-w-[30%] lg:min-w-[10%]"
             >
               <img src={course.image} alt={course.title} className="w-[100%] h-40 rounded-lg object-cover mb-4" />
-              <h3 className="text-base font-semibold text-blue-600 mb-2 ml-2">{course.title}</h3>
+              <h3 className="text-base font-sans text-blue-600 mb-2 ml-2">{course.title}</h3>
               
               <div className='flex flex-row gap-2 mb-3 ml-2'>
               <img src={user} alt='userLive' width="18px" height="20px"/> 
-              <p className='text-gray-600 text-sm'>{course.sessions}</p>
+              <p className='text-gray-600 text-sm font-sans'>{course.sessions}</p>
               </div>
               
               <div className='flex flex-row gap-2 mb-3 ml-2'>
               <img src={clock} alt='clock' width="18px" height="15px"/>
-              <p className="text-gray-600 text-sm">{course.duration}</p>
+              <p className="text-gray-600 text-sm font-sans">{course.duration}</p>
               </div>
             </div>
           ))}
