@@ -3,7 +3,7 @@ import { IoCloseSharp } from "react-icons/io5";
 import { CiImageOn } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
 import { createPost } from "../../services/operations/createPostApi.js";
-
+import boy from '../boy2.png' ;
 
 const CreatePost = () => {
 
@@ -125,7 +125,7 @@ const CreatePost = () => {
     >
       <div className="avatar">
         <div className="w-8 rounded-full">
-          <img src={data.profileImg || "/avatar-placeholder.png"} alt="Profile" />
+          <img src={boy} />
         </div>
       </div>
 

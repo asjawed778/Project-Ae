@@ -208,7 +208,9 @@ const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount 
               <div className="flex gap-1 items-center cursor-pointer" onClick={handleUpvote}>
                 
                 { upvote ? (
+                  
                   <FaThumbsUp className='w-4 h-4 cursor-pointer text-blue-600 '/>
+                  
                  ) : (
                   <FaRegThumbsUp className='w-4 h-4 text-slate-500'/>
                   
@@ -216,6 +218,7 @@ const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount 
                 }
                 
                 <span>{comment.upvotes.length}</span>
+                <span>voteUp</span>
               </div>
 
                {/* Downvote */}
@@ -228,11 +231,13 @@ const Comment = ({ comment, postId, handleReply, handleVote, replies, voteCount 
                 ) 
                 }
                 <span>{comment.downvotes.length}</span>
+                <span>voteDown</span>
               </div>
 
               {/* Reply Section */}
               <div className="flex gap-1 items-center cursor-pointer group" onClick={handleReplyClick}>
                 <FaReply className="w-4 h-4 text-slate-500 group-hover:text-sky-400" />
+                <span>reply</span>
               </div>
 
               <div className="flex gap-1 items-center">
