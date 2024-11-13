@@ -1,14 +1,14 @@
 import { Route, Routes, useLocation } from 'react-router-dom';
 import './App.css';
 import PageNotFound from './pages/PageNotFound';
-import Home from './pages/home/HomePage.jsx';
+import Home from './pages/home/HomePage1.jsx';
 import AuthPage from './pages/AuthPage';
 import PublicRoute from './components/core/PublicRoute';
 import PrivateRoute from './components/core/PrivateRoute';
 import './index.css';
 import Sidebar from './components/common/Sidebar.jsx';
 import UserPost from './components/common/UserPost.jsx';
-import Learning from './pages/Learning.jsx' ;
+import Learning from './pages/home/HomePage.jsx' ;
 
 
 

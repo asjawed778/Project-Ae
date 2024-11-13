@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import user from './slider/user.png' ;
-import clock from './slider/clock.png' ;
+import user from '../slider/user.png' ;
+import clock from '../slider/clock.png' ;
+import AndroidDevImg from '../slider/AndroidDevelopment.png' ;
+import FullStackImg from '../slider/MERNFullStackBanner.png' ;
+import DataScience from '../slider/DataScience.png' ;
 
-
-export default function Courses() {
+export default function Carousal() {
   const [activeTab, setActiveTab] = useState("Web Development");
 
   const tabs = ["Web Development", "Mobile Development", "Data Science", "Blockchain"];
@@ -12,41 +14,42 @@ export default function Courses() {
       title: "Full Stack Website Development",
       sessions: "120 Live Sessions",
       duration: "20 Weeks",
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL4kNXLTsLbjbaxapl0QFB_SBkCsuTT7pcfA&s" // Replace with actual image URLs
+      image: AndroidDevImg ,
     },
     {
       title: "Full Stack Website Development",
       sessions: "120 Live Sessions",
       duration: "20 Weeks",
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7ebvWHaqyU86bEEZ3dbEwIbXYHZLNYqqwhQ&s"
+      image: FullStackImg
     },
     {
       title: "Full Stack Website Development",
       sessions: "120 Live Sessions",
       duration: "20 Weeks",
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2AUJPOuEp8CTvMqfLuaG8rHRRd13Gk7tsEg&s"
+      image: DataScience
     },
 
     {
-        title: "Full Stack Website Development",
-        sessions: "120 Live Sessions",
-        duration: "20 Weeks",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL4kNXLTsLbjbaxapl0QFB_SBkCsuTT7pcfA&s" // Replace with actual image URLs
-      },
+      title: "Full Stack Website Development",
+      sessions: "120 Live Sessions",
+      duration: "20 Weeks",
+      image: AndroidDevImg ,
+    },
 
-      {
-        title: "Full Stack Website Development",
-        sessions: "120 Live Sessions",
-        duration: "20 Weeks",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7ebvWHaqyU86bEEZ3dbEwIbXYHZLNYqqwhQ&s"
-      },
+   {
 
-      {
-        title: "Full Stack Website Development",
-        sessions: "120 Live Sessions",
-        duration: "20 Weeks",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL4kNXLTsLbjbaxapl0QFB_SBkCsuTT7pcfA&s" // Replace with actual image URLs
-      },
+    title: "Full Stack Website Development",
+    sessions: "120 Live Sessions",
+    duration: "20 Weeks",
+    image: FullStackImg
+  },
+
+  {
+    title: "Full Stack Website Development",
+    sessions: "120 Live Sessions",
+    duration: "20 Weeks",
+    image: DataScience
+  },
     
   ];
 
@@ -55,7 +58,7 @@ export default function Courses() {
     <div className="p-8 mt-10 w-full items-center">
 
       {/* Title and Subtitle */}
-      <div className=" mb-10 items-center lg:ml-[15%]">
+      <div className=" mb-6 items-center lg:ml-[15%]">
         <h2 className="text-2xl font-sans text-blue-600">All the skills you need in one place</h2>
         <p className="text-gray-600 font-sans"
         >From critical skills to technical topics, AbilitaEdge supports your professional development.</p>
@@ -73,8 +76,9 @@ export default function Courses() {
             }}
             
            // min-w-fit font-semibold px-4 py-2 flex justify-center items-center
-            className={` min-w-fit font-sans px-0 py-2 flex justify-center items-center  ${
-              activeTab === tab ? "border-b-2 border-blue-600 text-blue-500" : "text-gray-600 carousel-item"
+            className={` min-w-fit font-sans px-0 py-2 flex justify-center items-center border-b-2 ${
+              activeTab === tab ? " border-blue-600 text-blue-500" 
+                                : " border-transparent text-gray-600 carousel-item"
             }`}
           >
             {tab}
@@ -94,7 +98,7 @@ export default function Courses() {
           {courses.map((course, index) => (
             <div
               key={index}
-              className="flex flex-col bg-white rounded-lg shadow-md p-0  carousel-item min-w-[80%] sm:min-w-[40%] md:min-w-[30%] lg:min-w-[10%]"
+              className="flex flex-col bg-white rounded-lg shadow-md p-0  carousel-item min-w-[50%] sm:min-w-[40%] md:min-w-[30%] lg:min-w-[10%]"
             >
               <img src={course.image} alt={course.title} className="w-[100%] h-40 rounded-lg object-cover mb-4" />
               <h3 className="text-base font-sans text-blue-600 mb-2 ml-2">{course.title}</h3>
