@@ -1,4 +1,4 @@
-const User = require('../../models/User');
+const User = require('../../models/user/User');
 
 exports.updateUsername = async (req, res, next) => {
     try {
@@ -9,7 +9,7 @@ exports.updateUsername = async (req, res, next) => {
             return next(err);
         }
 
-        const { id } = req.user; 
+        const { id } = req.user;
         const { username } = req.body;
 
         // Check if username is provided
@@ -23,12 +23,16 @@ exports.updateUsername = async (req, res, next) => {
         const existingUser = await User.findOne({ username });
         if (existingUser) {
             const err = new Error("Username already taken, please choose another one");
-            err.status = 409; 
+            err.status = 409;
             return next(err);
         }
 
         // Update the user's username
-        const updatedUser = await User.findByIdAndUpdate(id, { username }, { new: true });
+        const updatedUser = await User.findByIdAndUpdate(
+            id,
+            { username },
+            { new: true }
+        ).populate('role');
 
         if (!updatedUser) {
             const err = new Error("User not found");
@@ -45,11 +49,11 @@ exports.updateUsername = async (req, res, next) => {
                 name: updatedUser.name,
                 email: updatedUser.email,
                 username: updatedUser.username,
+                role: updatedUser.role
             }
         });
 
     } catch (error) {
-        // Log and handle any server errors
         console.error(error);
         return next(error);
     }

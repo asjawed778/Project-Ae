@@ -1,4 +1,4 @@
-const Post = require('../../models/Post');
+const Post = require('../../models/post/Post');
 
 exports.votePost = async (req, res, next) => {
     try {
