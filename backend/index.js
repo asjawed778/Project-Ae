@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 5000;
 const cookieParser = require("cookie-parser");
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const registerRoutes = require('./middlewares/registerRoutes');
 
 app.use(cookieParser());
 
@@ -54,6 +55,7 @@ app.use('/api/v1', userRoutes);
 const errorMiddleware = require('./middlewares/errorMiddleware');
 app.use(errorMiddleware);
 
+registerRoutes(app);
 
 app.listen(PORT, () => {
     console.log(`Server is Running on the PORT: ${PORT}`);

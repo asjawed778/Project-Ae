@@ -1,5 +1,6 @@
-const Post = require('../../models/Post');
-const User = require('../../models/User');
+const Post = require('../../models/post/Post');
+const User = require('../../models/user/User');
+const AdditionalDetails = require('../../models/user/AdditionalDetails');
 const { uploadFileToCloudinary } = require('../../utils/cloudinaryUtils');
 
 // Allowed file types and size limits
@@ -19,6 +20,13 @@ exports.createPost = async (req, res, next) => {
 
         const { id } = req.user;
         const { content } = req.body;
+
+        const user = await User.findById(id);
+        if (!user) {
+            const err = new Error("User not found");
+            err.status = 404;
+            return next(err);
+        }
 
         // Ensure images and videos are arrays, even if they don't exist
         const images = req.files && req.files.images ? (Array.isArray(req.files.images) ? req.files.images : [req.files.images]) : [];
@@ -106,8 +114,10 @@ exports.createPost = async (req, res, next) => {
         // Save the post to the database
         await newPost.save();
 
+        const userDetailsId = user.additionalDetails;
+
         // Push the new post's ID to the user's posts array
-        await User.findByIdAndUpdate(id, {
+        await AdditionalDetails.findByIdAndUpdate(userDetailsId, {
             $push: { posts: newPost._id }
         });
 

@@ -1,5 +1,5 @@
-const Comment = require('../../models/Comment');
-const Post = require('../../models/Post');
+const Post = require('../../models/post/Post');
+const Comment = require('../../models/post/Comment');
 
 // Reply to a Comment
 exports.replyToComment = async (req, res, next) => {

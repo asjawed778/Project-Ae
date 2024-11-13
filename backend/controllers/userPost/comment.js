@@ -1,5 +1,5 @@
-const Post = require('../../models/Post');
-const Comment = require('../../models/Comment');
+const Post = require('../../models/post/Post');
+const Comment = require('../../models/post/Comment');
 const { AvatarGenerator } = require('random-avatar-generator');
 
 // Add a comment to a post

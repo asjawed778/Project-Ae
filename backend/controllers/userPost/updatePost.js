@@ -1,4 +1,4 @@
-const Post = require('../../models/Post.js');
+const Post = require('../../models/post/Post');
 const { deleteFileFromCloudinary, uploadFileToCloudinary } = require('../../utils/cloudinaryUtils');
 
 const getCloudinaryPublicId = (url) => {
