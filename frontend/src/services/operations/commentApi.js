@@ -216,7 +216,7 @@ export function voteComment(postId, commentId, action) {
            
            console.log("vote comemnt", response) ;
            toast.success("your successfully voted up");
-           dispatch( getAllComments(postId) ) ;
+           //dispatch( getAllComments(postId) ) ;
 
         } catch (error ) {
            
