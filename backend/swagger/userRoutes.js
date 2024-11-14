@@ -123,6 +123,48 @@ module.exports = {
                                                 type: 'string',
                                                 example: 'amit',
                                             },
+                                            role: {
+                                                type: 'object',
+                                                properties: {
+                                                    _id: {
+                                                        type: 'string',
+                                                        example: '6734f6cf879ccc06782b06fd'
+                                                    },
+                                                    roleName: {
+                                                        type: 'string',
+                                                        example: 'USER'
+                                                    },
+                                                    description: {
+                                                        type: 'string',
+                                                        example: 'Regular user with limited permissions'
+                                                    },
+                                                    permissions: {
+                                                        type: 'array',
+                                                        items: {
+                                                            type: 'object',
+                                                            properties: {
+                                                                route: {
+                                                                    type: 'string',
+                                                                    example: '/user/profile'
+                                                                },
+                                                                action: {
+                                                                    type: 'string',
+                                                                    enum: ['GET', 'POST', 'PUT', 'DELETE']
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+
+                                                }
+                                            },
+                                            additionalDetails: {
+                                                type: 'string',
+                                                example: '6734f717879ccc06782b0747'
+                                            },
+                                            token: {
+                                                type: 'string',
+                                                example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+                                            }
                                         },
                                     },
                                 },
