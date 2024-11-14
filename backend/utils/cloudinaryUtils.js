@@ -1,5 +1,14 @@
 const cloudinary = require('cloudinary').v2;
 
+exports.checkFileType = (filename, allowedExtensions) => {
+    // Get the file extension by splitting the filename at the last dot
+    const fileExtension = filename.split('.').pop().toLowerCase();
+
+    // Check if the file extension is in the list of allowed extensions
+    return allowedExtensions.includes(fileExtension);
+}
+
+
 exports.uploadFileToCloudinary = async (file, folder, quality) => {
     try {
         const options = {
@@ -43,8 +52,8 @@ exports.uploadFileToCloudinary = async (file, folder, quality) => {
 
 exports.getCloudinaryPublicId = (url) => {
     const parts = url.split('/');
-    const publicIdWithExtension = parts[parts.length - 1]; 
-    const publicId = publicIdWithExtension.split('.')[0]; 
+    const publicIdWithExtension = parts[parts.length - 1];
+    const publicId = publicIdWithExtension.split('.')[0];
     return parts.slice(parts.length - 2, parts.length - 1) + '/' + publicId;
 };
 

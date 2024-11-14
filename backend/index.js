@@ -46,11 +46,13 @@ app.use(fileupload({
 const { cloudinaryConnect } = require('./config/cloudinary');
 cloudinaryConnect();
 
-
+const courseRoutes = require('./routes/courseRoutes');
 const userRoutes = require('./routes/userRoutes');
 const postRoutes = require('./routes/postRoutes');
 app.use('/api/v1', postRoutes);
 app.use('/api/v1', userRoutes);
+app.use('/api/v1', courseRoutes);
+
 
 const errorMiddleware = require('./middlewares/errorMiddleware');
 app.use(errorMiddleware);
