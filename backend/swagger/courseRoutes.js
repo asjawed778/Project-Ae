@@ -292,6 +292,460 @@ module.exports = {
             },
         },
     },
+
+    '/course/get-category-course/{categoryId}': {
+        get: {
+            tags: ['CourseRoutes'],
+            summary: 'Get courses by category',
+            description: 'Fetches a list of courses belonging to a specific category. Only specific fields like course title, thumbnail, mode, and language are returned.',
+            parameters: [
+                {
+                    name: 'categoryId',
+                    in: 'path',
+                    description: 'The ID of the category to fetch courses for',
+                    required: true,
+                    schema: {
+                        type: 'string',
+                    },
+                    example: '64ae08b1f85a9b0023f41c23',
+                },
+            ],
+            responses: {
+                200: {
+                    description: 'List of courses for the given category',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: {
+                                        type: 'boolean',
+                                        example: true,
+                                    },
+                                    courses: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'object',
+                                            properties: {
+                                                _id: {
+                                                    type: 'string',
+                                                    example: '64ae08b1f85a9b0023f41c45',
+                                                },
+                                                courseTitle: {
+                                                    type: 'string',
+                                                    example: 'Full-Stack Web Development',
+                                                },
+                                                thumbnail: {
+                                                    type: 'string',
+                                                    example: 'https://example.com/thumbnails/webdev.png',
+                                                },
+                                                courseMode: {
+                                                    type: 'string',
+                                                    example: 'Online',
+                                                },
+                                                courseLanguage: {
+                                                    type: 'string',
+                                                    example: 'English',
+                                                },
+                                            },
+                                        },
+                                        example: [
+                                            {
+                                                _id: '64ae08b1f85a9b0023f41c45',
+                                                courseTitle: 'Full-Stack Web Development',
+                                                thumbnail: 'https://example.com/thumbnails/webdev.png',
+                                                courseMode: 'Online',
+                                                courseLanguage: 'English',
+                                            },
+                                            {
+                                                _id: '64ae08b1f85a9b0023f41c46',
+                                                courseTitle: 'Frontend Development',
+                                                thumbnail: 'https://example.com/thumbnails/frontend.png',
+                                                courseMode: 'Offline',
+                                                courseLanguage: 'Hindi',
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                404: {
+                    description: 'No courses found for the given category',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: {
+                                        type: 'boolean',
+                                        example: false,
+                                    },
+                                    message: {
+                                        type: 'string',
+                                        example: 'No courses found for the given category.',
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                500: {
+                    description: 'Internal Server Error',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: {
+                                        type: 'boolean',
+                                        example: false,
+                                    },
+                                    message: {
+                                        type: 'string',
+                                        example: 'Server error. Please try again later.',
+                                    },
+                                    Error: {
+                                        type: 'string',
+                                        example: 'Error message for debugging.',
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    },
+
+    '/course/get-full-course-details/{courseId}': {
+        get: {
+            tags: ['CourseRoutes'],
+            summary: 'Get full course details',
+            description: 'Fetches detailed information for a specific course, including course title, description, content, ratings, and associated category.',
+            parameters: [
+                {
+                    name: 'courseId',
+                    in: 'path',
+                    description: 'The ID of the course to fetch details for',
+                    required: true,
+                    schema: {
+                        type: 'string',
+                    },
+                    example: '64ae08b1f85a9b0023f41c30',
+                },
+            ],
+            responses: {
+                200: {
+                    description: 'Full details of the specified course',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: {
+                                        type: 'boolean',
+                                        example: true,
+                                    },
+                                    message: {
+                                        type: 'string',
+                                        example: 'Course fetched successfully',
+                                    },
+                                    course: {
+                                        type: 'object',
+                                        properties: {
+                                            _id: {
+                                                type: 'string',
+                                                example: '64ae08b1f85a9b0023f41c30',
+                                            },
+                                            courseTitle: {
+                                                type: 'string',
+                                                example: 'Full-Stack Web Development',
+                                            },
+                                            courseSubTitle: {
+                                                type: 'string',
+                                                example: 'Become a full-stack developer with hands-on projects',
+                                            },
+                                            keyPoints: {
+                                                type: 'array',
+                                                items: {
+                                                    type: 'string',
+                                                },
+                                                example: [
+                                                    'Learn HTML, CSS, and JavaScript',
+                                                    'Build responsive web applications',
+                                                    'Master backend with Node.js and Express',
+                                                ],
+                                            },
+                                            tags: {
+                                                type: 'array',
+                                                items: {
+                                                    type: 'string',
+                                                },
+                                                example: ['Web Development', 'Full-Stack', 'JavaScript'],
+                                            },
+                                            courseDescription: {
+                                                type: 'string',
+                                                example: 'An in-depth course covering both frontend and backend web development.',
+                                            },
+                                            courseMode: {
+                                                type: 'string',
+                                                example: 'Online',
+                                            },
+                                            courseLanguage: {
+                                                type: 'string',
+                                                example: 'English',
+                                            },
+                                            brochure: {
+                                                type: 'string',
+                                                example: 'https://example.com/brochure.pdf',
+                                            },
+                                            thumbnail: {
+                                                type: 'string',
+                                                example: 'https://example.com/images/thumbnail.png',
+                                            },
+                                            courseContent: {
+                                                type: 'array',
+                                                items: {
+                                                    type: 'object',
+                                                    properties: {
+                                                        _id: {
+                                                            type: 'string',
+                                                            example: '64ae08b1f85a9b0023f41c31',
+                                                        },
+                                                        topicName: {
+                                                            type: 'string',
+                                                            example: 'Introduction to Web Development',
+                                                        },
+                                                        subTopic: {
+                                                            type: 'array',
+                                                            items: {
+                                                                type: 'object',
+                                                                properties: {
+                                                                    _id: {
+                                                                        type: 'string',
+                                                                        example: '64ae08b1f85a9b0023f41c32',
+                                                                    },
+                                                                    title: {
+                                                                        type: 'string',
+                                                                        example: 'HTML Basics',
+                                                                    },
+                                                                    description: {
+                                                                        type: 'string',
+                                                                        example: 'Learn the structure of HTML documents and basic tags.',
+                                                                    },
+                                                                    timeDuration: {
+                                                                        type: 'string',
+                                                                        example: '15 mins',
+                                                                    },
+                                                                    videoUrl: {
+                                                                        type: 'string',
+                                                                        example: 'https://example.com/videos/html_basics.mp4',
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                            ratingAndReviews: {
+                                                type: 'array',
+                                                items: {
+                                                    type: 'object',
+                                                    properties: {
+                                                        rating: {
+                                                            type: 'number',
+                                                            example: 4.5,
+                                                        },
+                                                        comment: {
+                                                            type: 'string',
+                                                            example: 'Great course, very informative!',
+                                                        },
+                                                    },
+                                                },
+                                                example: [
+                                                    {
+                                                        rating: 5,
+                                                        comment: 'Excellent course!',
+                                                    },
+                                                    {
+                                                        rating: 4,
+                                                        comment: 'Very detailed and helpful',
+                                                    },
+                                                ],
+                                            },
+                                            category: {
+                                                type: 'object',
+                                                properties: {
+                                                    _id: {
+                                                        type: 'string',
+                                                        example: '64ae08b1f85a9b0023f41c23',
+                                                    },
+                                                    name: {
+                                                        type: 'string',
+                                                        example: 'Web Development',
+                                                    },
+                                                },
+                                            },
+                                            createdAt: {
+                                                type: 'string',
+                                                format: 'date-time',
+                                                example: '2024-08-01T12:34:56.789Z',
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                404: {
+                    description: 'Course not found',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: {
+                                        type: 'boolean',
+                                        example: false,
+                                    },
+                                    message: {
+                                        type: 'string',
+                                        example: 'Course not found.',
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                500: {
+                    description: 'Internal Server Error',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: {
+                                        type: 'boolean',
+                                        example: false,
+                                    },
+                                    message: {
+                                        type: 'string',
+                                        example: 'Server error. Please try again later.',
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    },
+
+    '/course/get-all-course': {
+        get: {
+            tags: ['CourseRoutes'],
+            summary: 'Get a list of all courses',
+            description: 'Retrieves a list of all available courses with limited details including title, thumbnail, mode, and language.',
+            responses: {
+                200: {
+                    description: 'Successfully fetched all courses',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: {
+                                        type: 'boolean',
+                                        example: true,
+                                    },
+                                    message: {
+                                        type: 'string',
+                                        example: 'All courses fetched successfully',
+                                    },
+                                    allCourse: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'object',
+                                            properties: {
+                                                _id: {
+                                                    type: 'string',
+                                                    example: '64ae08b1f85a9b0023f41c30',
+                                                },
+                                                courseTitle: {
+                                                    type: 'string',
+                                                    example: 'Introduction to Data Science',
+                                                },
+                                                thumbnail: {
+                                                    type: 'string',
+                                                    example: 'https://example.com/images/course-thumbnail.png',
+                                                },
+                                                courseMode: {
+                                                    type: 'string',
+                                                    example: 'Online',
+                                                },
+                                                courseLanguage: {
+                                                    type: 'string',
+                                                    example: 'English',
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                404: {
+                    description: 'No courses found',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: {
+                                        type: 'boolean',
+                                        example: false,
+                                    },
+                                    message: {
+                                        type: 'string',
+                                        example: 'No courses found.',
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                500: {
+                    description: 'Internal Server Error',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: {
+                                        type: 'boolean',
+                                        example: false,
+                                    },
+                                    message: {
+                                        type: 'string',
+                                        example: 'Server error in fetching all courses. Please try again later.',
+                                    },
+                                    Error: {
+                                        type: 'string',
+                                        example: 'Database connection error',
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    },
+
     '/course/add-category': {
         post: {
             tags: ['CourseRoutes'],
@@ -429,6 +883,7 @@ module.exports = {
             },
         },
     },
+    
     '/course/get-all-category': {
         get: {
             tags: ['CourseRoutes'],

@@ -49,9 +49,11 @@ cloudinaryConnect();
 const courseRoutes = require('./routes/courseRoutes');
 const userRoutes = require('./routes/userRoutes');
 const postRoutes = require('./routes/postRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 app.use('/api/v1', postRoutes);
 app.use('/api/v1', userRoutes);
 app.use('/api/v1', courseRoutes);
+app.use('/api/v1', adminRoutes);
 
 
 const errorMiddleware = require('./middlewares/errorMiddleware');
