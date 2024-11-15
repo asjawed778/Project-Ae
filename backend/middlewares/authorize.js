@@ -4,16 +4,14 @@ const Role = require('../models/user/Role');
 // Authorization middleware
 exports.isAuthorized = async (req, res, next) => {
     try {
-        if (!req.user || !req.user.id || req.user.role) {
+        if (!req.user || !req.user.id || !req.user.role) {
             const err = new Error("Please login to get Authorized");
             err.status = 401;
             return next(err);
         }
-        const { id, role } = req.user;
+        const { role } = req.user;
 
-        // Check if user is SUPERADMIN by ID comparison
-        const superAdminRole = await Role.findOne({ roleName: 'SUPERADMIN' });
-        if (superAdminRole && role._id.equals(superAdminRole._id)) {
+        if (role.roleName === 'SUPERADMIN') {
             return next();
         }
 
