@@ -1,4 +1,4 @@
-const Post = require('../../models/Post');
+const Post = require('../../models/post/Post');
 const { AvatarGenerator } = require('random-avatar-generator');
 
 exports.getAllPost = async (req, res, next) => {

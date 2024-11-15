@@ -1,9 +1,11 @@
-const User = require('../../models/User');
+const User = require('../../models/user/User');
 const otpGenerator = require('otp-generator');
 const emailTemplate = require('../../templates/mailOTP');
 const { mailSender } = require('../../utils/mailSender');
 const OTP = require('../../models/OTP');
 const bcrypt = require('bcrypt');
+const validator = require("email-validator");
+const passwordValidator = require('password-validator');
 require('dotenv').config();
 
 
@@ -14,6 +16,13 @@ exports.sendForgotPasswordOTP = async (req, res, next) => {
         if (!email) {
             const err = new Error("Please enter email to reset password");
             err.status = 400;
+            return next(err);
+        }
+
+        // email validation
+        if (!validator.validate(email)) {
+            const err = new Error("Invalid email address");
+            err.status = 403;
             return next(err);
         }
 
@@ -68,11 +77,21 @@ exports.verifyForgotPasswordOTP = async (req, res, next) => {
             err.status = 400;
             return next(err);
         }
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        // password validator 
+        const schema = new passwordValidator();
+        schema
+            .is().min(8)
+            .is().max(100)
+            .has().uppercase()
+            .has().lowercase()
+            .has().digits(1)
+            .has().not().spaces()
+            .is().not().oneOf(['Passw0rd', 'Password123']);
 
-        if (!passwordRegex.test(newPassword)) {
+
+        if (!schema.validate(password)) {
             const err = new Error(
-                "New Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number."
+                "Password must be at least 8 characters long and max 100 char long, contain at least one uppercase letter, one lowercase letter, and one number."
             );
             err.status = 400;
             return next(err);
