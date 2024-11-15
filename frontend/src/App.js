@@ -9,6 +9,7 @@ import './index.css';
 import Sidebar from './components/common/Sidebar.jsx';
 import UserPost from './components/common/UserPost.jsx';
 import Learning from './pages/home/HomePage.jsx' ;
+import AdminDashboard from './pages/home/Admin/AdminDashboard.jsx';
 
 
 
@@ -41,7 +42,8 @@ function App() {
         <Route path='/auth' element={
           <PublicRoute>
             {/* <AuthPage />  */}
-            <Learning/>
+            {/* <Learning/> */}
+            <AdminDashboard/>
           </PublicRoute>
         } />
 
