@@ -46,4 +46,12 @@ export const commentEndpoints = {
     VOTE_REPLY: (postId, commentId, replyId ) => `${SERVER_URL}/vote-reply/${postId}/${commentId}/${replyId}`, // For voting on a reply
 };
 
+// add courses in Admin 
+export const addCourseEndpoints = {
+    
+    GET_ALL_CATEGORY: SERVER_URL + `/course/get-all-category` , 
+    ADD_COURSES: SERVER_URL + `/course/add-course` ,
+    
+}
+
   

@@ -20,6 +20,7 @@ import authSlice from './slices/authSlice';
 import loadingSlice from './slices/loadingSlice';
 import postSlice from './slices/postSlice';
 import commentSlice from './slices/commentSlice';
+import categorySlice  from './slices/adminCategorySlice';
 import { combineReducers } from 'redux';
 import userPostSlice from './slices/userPostSlice';
 
@@ -36,6 +37,7 @@ const rootReducer = combineReducers({
   posts: postSlice,
   userposts: userPostSlice ,
   comments: commentSlice,
+  categories: categorySlice ,
   loading: loadingSlice
 });
 
