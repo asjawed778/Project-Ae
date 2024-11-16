@@ -1,12 +1,25 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import user from '../slider/user.png' ;
 import clock from '../slider/clock.png' ;
 import AndroidDevImg from '../slider/AndroidDevelopment.png' ;
 import FullStackImg from '../slider/MERNFullStackBanner.png' ;
 import DataScience from '../slider/DataScience.png' ;
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllCourses } from '../../services/operations/addCourses';
 
 export default function Carousal() {
+
+  const dispatch = useDispatch() ;
+
+  useEffect(() => {
+    dispatch(getAllCourses()) ;
+ },[dispatch]) ;
+
+  
+  const coursesAll = useSelector((state) => state.courses) ;
+  console.log("coursesAll", coursesAll.courses.allCourse) ;
+
   const [activeTab, setActiveTab] = useState("Web Development");
 
   const tabs = ["Web Development", "Mobile Development", "Data Science", "Blockchain"];
@@ -94,32 +107,32 @@ export default function Carousal() {
       /> 
 
        {/* Scrollable Course Cards */}
+       {coursesAll?.courses?.allCourse ? (
        <div className='space-x-2 carousel rounded-box w-[100%] lg:w-3/4 items-center lg:ml-[15%] p-4 '>
         
-          {courses.map((course, index) => (
-            // <div
-            //   key={index}
-            //   className="flex flex-col bg-white rounded-lg shadow-md p-0  carousel-item min-w-[50%] sm:min-w-[40%] md:min-w-[30%] lg:min-w-[10%]"
-            // >
-            <Link to={`/course/${course.id}`} key={index} className="carousel-item min-w-[50%] sm:min-w-[40%] md:min-w-[30%] lg:min-w-[10%]">
+          {coursesAll?.courses.allCourse.map((course, index) => (
+            
+            <Link to={`/course/${course._id}`} key={index} className="carousel-item min-w-[50%] sm:min-w-[40%] md:min-w-[30%] lg:min-w-[10%]">
              <div className="flex flex-col bg-white rounded-lg shadow-md p-0">
-              <img src={course.image} alt={course.title} className="w-[100%] h-40 rounded-lg object-cover mb-4" />
-              <h3 className="text-base font-sans text-blue-600 mb-2 ml-2">{course.title}</h3>
+              <img src={course.thumbnail} alt={course.courseTitle} className="w-[100%] h-40 rounded-lg object-cover mb-4" />
+              <h3 className="text-base font-sans text-blue-600 mb-2 ml-2">{course.courseTitle}</h3>
               
               <div className='flex flex-row gap-2 mb-3 ml-2'>
               <img src={user} alt='userLive' width="18px" height="20px"/> 
-              <p className='text-gray-600 text-sm font-sans'>{course.sessions}</p>
+              <p className='text-gray-600 text-sm font-sans'>{course.courseMode}</p>
               </div>
               
               <div className='flex flex-row gap-2 mb-3 ml-2'>
               <img src={clock} alt='clock' width="18px" height="15px"/>
-              <p className="text-gray-600 text-sm font-sans">{course.duration}</p>
+              <p className="text-gray-600 text-sm font-sans">{course.courseLanguage}</p>
               </div>
             </div>
             </Link>
           ))}
        
-      </div>
+      </div> ) : (
+        <div className="text-center text-gray-600">Loading courses...</div>
+      )}
       
       
     </div>

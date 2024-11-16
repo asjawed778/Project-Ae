@@ -161,38 +161,38 @@ function AddCourse() {
     }
   
     // Append course content (nested arrays)
-    const courseContent = [
-      {
-        topicName: "Introduction to JavaScript",
-        subTopic: [
-          {
-            title: "What is JavaScript?",
-            description: "Introduction to JavaScript",
-          },
-          {
-            title: "JavaScript Basics",
-            description: "JavaScript Basics",
-          }
-        ],
-      },
-      {
-        topicName: "Introduction to html",
-        subTopic: [
-          {
-            title: "What is html?",
-            description: "Introduction to html",
-          },
-          {
-            title: "html Basics",
-            description: "html Basics",
-          }
-        ],
-      },
-    ];
+    // const courseContent = [
+    //   {
+    //     topicName: "Introduction to JavaScript",
+    //     subTopic: [
+    //       {
+    //         title: "What is JavaScript?",
+    //         description: "Introduction to JavaScript",
+    //       },
+    //       {
+    //         title: "JavaScript Basics",
+    //         description: "JavaScript Basics",
+    //       }
+    //     ],
+    //   },
+    //   {
+    //     topicName: "Introduction to html",
+    //     subTopic: [
+    //       {
+    //         title: "What is html?",
+    //         description: "Introduction to html",
+    //       },
+    //       {
+    //         title: "html Basics",
+    //         description: "html Basics",
+    //       }
+    //     ],
+    //   },
+    // ];
     
     // Append the courseContent object
    // Iterate through courseContent and append the data to formData
-  formData.append("courseContent",JSON.stringify(courseContent)) ;
+  formData.append("courseContent",JSON.stringify(coursecontent)) ;
     
   
     // Debugging: Log formData contents

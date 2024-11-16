@@ -2,8 +2,20 @@ import { GoHome } from "react-icons/go";
 import { FaCircleCheck } from "react-icons/fa6";
 import { RiSearchLine } from "react-icons/ri";
 import { PiGreaterThanBold } from "react-icons/pi";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import coder from "./slider/coder.jpg" ;
 
-const CourseDetails = () => {
+const CourseDetails = () => { 
+
+  const courses = useSelector((state) => state.courses);
+  console.log("CourseDetials", courses.courses.allCourse) ;
+  const course = courses.courses.allCourse ;
+  const {id} = useParams() ;
+  console.log("id", id) ;
+  const specificCourse = course.filter((course) => course._id === id);
+  console.log("specific course",specificCourse) ;
+  
   return (
     <div className="">
         <div className="mt-3 border-b-2 pb-5">
@@ -18,12 +30,12 @@ const CourseDetails = () => {
   <GoHome size={30} />
 </div></h1>
         <p className="size-3"><PiGreaterThanBold color="grey" size={20} className="mt-1"/>{""}</p>
-        <h1 className="text-gray-600 font-semibold">MERN Full Stack Website Development</h1>
+        <h1 className="text-gray-600 font-semibold">{specificCourse[0].courseTitle}</h1>
       </div>
       <div className="mt-5 max-w-5xl mx-auto flex space-x-40">
         <div>
-        <h1 className="text-3xl font-bold">MERN Full Stack Website Development</h1>
-        <h2 className="mt-1.5 font-semibold">Learn Complete Website Development from Basic to Advanced</h2>
+        <h1 className="text-3xl font-bold">{specificCourse[0].courseTitle} Course</h1>
+        <h2 className="mt-1.5 font-semibold">Learn Complete {specificCourse[0].courseTitle} from Basic to Advanced</h2>
         <ul className="mt-10">
           <li className="mb-1 font-medium flex"> <div style={{color: '#3B82F6'}}>
           <FaCircleCheck size={15} className="mt-2" /></div><div className="ml-2">Master  the core concepts of Python programming</div></li>
@@ -34,12 +46,16 @@ const CourseDetails = () => {
         </ul>
         <button className="bg-blue-500 text-white p-3 rounded-md mt-5">Download Brochure</button>
         </div>
-        
+        <div>
+            <img src={coder}
+             className="w-[290px] rounded-md"
+             />
+        </div>
       </div>
       <div className="mt-10 max-w-5xl mx-auto flex space-x-10 mb-10">
         <div>
-        <h1 className="font-bold">Explore Our Immersive Full Stack Development Bootcamp</h1>
-        <p>Designed to get you hired, our power-packed Full-Stack Developer Bootcamp features bect in-class hardng, plenty of harals-on exercises and assignments with Cloud Labs, and so much more. Build a stellar project portfolio get ready to crack interviews at product based companies, and launch your career as a Full Stack Developer</p><br />
+        <h1 className="font-bold">Explore Our Immersive {specificCourse[0].courseTitle} Bootcamp</h1>
+        <p>Designed to get you hired, our power-packed {specificCourse[0].courseTitle} Developer Bootcamp features bect in-class hardng, plenty of harals-on exercises and assignments with Cloud Labs, and so much more. Build a stellar project portfolio get ready to crack interviews at product based companies, and launch your career as a Full Stack Developer</p><br />
         <p>Due revamped Full Stack Developer Bootcamp Online, now offers expertly crafted recorded streaming sessions that elevate your educationa вкритное. Those meticulously planned sessions, created by top intruttore and progenators, promsse unmutched clarity and engagement</p>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia consequuntur velit corporis unde. Reprehenderit dignissimos dolor cum. Alias, hic enim voluptatum necessitatibus ad, quod quibusdam earum pariatur iusto corrupti qui!
         </p>
@@ -58,6 +74,7 @@ const CourseDetails = () => {
         <p className="font-bold text-blue-500 pt-3.5">Course Highlights</p>
         </div>
         
+
         <div className="p-5 space-y-4 flex-col border-[2px] shadow-lg h-full">
             <h1 className="text-blue-500 font-bold">Book a Live Class, For Free!</h1>
             <input type="text" placeholder="Name" className="w-full border-2 px-2 text-blue-400"/>
