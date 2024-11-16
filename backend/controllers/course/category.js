@@ -42,7 +42,6 @@ exports.addCategory = async (req, res, next) => {
     }
 };
 
-
 exports.getAllCategory = async (req, res, next) => {
     try {
         // Fetch all categories from the database

@@ -1,6 +1,7 @@
 const userRoutes = require('./userRoutes');
 const postRoutes = require('./postRoutes');
 const courseRoutes = require('./courseRoutes');
+const adminRoutes = require('./adminRoutes');
 
 module.exports = {
     openapi: '3.0.0',
@@ -24,6 +25,7 @@ module.exports = {
     paths: {
         ...userRoutes,
         ...postRoutes,
-        ...courseRoutes
+        ...courseRoutes,
+        ...adminRoutes
     },
 };
