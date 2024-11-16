@@ -10,6 +10,7 @@ import Sidebar from './components/common/Sidebar.jsx';
 import UserPost from './components/common/UserPost.jsx';
 import Learning from './pages/home/HomePage.jsx' ;
 import AdminDashboard from './pages/home/Admin/AdminDashboard.jsx';
+import CourseDetails from './pages/CourseDetails.jsx';
 
 
 
@@ -24,11 +25,11 @@ function App() {
      <> 
 
       {/* Sidebar */}
-      {location.pathname !== '/auth' && (
+      {/* {location.pathname !== '/auth' && (
         <div className="w-[250px] md:w-[300px] h-screen">
           <Sidebar />
         </div>
-      )}
+      )} */}
 
     {/* <div className='flex-1 flex justify-center home-component mr-32' > */}
       <Routes>
@@ -42,15 +43,21 @@ function App() {
         <Route path='/auth' element={
           <PublicRoute>
             {/* <AuthPage />  */}
-            {/* <Learning/> */}
-            <AdminDashboard/>
+            <Learning/>
+            {/* <AdminDashboard/> */}
           </PublicRoute>
         } />
-
+       
         <Route path='/user' element={
           <PrivateRoute>
             <UserPost />
           </PrivateRoute>
+        } />
+
+        <Route path='/course/:id' element={
+          <PublicRoute>
+            <CourseDetails/>
+          </PublicRoute>
         } />
 
         <Route path='*' element={<PageNotFound />} />
