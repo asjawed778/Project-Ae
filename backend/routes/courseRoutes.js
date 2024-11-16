@@ -9,7 +9,7 @@ const { getCourseByCategory, getFullCourseDetails, getAllCourse } = require('../
 
 
 router.post('/course/add-category', auth, addCategory);
-router.get('/course/get-all-category', auth, isAuthorized, getAllCategory);
+router.get('/course/get-all-category', getAllCategory);
 
 
 router.post('/course/add-course', addCourse);

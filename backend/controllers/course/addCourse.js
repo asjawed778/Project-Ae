@@ -16,10 +16,19 @@ exports.addCourse = async (req, res, next) => {
             courseMode,
             courseLanguage,
             courseContent,
-            category
+            category,
         } = req.body;
 
         let { brochure, thumbnail } = req.files || {};
+
+        //changes
+        const parsedContent = JSON.parse(courseContent);
+
+        if (!Array.isArray(parsedContent)) {
+            const err = new Error("Please send course content as an arry of Topic, and Topic is also array of subTopic");
+            err.status = 400;
+            return next(err);
+        }
 
         if (!courseTitle || !courseSubTitle || !courseDescription || !courseMode || !courseLanguage || !category) {
             const err = new Error("Please fill all the details, including course content as an array");
@@ -36,11 +45,7 @@ exports.addCourse = async (req, res, next) => {
             err.status = 400;
             return next(err);
         }
-        if(!Array.isArray(courseContent)) {
-            const err = new Error("Please send course content as an arry of Topic, and Topic is also array of subTopic");
-            err.status = 400;
-            return next(err);
-        }
+
 
         if (!thumbnail) {
             const err = new Error("Please upload a Thumbnail");
@@ -56,13 +61,13 @@ exports.addCourse = async (req, res, next) => {
             thumbnail = thumbnail[thumbnail.length - 1];
         }
 
-        if (brochure && !checkFileType(brochure.name, ['pdf'])) {
+        if (brochure && !checkFileType(brochure?.name, ['pdf'])) {
             const err = new Error("Invalid brochure file type. Please upload a PDF file.");
             err.status = 400;
             return next(err);
         }
 
-        if (thumbnail && !checkFileType(thumbnail.name, ['jpg', 'jpeg', 'png'])) {
+        if (thumbnail && !checkFileType(thumbnail?.name, ['jpg', 'jpeg', 'png'])) {
             const err = new Error("Invalid thumbnail file type. Please upload an image file.");
             err.status = 400;
             return next(err);
@@ -86,7 +91,8 @@ exports.addCourse = async (req, res, next) => {
 
         const newCourseContent = [];
 
-        for (const topic of courseContent) {
+
+        for (const topic of parsedContent) {
             const { topicName, subTopic } = topic;
             if (!topicName || !Array.isArray(subTopic)) {
                 const err = new Error("Please fill details in Topic and their subtopic");
@@ -147,4 +153,3 @@ exports.addCourse = async (req, res, next) => {
         });
     }
 };
-
