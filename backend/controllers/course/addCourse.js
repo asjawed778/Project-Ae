@@ -3,6 +3,7 @@ const Category = require('../../models/course/Category');
 const SubTopic = require('../../models/course/SubTopic');
 const Topic = require('../../models/course/Topic');
 const Course = require("../../models/course/Course");
+const { putObject } = require("../../utils/AWS_S3_Utils");
 
 
 exports.addCourse = async (req, res, next) => {
@@ -82,12 +83,14 @@ exports.addCourse = async (req, res, next) => {
 
         // Parallel upload for better efficiency
         const [thumbnail_res, brochur_res] = await Promise.all([
-            uploadFileToCloudinary(thumbnail, "AbilitaEdge", 100),
-            uploadFileToCloudinary(brochure, "AbilitaEdge", 100)
+            // uploadFileToCloudinary(thumbnail, "AbilitaEdge", 100),
+            // uploadFileToCloudinary(brochure, "AbilitaEdge", 100),
+            putObject(thumbnail, "Course"),
+            putObject(brochure, "Course")
         ]);
 
-        const thumbnailUrl = thumbnail_res[0].url.toString();
-        const brochureUrl = brochur_res[0].url.toString();
+        // const thumbnailUrl = thumbnail_res[0].url.toString();
+        // const brochureUrl = brochur_res[0].url.toString();
 
         const newCourseContent = [];
 
@@ -129,8 +132,8 @@ exports.addCourse = async (req, res, next) => {
             courseDescription,
             courseMode,
             courseLanguage,
-            brochure: brochureUrl,
-            thumbnail: thumbnailUrl,
+            brochure: brochur_res,
+            thumbnail: thumbnail_res,
             category,
             courseContent: newCourseContent
         });
