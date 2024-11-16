@@ -1,5 +1,5 @@
 const { PutObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
-const { s3Client } = require("../config/AWSConfig");
+const { s3Client } = require("../config/AWS_S3_Config");
 const fs = require("fs");
 require('dotenv').config();
 

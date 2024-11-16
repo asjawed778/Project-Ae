@@ -13,10 +13,10 @@ const AdminDashboard = () => {
     };
 
     return(
-        <>
+        <div className=' flex flex-row'>
          
         { /* Left component Admin Sidebar */ }
-        <div className={`flex ${ !isOpen ? "items-start": ""}`}>
+        <div className={`h-auto ${ !isOpen ? "items-start": ""}`}>
          {/* Sidebar */}
            <div
              className={`fixed z-50 inset-y-0 left-0 transform bg-gray-800 text-white w-64 max-h-full p-4 transition-transform duration-300 ease-in-out
@@ -83,7 +83,7 @@ const AdminDashboard = () => {
       )}
     </div>
 
-           </div>
+  </div>
 
       {/* Toggle button for mobile */}
       <div className='flex flex-col w-full'>
@@ -97,13 +97,16 @@ const AdminDashboard = () => {
       </button>
       } 
 
-      {/* Main content */}
-      <AddCourse/>
+      
       </div>
-    </div>
+        </div>
+        
+        {/* Right Component Admin */}
+        <div className=" w-full overflow-y-auto h-screen">
+         <AddCourse />
+        </div>
 
-
-        </>
+       </div>
     )
 }
 

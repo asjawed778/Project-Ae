@@ -84,10 +84,9 @@ exports.addCourse = async (req, res, next) => {
         // Parallel upload for better efficiency
         const [thumbnail_res, brochur_res] = await Promise.all([
             // uploadFileToCloudinary(thumbnail, "AbilitaEdge", 100),
-            // uploadFileToCloudinary(brochure, "AbilitaEdge", 100)
-            putObject(thumbnail, "Courses"),
-            putObject(brochure, "Courses")
-
+            // uploadFileToCloudinary(brochure, "AbilitaEdge", 100),
+            putObject(thumbnail, "Course"),
+            putObject(brochure, "Course")
         ]);
 
         // const thumbnailUrl = thumbnail_res[0].url.toString();

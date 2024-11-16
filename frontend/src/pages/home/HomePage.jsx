@@ -5,6 +5,7 @@ import bar from '../slider/bar.png'
 import Footer from "../../components/common/Footer";
 import backgroundImage from "../slider/Artboard.png" ;
 
+
 function HomePage() {
   
   
@@ -66,7 +67,7 @@ function HomePage() {
               backgroundSize: 'cover',
               backgroundPosition: 'center',
             }} 
-      className={`w-full flex flex-col md:flex-row items-center justify-around p-12 `}>
+      className={`w-full flex flex-col md:flex-row items-center justify-around p-4 `}>
 
         {/* Text Section */}
         <div className="flex flex-col items-start text-left text-white px-4 mb-8 ">
@@ -98,7 +99,7 @@ function HomePage() {
 
         {/* Form Section */}
         
-        <div className="bg-white p-6 sm:p-4 rounded-lg shadow-lg w-[300px] sm:w-80 md:w-80">
+        <div className="bg-white p-6 sm:p-4 rounded-lg shadow-lg w-[350px] sm:w-80 md:w-80">
           <h3 className=" sm:text-lg font-sans text-blue-600 mb-4">
            Book a Live Class, For Free!
           </h3>
@@ -147,17 +148,17 @@ function HomePage() {
 
       {/* Skill Boxes */} 
       <div className="mt-10 flex flex-wrap flex-col md:flex-row gap-4 justify-center px-4  ">
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white font-sans p-8 sm:p-6 rounded-lg shadow-lg h-48 w-64 md:w-56 lg:w-80 flex flex-col items-start">
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white font-sans p-8 sm:p-6 rounded-lg shadow-lg h-48 w-80 md:w-56 lg:w-80 flex flex-col items-start">
          <h1 className="text-2xl lg:text-2xl">Foundational</h1>
          <h1 className="text-2xl lg:text-2xl">Skills</h1>
         </div>
         
-        <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-sans p-8 sm:p-6 rounded-lg shadow-lg h-48 w-64 md:w-56 lg:w-80 flex flex-col items-start">
+        <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-sans p-8 sm:p-6 rounded-lg shadow-lg h-48 w-80 md:w-56 lg:w-80 flex flex-col items-start">
          <h1 className="text-2xl lg:text-2xl">Employability</h1>
          <h1 className="text-2xl lg:text-2xl">Skills</h1>
         </div>
         
-        <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-sans p-8 sm:p-6 rounded-lg shadow-lg h-48 w-64 md:w-56 lg:w-80 flex flex-col items-start">
+        <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-sans p-8 sm:p-6 rounded-lg shadow-lg h-48 w-80 md:w-56 lg:w-80 flex flex-col items-start">
          <h1 className="text-2xl lg:text-2xl">Entrepreneurial</h1>
          <h1 className="text-2xl lg:text-2xl">Skills</h1>
         </div>
