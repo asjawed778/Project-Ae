@@ -1,7 +1,7 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import Courses from "./Carousal";
 import { useState } from "react";
-import bar from '../slider/bar.png'
+import bar from '../slider/Hamburger_icon.png'
 import Footer from "../../components/common/Footer";
 import backgroundImage from "../slider/Artboard.png" ;
 
@@ -32,7 +32,7 @@ function HomePage() {
             aria-expanded={isMenuOpen}
           >
            
-            <img src={bar} alt="bar" />
+            <img src={bar} alt="bar" className="w-[30px] h-[30px]"/>
             <span className="sr-only">Search</span>
           </button>
 

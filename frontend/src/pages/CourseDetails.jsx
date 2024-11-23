@@ -10,11 +10,11 @@ const CourseDetails = () => {
 
   const courses = useSelector((state) => state.courses);
   console.log("CourseDetials", courses.courses.allCourse) ;
-  const course = courses.courses.allCourse ;
+  const specificCourse = courses.courses.courses  ;
   const {id} = useParams() ;
   console.log("id", id) ;
-  const specificCourse = course.filter((course) => course._id === id);
-  console.log("specific course",specificCourse) ;
+  //const specificCourse = course?.filter((course) => course._id === id);
+  //console.log("specific course",specificCourse) ;
   
   return (
     <div className="">

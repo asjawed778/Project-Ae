@@ -6,6 +6,11 @@ import { addCourse, getAllCategory } from '../../../services/operations/addCours
 
 function AddCourse() {
   
+  const dispatch = useDispatch() ;
+  const categories = useSelector( (state) => state.categories.categories ); 
+
+  // States
+
   const [courseTitle, setCourseTitle] = useState('') ;
   const [courseSubTitle, setCourseSubTitle] = useState('') ;
   const [keyPoints, setKeyPoints] = useState([]) ;
@@ -21,18 +26,14 @@ function AddCourse() {
   const [coursecontent, setCourseContent] = useState([]);
   const [savedContent, setSavedContent] = useState([]);
 
-  console.log("selected categories",selectedCategories) ;
-
-  const dispatch = useDispatch() ;
-  const categories = useSelector( (state) => state.categories.categories ); 
-  console.log("Frontend response", categories) ;
   
   // Fetch categories on component mount
-    useEffect(() => {
+  useEffect(() => {
       dispatch(getAllCategory());
-    }, [dispatch]);
+  }, [dispatch]);
+
   
-   // Handle selecting a category
+  // Handle selecting a category
    const handleSelectCategory = (e) => {
     const selectedCategoryId = e.target.value; // Get selected category ID
     setSelectedCategory(selectedCategoryId); // Save it directly as a string
@@ -52,8 +53,6 @@ function AddCourse() {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) setSelectedImage(file);
-
-    console.log("Image",file) ;
   };
 
   // Handle brochure upload
@@ -62,7 +61,8 @@ function AddCourse() {
     if (file) setBrochure(file);
   };
 
-  //course content
+  //course content 
+
   // Handle adding a new topic
   const addTopic = () => {
     setCourseContent([
@@ -112,28 +112,11 @@ function AddCourse() {
     setCourseContent([]); // Clear current content after saving
   };
 
-  // const handleSubmit = async () => {
-  //   // Prepare payload
-  //   const payload = {
-  //     courseTitle,
-  //     courseSubTitle,
-  //     keyPoints,
-  //     tags,
-  //     courseDescription: value,
-  //     courseMode,
-  //     courseLanguage,
-  //     brochure,
-  //     thumbnail: URL.createObjectURL(selectedImage), // This should be a file upload URL or file object
-  //     courseContent: savedContent,
-  //     category: selectedCategories,
-  //   };
-
-  //   console.log("payload",payload) ;
-  //   dispatch(addCourse(payload, resetForm)) ;
-
-  // }
   
+  // form submit
+
   const handleSubmit = async () => {
+
     // Create a FormData object
     const formData = new FormData();
   
@@ -160,49 +143,15 @@ function AddCourse() {
       formData.append("thumbnail", selectedImage);
     }
   
-    // Append course content (nested arrays)
-    // const courseContent = [
-    //   {
-    //     topicName: "Introduction to JavaScript",
-    //     subTopic: [
-    //       {
-    //         title: "What is JavaScript?",
-    //         description: "Introduction to JavaScript",
-    //       },
-    //       {
-    //         title: "JavaScript Basics",
-    //         description: "JavaScript Basics",
-    //       }
-    //     ],
-    //   },
-    //   {
-    //     topicName: "Introduction to html",
-    //     subTopic: [
-    //       {
-    //         title: "What is html?",
-    //         description: "Introduction to html",
-    //       },
-    //       {
-    //         title: "html Basics",
-    //         description: "html Basics",
-    //       }
-    //     ],
-    //   },
-    // ];
     
-    // Append the courseContent object
-   // Iterate through courseContent and append the data to formData
+  // Append the courseContent object
+   // 1. Change courseContent to string  2. Send as key value pair  3.Parse it on server  
   formData.append("courseContent",JSON.stringify(coursecontent)) ;
     
   
-    // Debugging: Log formData contents
-  console.log("FormData contents:");
-  for (let [key, value] of formData.entries()) {
-    console.log(`${key}: ${value}`);
-  }
-  
-    // Dispatch or send the FormData
-    dispatch(addCourse(formData, resetForm));
+  // Dispatch or send the FormData
+  dispatch(addCourse(formData, resetForm));
+
   };
   
 
@@ -227,8 +176,6 @@ function AddCourse() {
     if (newTag.trim()) {
       setTags((prevTags) => [...prevTags, newTag]); // Add new tag to the array
     }
-
-    console.log("Tags", tags) ;
   };
 
   const handleKeyChange = (e) => {
@@ -236,63 +183,62 @@ function AddCourse() {
     if (newTag.trim()) {
       setKeyPoints((prevTags) => [...prevTags, newTag]); // Add new tag to the array
     }
-
-    console.log("keyPoints", keyPoints) ;
   };
 
   return (
     <div className="p-5 space-y-5 w-full">
       {/* Upper Section */}
+
       <div className="grid lg:grid-cols-2 gap-5">
 
         {/* Left Section */}
         <div className="space-y-4 bg-white p-5 shadow-md rounded-md w-full">
           
-          {/* Title, Subtitle, Description, and Brochure Upload */}
+          {/* Title, Subtitle, Tag , Key Points and Brochure Upload */}
           <div>
-            <label className="block text-gray-700 font-medium">Title</label>
+            <label className="block text-black font-sans text-xl">Title</label>
             <input
               type="text"
               value={courseTitle}
               onChange={(e) => setCourseTitle(e.target.value)}
-              className="w-full border-b border-gray-300 p-1 focus:outline-none focus:border-blue-500 text-gray-400"
+              className="w-full border-b border-gray-300 p-1 focus:outline-none focus:border-blue-500 text-gray-700 font-medium text-sm"
             />
           </div>
           
           <div>
-            <label className="block text-gray-700 font-medium">Subtitle</label>
+            <label className="block text-black font-sans text-xl">Subtitle</label>
             <input
               type="text"
               value={courseSubTitle}
               onChange={(e) => setCourseSubTitle(e.target.value)}
-              className="w-full border-b border-gray-300 p-2 focus:outline-none focus:border-blue-500"
+              className="w-full border-b border-gray-300 p-2 focus:outline-none focus:border-blue-500  text-gray-700"
             />
           </div>
           
           <div className='flex flex-row justify-between'>
 
           <div>
-            <label className="block text-gray-700 font-medium">Tag</label>
+            <label className="block text-black font-sans text-xl">Tag</label>
             <input
               type="text"
               onBlur={handleTagChange}
-              className="w-full border-b border-gray-300 p-1 focus:outline-none focus:border-blue-500 text-gray-400"
+              className="w-full border-b border-gray-300 p-1 focus:outline-none focus:border-blue-500 text-gray-700"
             />
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium">Key Points</label>
+            <label className="block text-black font-sans text-xl">Key Points</label>
             <input
               type="text"
               onBlur={handleKeyChange}
-              className="w-full border-b border-gray-300 p-1 focus:outline-none focus:border-blue-500 text-gray-400"
+              className="w-full border-b border-gray-300 p-1 focus:outline-none focus:border-blue-500 text-gray-700"
             />
           </div>
 
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium">Add Brochure</label>
+            <label className="block text-black font-sans ">Add Brochure</label>
             <input
               type="file"
               className="w-full"
@@ -303,7 +249,7 @@ function AddCourse() {
 
         </div>
 
-        {/* Right Section (Image Upload) */}
+        {/* Right Section  [ Mode, Lang, Category, (Image Upload) ]*/ }
         <div className="flex flex-col  bg-white p-5 shadow-md rounded-md">
           
           {/* Course Mode */}
@@ -342,7 +288,7 @@ function AddCourse() {
         </div>
           
 
-         {/* Course Category */}
+        {/* Course Category */}
           <div className='shadow-md mb-4'>
             
           <select
@@ -353,37 +299,22 @@ function AddCourse() {
             <option value="">Select Category</option>
              {categories.map((category) => (
                <option key={category._id} value={category._id}>
-               {category._id}
+               {category.categoryName}
             </option>
            ))}
           </select>
           </div>
-
-       {/* Display selected categories with remove option
-       <div className="selected-categories flex flex-row">
-        {selectedCategories?.map((category, index) => (
-          <div key={index} className="category-tag space-x-2 bg-gray-200 px-3 py-1 rounded-full mb-2">
-            <span>{category}</span>
-            <button
-              className="text-red-500"
-              onClick={() => removeCategory(category)}
-            >
-              ✕
-            </button>
-          </div>
-        ))}
-      </div> */}
+              
           
-          
-          
-          
+        {/* Image Upload   */}
           <label
             htmlFor="image-upload"
             className="w-full h-48 border-dashed border-2 border-gray-300 flex justify-center items-center cursor-pointer hover:bg-gray-50"
-          >
+          > 
+            {/* to show the selected image  */}
             {selectedImage ? (
               <img
-                src={selectedImage}
+                src={URL.createObjectURL(selectedImage)}
                 alt="Uploaded"
                 className="w-full h-full object-cover"
               />
@@ -399,10 +330,13 @@ function AddCourse() {
             />
           </label>
         </div>
+
       </div>
       
+      {/* Lower Section [ Course Content, React Editor ]*/}
+
       <div className="bg-white p-5 shadow-md rounded-md space-y-4">
-        <h3 className="text-lg font-medium text-gray-700">Course Content</h3>
+        <h3 className="text-xl font-sans text-black">Course Content</h3>
         {coursecontent.map((topic, topicIndex) => (
           <div key={topicIndex} className="space-y-3 border-b pb-4">
             {/* Topic Name */}
@@ -412,7 +346,7 @@ function AddCourse() {
                 placeholder="Topic Name"
                 value={topic.topicName}
                 onChange={(e) => handleTopicChange(topicIndex, e.target.value)}
-                className="w-full border-b border-gray-300 p-2 focus:outline-none focus:border-blue-500"
+                className="w-full border-b border-gray-300 p-2 focus:outline-none focus:border-blue-500  text-gray-400"
               />
               <button
                 className="text-red-500"
@@ -432,7 +366,7 @@ function AddCourse() {
                   onChange={(e) =>
                     handleSubtopicChange(topicIndex, subtopicIndex, 'title', e.target.value)
                   }
-                  className="w-full border-b border-gray-300 p-1 focus:outline-none focus:border-blue-500"
+                  className="w-full border-b border-gray-300 p-1 focus:outline-none focus:border-blue-500  text-gray-400"
                 />
                 <textarea
                   placeholder="Subtopic Description"
@@ -506,7 +440,8 @@ function AddCourse() {
         onChange={handleOnChange}
         className="lg:h-[30vh] mb-10"
       />
-
+      
+      {/* Submit Button */}
       <div>
         <button
           onClick={handleSubmit}
@@ -515,6 +450,7 @@ function AddCourse() {
           Submit
         </button>
       </div>
+      
 
     </div>
   );

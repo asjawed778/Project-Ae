@@ -10,8 +10,48 @@ const {
     GET_ALL_CATEGORY,
     ADD_COURSES ,
     GET_ALL_COURSES ,
+    GET_COURSE_BY_CATEGORY ,
+    GET_FULL_COURSE_DETAILS , 
+    ADD_CATEGORY ,
 
 } = addCourseEndpoints ;
+
+
+export function addCategory(data) {
+    return async (dispatch, getState) => {
+      
+        try{
+
+           const response = await apiConnector(
+             "POST" ,
+             ADD_CATEGORY ,
+             data
+           )
+           
+           if( !response.data.success ) {
+              throw new Error(response.data.message);
+              console.log(response.error.message) ;
+           }
+           
+            toast.success("Successful") ; 
+
+        } catch(error) {
+            
+            if( error.response.status === 401 ) {
+                toast.error("Unauthorized");
+            } else if( error.response.status === 400 ) {
+                toast.error("Bad Request: Missing name or descr.")
+            } else if( error.response.status === 409 ) {
+                toast.error("Conflict: Same name exists") ;
+            } else if( error.response.status === 500 ) {
+                toast.error("Internal Server Error");
+            }
+
+        } finally {
+            dispatch(setLoading(false)) ;
+        }
+    }
+}
 
 
 export function getAllCategory() {
@@ -28,7 +68,7 @@ export function getAllCategory() {
         console.log(response.error.message) ;
       }
       
-      console.log("Success", response.data);
+      //console.log("Success", response.data);
       dispatch(setCategories(response.data.categories)) ;
       
 
@@ -37,7 +77,7 @@ export function getAllCategory() {
         if( error.response && error.response.status === 404 ) {
             toast.error("Page not found");
         } 
-        console.log(error) ;
+        console.log("categories error",error) ;
 
     } finally {
         dispatch(setLoading(false)) ;
@@ -45,6 +85,7 @@ export function getAllCategory() {
 
   }
 }
+
 
 export function addCourse(payload, resetForm) {
     return async(dispatch, getState) => {
@@ -86,6 +127,7 @@ export function addCourse(payload, resetForm) {
     }
 }
 
+
 export function getAllCourses() {
     return async(dispatch, getState) => {
 
@@ -100,8 +142,11 @@ export function getAllCourses() {
                 console.log(response.error.message) ;
               }
               
-            console.log("Success", response.data);
+            console.log("Success courses", response);
+            //dispatch(getAllCategory()) ;
             dispatch(setCourses(response.data)) ;
+
+            
 
         }catch(error) {
             if( error.response && error.response.status === 404 ) {
@@ -113,4 +158,33 @@ export function getAllCourses() {
             dispatch(setLoading(false)) ;
         }
     }
+}
+
+export function getCourseByCategory(id) {
+    return async(dispatch, getState) => {
+        console.log("id", id)
+        try{
+          const response = await apiConnector(
+            "GET" , 
+            GET_COURSE_BY_CATEGORY(id)
+          )
+        
+          if( !response.data.success ) {
+            throw new Error(response.data.message);
+            console.log(response.error.message) ;
+          }
+          console.log(response.data) ;
+          dispatch(setCourses(response.data)) ;
+
+        } catch(error) {
+          if( error.response && error.response.status === 404 ) {
+             toast.error("No course found") ;
+          } else if( error.response && error.response.status === 500 ) {
+             toast.error("Internal Server Error") ;
+          }
+        } finally {
+            dispatch(setLoading(false)) ;
+        }
+    }
+  
 }
