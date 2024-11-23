@@ -3,13 +3,14 @@ const router = express.Router();
 const { auth } = require('../middlewares/auth');
 const { isAuthorized } = require('../middlewares/authorize');
 const { addCourse } = require('../controllers/course/addCourse');
-const { addCategory, getAllCategory } = require('../controllers/course/category');
+const { addCategory, getAllCategory, editCategory } = require('../controllers/course/category');
 const { getCourseByCategory, getFullCourseDetails, getAllCourse } = require('../controllers/course/getCourse');
 
 
 
 router.post('/course/add-category', auth, addCategory);
 router.get('/course/get-all-category', getAllCategory);
+router.put('/course/edit-category/:categoryId', auth, editCategory);
 
 
 router.post('/course/add-course', addCourse);

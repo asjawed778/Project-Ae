@@ -21,7 +21,7 @@ const {
     deleteReply,
     voteReply
 } = require('../controllers/userPost/replies');
- 
+
 // post routes 
 router.post('/create-post', auth, createPost);
 router.get('/get-all-post', getAllPost);
