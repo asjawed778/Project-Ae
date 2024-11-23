@@ -68,3 +68,52 @@ exports.getAllCategory = async (req, res, next) => {
     }
 };
 
+exports.editCategory = async (req, res, next) => {
+    try {
+        const { categoryId } = req.params;
+
+        // Validate categoryId
+        if (!categoryId || !mongoose.Types.ObjectId.isValid(categoryId)) {
+            const err = new Error("Invalid or missing Category Id in params");
+            err.status = 400;
+            return next(err);
+        }
+        const { name, description } = req.body;
+
+        // Check if name and description are provided and not empty
+        if (!name?.trim() || !description?.trim()) {
+            const err = new Error("Category name and description cannot be empty.");
+            err.status = 400;
+            return next(err);
+        }
+
+        const category = await Category.findByIdAndUpdate(
+            categoryId,
+            {
+                name: name.trim(),
+                description: description.trim()
+            },
+            { new: true }
+        );
+
+        if (!category) {
+            const err = new Error("category does not exits");
+            err.status = 404;
+            return next(err);
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Category Updated successfully",
+            category
+        })
+
+    } catch (error) {
+        // console.error("Error in edit category:", error);
+        res.status(500).json({
+            success: false,
+            error: "Internal Server Error",
+        });
+    }
+}
+
