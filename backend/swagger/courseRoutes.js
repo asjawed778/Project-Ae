@@ -883,7 +883,7 @@ module.exports = {
             },
         },
     },
-    
+
     '/course/get-all-category': {
         get: {
             tags: ['CourseRoutes'],
@@ -990,4 +990,180 @@ module.exports = {
             },
         },
     },
+
+
+    '/course/edit-category/{categoryId}': {
+        put: {
+            tags: ['CourseRoutes'],
+            summary: 'Edit an existing category',
+            description: 'Allows the super admin to edit the name and description of an existing category.',
+            security: [
+                {
+                    bearerAuth: [],
+                },
+            ],
+            parameters: [
+                {
+                    name: 'categoryId',
+                    in: 'query',
+                    required: true,
+                    schema: {
+                        type: 'string',
+                        example: '647e243e7f44f9a1e9d9b4fe',
+                    },
+                    description: 'The unique ID of the category to be edited.',
+                },
+            ],
+            requestBody: {
+                description: 'Category name and description details.',
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                name: {
+                                    type: 'string',
+                                    example: 'New Category Name',
+                                    description: 'The updated name for the category.',
+                                },
+                                description: {
+                                    type: 'string',
+                                    example: 'This category is dedicated to advanced programming tutorials.',
+                                    description: 'The updated description for the category.',
+                                },
+                            },
+                            required: ['name', 'description'],
+                        },
+                    },
+                },
+            },
+            responses: {
+                200: {
+                    description: 'Category updated successfully',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: {
+                                        type: 'boolean',
+                                        example: true,
+                                    },
+                                    message: {
+                                        type: 'string',
+                                        example: 'Category updated successfully',
+                                    },
+                                    category: {
+                                        type: 'object',
+                                        properties: {
+                                            _id: {
+                                                type: 'string',
+                                                example: '647e243e7f44f9a1e9d9b4fe',
+                                            },
+                                            name: {
+                                                type: 'string',
+                                                example: 'New Category Name',
+                                            },
+                                            description: {
+                                                type: 'string',
+                                                example: 'This category is dedicated to advanced programming tutorials.',
+                                            },
+                                            updatedAt: {
+                                                type: 'string',
+                                                format: 'date-time',
+                                                example: '2024-11-20T12:34:56.789Z',
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                400: {
+                    description: 'Bad Request - Validation errors such as missing required fields or invalid categoryId.',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: {
+                                        type: 'boolean',
+                                        example: false,
+                                    },
+                                    message: {
+                                        type: 'string',
+                                        example: 'Invalid or missing Category Id in params',
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                404: {
+                    description: 'Category not found',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: {
+                                        type: 'boolean',
+                                        example: false,
+                                    },
+                                    message: {
+                                        type: 'string',
+                                        example: 'Category does not exist',
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                403: {
+                    description: 'Forbidden - Unauthorized access (only super admin allowed)',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: {
+                                        type: 'boolean',
+                                        example: false,
+                                    },
+                                    message: {
+                                        type: 'string',
+                                        example: 'You do not have permission to perform this action.',
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                500: {
+                    description: 'Internal Server Error - Server error occurred while processing the request.',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: {
+                                        type: 'boolean',
+                                        example: false,
+                                    },
+                                    message: {
+                                        type: 'string',
+                                        example: 'Internal Server Error',
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    },
+
+
 };
