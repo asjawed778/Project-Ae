@@ -51,7 +51,8 @@ export const addCourseEndpoints = {
     
     GET_ALL_CATEGORY: SERVER_URL + `/course/get-all-category` , 
     ADD_COURSES: SERVER_URL + `/course/add-course` ,
-    
+    GET_ALL_COURSES:SERVER_URL + `/course/get-all-course` ,
+
 }
 
   

@@ -3,11 +3,13 @@ import { apiConnector } from "../apiConnector";
 import { addCourseEndpoints } from "../apis";  
 import { setLoading } from "../../redux/slices/loadingSlice";
 import { setCategories } from "../../redux/slices/adminCategorySlice";
+import { setCourses } from "../../redux/slices/coursesSlice";
 
 const { 
 
     GET_ALL_CATEGORY,
-    ADD_COURSES
+    ADD_COURSES ,
+    GET_ALL_COURSES ,
 
 } = addCourseEndpoints ;
 
@@ -78,6 +80,35 @@ export function addCourse(payload, resetForm) {
 
             console.log(error.response) ;
 
+        } finally {
+            dispatch(setLoading(false)) ;
+        }
+    }
+}
+
+export function getAllCourses() {
+    return async(dispatch, getState) => {
+
+        try{
+           const response = await apiConnector(
+              "GET" ,
+               GET_ALL_COURSES
+            )
+
+            if( !response.data.success ) {
+                throw new Error(response.data.message);
+                console.log(response.error.message) ;
+              }
+              
+            console.log("Success", response.data);
+            dispatch(setCourses(response.data)) ;
+
+        }catch(error) {
+            if( error.response && error.response.status === 404 ) {
+                toast.error("Page not found");
+            } 
+            console.log(error.response) ;
+    
         } finally {
             dispatch(setLoading(false)) ;
         }
