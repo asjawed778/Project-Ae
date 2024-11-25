@@ -17,10 +17,6 @@ export default function Carousal() {
     dispatch(getAllCategory()) ;
   },[]) 
 
-  
-
-  
-
   const categories = useSelector((state)=> state.categories.categories) ;
   console.log(categories) ;
   const coursesAll = useSelector((state) => state.courses.courses.courses) ;
@@ -29,11 +25,11 @@ export default function Carousal() {
   
   const [activeTab, setActiveTab] = useState(null); // Start with null or a default value
 
-useEffect(() => {
-  if (categories.length > 0 && !activeTab) {
+  useEffect(() => {
+   if (categories.length > 0 && !activeTab) {
     setActiveTab(categories[0]._id); // Set the default value when categories are fetched
-  }
-}, [categories]); // Run this effect whenever categories change
+   }
+  }, [categories]); // Run this effect whenever categories change
   
 
   
@@ -46,10 +42,11 @@ useEffect(() => {
   
 
   return (
-    <div className="p-8 mt-10 w-full items-center">
+    <div className="p-8 mt-4 w-full ">
 
       {/* Title and Subtitle */}
-      <div className=" mb-6 items-center lg:ml-[15%]">
+      {/* <div className=" mb-6 items-center lg:ml-[15%]"> */}
+      <div className=' mb-6 items-center'>
         <h2 className="text-2xl font-sans text-blue-600">All the skills you need in one place</h2>
         <p className="text-gray-600 font-sans"
         >From critical skills to technical topics, AbilitaEdge supports your professional development.</p>
@@ -57,7 +54,8 @@ useEffect(() => {
 
       {/* Tab Menu */}
       
-      <div className="flex w-auto gap-4 lg:ml-[15%] space-x-1 mb-10 overflow-x-auto carousel  scroll-snap-x scroll-smooth">
+      {/* <div className="flex w-auto gap-4 lg:ml-[15%] space-x-1 mb-10 overflow-x-auto carousel  scroll-snap-x scroll-smooth"> */}
+      <div className="flex w-auto gap-4 space-x-1 mb-10 overflow-x-auto carousel  scroll-snap-x scroll-smooth ">
         {categories.map((tab) => (
           <button
             key={tab._id}
@@ -81,32 +79,35 @@ useEffect(() => {
         
         
       </div>
-      <hr style={{backgroundColor:"#36454F", marginTop:"-40px", height:"1px",}}
+      {/* <hr style={{backgroundColor:"#36454F", marginTop:"-40px", height:"1px",}}
           className='lg:w-[70%] lg:ml-[15%]'
+      />  */}
+      <hr style={{backgroundColor:"#36454F", marginTop:"-40px", height:"1px",}}
+          className='lg:w-[70%]'
       /> 
 
        {/* Scrollable Course Cards */}
        {coursesAll ? (
-       <div className='space-x-2 carousel rounded-box w-[100%] lg:w-3/4 items-center lg:ml-[15%] p-4 '>
+       <div className='space-x-2 carousel rounded-box w-[100%] lg:w-3/4 items-center lg:ml p-4 '>
         
           {coursesAll?.map((course, index) => (
             
             <Link to={`/course/${course._id}`} key={index} className="carousel-item min-w-[50%] sm:min-w-[40%] md:min-w-[30%] lg:min-w-[10%]">
              <div className="flex flex-col bg-white rounded-lg shadow-md p-0">
-              <img src={course.thumbnail} alt={course.courseTitle} className="w-[100%] h-40 rounded-lg object-cover mb-4" />
+              <img src={course.thumbnail} alt={course.courseTitle} className="w-[100%] h-40 rounded-lg object-cover mb-2" />
               <h3 className="text-base font-sans mb-2 ml-2">{course.courseTitle}</h3>
               
               <div className='flex flex-row gap-2 mt-3 h-[38px]'>
 
-              <div className='flex flex-row items-center gap-2 mb-3 ml-2'>
+              <div className='flex flex-row items-center gap-1 mb-3 ml-2'>
               <img src={user} alt='userLive' className='w-[25px] h-[25px] text-blue-950'/> 
               <p className='text-gray-600 text-sm font-sans'>{course.courseMode.charAt(0).toUpperCase() + course.courseMode.slice(1).toLowerCase()}</p>
               </div>
               
-              <div className='flex flex-row items-center gap-2 mb-3 ml-2'>
+              <div className='flex flex-row items-center gap-1 mb-3 ml-2'>
               <img src={clock} alt='clock' className='w-[25px] h-[25px]'/>
               <p className="text-gray-600 text-sm font-sans">{course.courseLanguage.charAt(0).toUpperCase()+course.courseLanguage.slice(1).toLowerCase()}</p>
-              <button className=" h-[28px] ml-6 px-1 text-gray-600 border-2 border-gray-600 rounded-lg shadow-[4px_4px_0px_rgba(128,128,128,1)] bg-white font-medium hover:shadow-[6px_6px_0px_rgba(128,128,128,1)] transition-all duration-200">
+              <button className=" h-[28px] ml-6 px-1 text-gray-600 border-2 border-gray-600 rounded-lg hover-shadow-[4px_4px_0px_rgba(128,128,128,1)] bg-white font-medium hover:shadow-[6px_6px_0px_rgba(128,128,128,1)] transition-all duration-200">
                Learn More
               </button>
 
