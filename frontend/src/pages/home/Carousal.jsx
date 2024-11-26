@@ -88,7 +88,7 @@ export default function Carousal() {
 
        {/* Scrollable Course Cards */}
        {coursesAll ? (
-       <div className='space-x-2 carousel rounded-box w-[100%] lg:w-3/4 items-center lg:ml p-4 '>
+       <div className='space-x-2 carousel rounded-box w-[100%] lg:w-3/4 items-center mt-4'>
         
           {coursesAll?.map((course, index) => (
             
@@ -97,21 +97,25 @@ export default function Carousal() {
               <img src={course.thumbnail} alt={course.courseTitle} className="w-[100%] h-40 rounded-lg object-cover mb-2" />
               <h3 className="text-base font-sans mb-2 ml-2">{course.courseTitle}</h3>
               
-              <div className='flex flex-row gap-2 mt-3 h-[38px]'>
-
-              <div className='flex flex-row items-center gap-1 mb-3 ml-2'>
-              <img src={user} alt='userLive' className='w-[25px] h-[25px] text-blue-950'/> 
-              <p className='text-gray-600 text-sm font-sans'>{course.courseMode.charAt(0).toUpperCase() + course.courseMode.slice(1).toLowerCase()}</p>
-              </div>
+              <div className='flex flex-row gap-4 mt-3 h-[38px] ml-2'>
               
-              <div className='flex flex-row items-center gap-1 mb-3 ml-2'>
-              <img src={clock} alt='clock' className='w-[25px] h-[25px]'/>
-              <p className="text-gray-600 text-sm font-sans">{course.courseLanguage.charAt(0).toUpperCase()+course.courseLanguage.slice(1).toLowerCase()}</p>
-              <button className=" h-[28px] ml-6 px-1 text-gray-600 border-2 border-gray-600 rounded-lg hover-shadow-[4px_4px_0px_rgba(128,128,128,1)] bg-white font-medium hover:shadow-[6px_6px_0px_rgba(128,128,128,1)] transition-all duration-200">
-               Learn More
-              </button>
+               <div className='flex flex-row items-center mb-3 w-[60px]'>
+                <img src={user} alt='userLive' className='w-[24px] h-[24px] '/> 
+                <p className='text-gray-600 text-sm font-sans'>{course.courseMode.charAt(0).toUpperCase() + course.courseMode.slice(1).toLowerCase()}</p>
+               </div>
+              
+              
+               <div className='flex flex-row items-center mb-3 w-[70px] '>
+                <img src={clock} alt='clock' className='w-[24px] h-[24px]'/>
+                <p className="text-gray-600 text-sm font-sans ">{course.courseLanguage.charAt(0).toUpperCase()+course.courseLanguage.slice(1).toLowerCase()}</p>
+               </div>
 
+               <div className=" h-[28px] w-[95px]  px-1 text-gray-600 border-2 border-gray-600 rounded-lg hover-shadow-[4px_4px_0px_rgba(128,128,128,1)] bg-white font-medium hover:shadow-[2px_2px_0px_rgba(128,128,128,1)] transition-all duration-200"
+               >
+               Learn More
               </div>
+             
+
             </div>
             </div>
             </Link>

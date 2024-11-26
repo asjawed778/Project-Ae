@@ -73,21 +73,21 @@ function HomePage() {
         {/* Text Section */}
         <div className="flex flex-col items-start text-left text-white px-4 mb-8 ">
         <motion.h2
-        className="text-2xl md:text-4xl font-sans"
+        className="text-2xl md:text-4xl font-bold font-sans"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ ease:easeIn, duration: 2 }}
       >
-        Transform Your Abilities
+        Transform Your Abilities Into
       </motion.h2>
 
       <motion.h2 
-        className=" text-2xl md:text-4xl font-sans mb-4"
+        className=" text-2xl md:text-4xl font-sans mb-4 font-bold"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ ease:easeIn, duration: 2 }}
       >
-       Into Capabilities
+       Capabilities
       </motion.h2>
 
           <motion.p 
