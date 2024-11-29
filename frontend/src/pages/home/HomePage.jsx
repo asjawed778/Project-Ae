@@ -14,61 +14,84 @@ function HomePage() {
   
   return (
 
-    <div className="h-[110%] flex flex-col items-center w-auto font-sans">
-      
-      
-      {/* Header */}
-      <nav className="bg-white border-gray-200 w-full">
-
-      <div className={`max-w-screen-xl flex flex-wrap items-center gap-20 mx-auto p-4 justify-around md:ml-[10%] sm:justify-normal`}>
-      <span className="text-2xl md:text-3xl font-sans text-black-600">Abilita<span className="text-blue-600 font-sans">Edge</span>
-      </span>
-
-        <div className=" md:order-2">
-          
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="sm:hidden text-gray-500 rounded-lg text-sm p-2.5 me-1 "
-            aria-controls="navbar-search"
-            aria-expanded={isMenuOpen}
-          >
+    <> 
+       {/* Header w-full*/}
+       <nav className="bg-white flex flex-row border-gray-200 lg:ml-[10%] md:gap-4">
+         
+         {/* Logo and Hamburger Icon in small screen and logo else only */}
+        <div className=" mt-4 mb-4 md:mt-0 md:mb-0 flex flex-row items-center justify-around w-full md:justify-normal md:w-auto">
            
-            <img src={bar} alt="bar" className="w-[30px] h-[30px]"/>
-            <span className="sr-only">Search</span>
-          </button>
+           {/* Logo */}
+           <div className="md:p-6 ">
+             <span className="text-2xl md:text-3xl font-sans text-black-600 ">Abilita
+              <span className="text-blue-600 font-sans">Edge</span>
+             </span>
+           </div>
+           
+           {/* Hamburger Icon */}
+            <div
+             onClick={() => setIsMenuOpen(!isMenuOpen)}
+             className="md:hidden text-gray-500 rounded-lg text-sm "
+            >
+             <img src={bar} alt="bar" className="w-[30px] h-[30px]"/>
+           </div>
 
         </div>
 
-        <div className={` items-center justify-between ${isMenuOpen ? 'block' : 'hidden'} w-full md:flex md:w-auto md:order-1 `} id="navbar-search">
-          
-          <div className=" relative w-auto md:w-1/3 mt-[-60px] md:mt-0 rounded-[14px] lg:w-[300px]">
-          
-          <span className="absolute inset-y-0 left-3 flex items-center">
-            <MagnifyingGlassIcon className="h-5 w-5 text-[#0b66c3]" />
-          </span>
-       
-          <input
-            type="text"
-            placeholder="Type to search"
-            className="w-auto pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 bg-[#f1f2f5] text-[#707070] font-sans"           />
-       
-          </div>
+         {/* Menu */}
+        <div className="flex flex-row ">
+            
+            {/* Search bar */}
+            <div className="hidden md:block relative w-auto rounded-[14px] ">
+             <span className="absolute inset-y-0 left-3 flex items-center">
+             <MagnifyingGlassIcon className="h-5 w-5 text-[#0b66c3]" />
+             </span>
+      
+             <input
+              type="text"
+              placeholder="Type to search"
+              className="w-auto mt-5 pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 bg-[#f1f2f5] text-[#707070] font-sans"           
+             />
 
-       <button className="text-blue-600 font-sans mt-4  md:mt-0  md:ml-10">
-         Learning
-       </button>
+            </div>
+         
+           {/* Learning */}
+            <button className=" hidden md:block text-blue-600 font-sans mt-4  md:mt-0  md:ml-10">
+              Learning
+            </button>
+
         </div>
-      </div>
-      </nav>
+
+       </nav>
+       
+       {/* Hamburger Action Section */}
+          <section className={`overflow-hidden transition-all duration-700 ${isMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0' } md:hidden ml-8`}>
+              <div className="relative">
+                 <span className="absolute inset-y-10 left-3 flex items-center">
+                 <MagnifyingGlassIcon className="h-5 w-5 text-[#0b66c3]" />
+                 </span>
+
+                 <input
+                   type="text"
+                   placeholder="Type to search"
+                   className="w-auto mt-5 pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 bg-[#f1f2f5] text-[#707070] font-sans"
+                 />
+              </div>
+
+                {/* Learning */}
+              <button className="text-blue-600 font-sans mt-4 mb-4">Learning</button>
+          </section>
 
 
+     <div className="h-[110%] flex flex-col items-center w-full font-sans">
+      
       {/* Main Section */}
       <div  style={{
               backgroundImage: `url(${backgroundImage})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
             }} 
-      className={`w-full flex flex-col md:flex-row items-center justify-around p-4 `}>
+      className={`w-full flex flex-col sm:flex-row items-center justify-around p-4 `}>
 
         {/* Text Section */}
         <div className="flex flex-col items-start text-left text-white px-4 mb-8 ">
@@ -118,16 +141,12 @@ function HomePage() {
           </motion.p>
 
           <motion.button 
-            className="relative bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg"
+            className="relative bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg shadow-[2px_2px_0px_rgba(255,255,255,1)]"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ ease:easeIn, duration: 2}}
           >
-            <span className="relative z-10 font-sans">Explore Program</span>
-
-            {/* Decorative lines */}
-            <span className="absolute right-0 bottom-0 w-1 h-full bg-white opacity-50"></span>
-            <span className="absolute left-0 bottom-0 w-full h-1 bg-white opacity-50"></span>
+            <span className="relative z-10 font-sans ">Explore Program</span>
           </motion.button> 
 
         </div>
@@ -201,7 +220,7 @@ function HomePage() {
 
       {/* Skill Boxes */} 
       <motion.div 
-         className="mt-10 flex flex-wrap flex-col md:flex-row gap-4 justify-center px-4"
+         className="mt-10 flex flex-wrap flex-col sm:flex-row gap-4 justify-center px-4"
          initial={{ opacity: 0, y: 20 }}
          animate={{ opacity: 1, y: 0 }}
          transition={{ ease:"linear", duration: 2}} 
@@ -232,6 +251,7 @@ function HomePage() {
       <Footer/>
 
     </div>
+    </>
   );
 }
 
