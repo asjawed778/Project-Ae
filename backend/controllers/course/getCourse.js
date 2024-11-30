@@ -1,7 +1,6 @@
 const Course = require('../../models/course/Course');
 const RatingAndReview = require('../../models/course/RatingAndReviews');
 
-
 exports.getCourseByCategory = async (req, res, next) => {
     try {
         const { categoryId } = req.params;
@@ -110,4 +109,3 @@ exports.getAllCourse = async (req, res, next) => {
         });
     }
 }
-
