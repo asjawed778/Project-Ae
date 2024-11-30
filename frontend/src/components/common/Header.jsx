@@ -1,4 +1,5 @@
 import bar from '../../assets/Hamburger_icon.png'
+import logo from "../../assets/logo.jpg" ;
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline" ;
 import { useState } from 'react';
 function Header() {
@@ -11,19 +12,17 @@ function Header() {
        <nav className="bg-white flex flex-row border-gray-200 lg:ml-[10%] md:gap-4 ">
          
          {/* Logo and Hamburger Icon in small screen and logo else only */}
-        <div className=" mt-4 mb-4 md:mt-0 md:mb-0 flex flex-row items-center justify-around w-full md:justify-normal md:w-auto">
+        <div className="ml-7 mt-4 mb-4 md:mt-0 md:mb-0 flex flex-row items-center justify-between w-full md:justify-normal md:w-auto">
            
            {/* Logo */}
-           <div className="md:p-6 ">
-             <span className="text-2xl md:text-3xl font-sans text-black-600 ">Abilita
-              <span className="text-blue-600 font-sans">Edge</span>
-             </span>
+           <div className="md:p-2 ">
+             <img src={logo} alt="Logo" className="w-[180px]"/>
            </div>
            
            {/* Hamburger Icon */}
             <div
              onClick={() => setIsMenuOpen(!isMenuOpen)}
-             className="md:hidden text-gray-500 rounded-lg text-sm "
+             className="md:hidden text-gray-500 rounded-lg text-sm mr-7"
             >
              <img src={bar} alt="bar" className="w-[30px] h-[30px]"/>
            </div>
