@@ -157,6 +157,7 @@ export function getAllCourses() {
     }
 }
 
+
 export function getCourseByCategory(id) {
     return async(dispatch, getState) => {
         console.log("id", id)
@@ -186,6 +187,7 @@ export function getCourseByCategory(id) {
   
 }
 
+
 export function getCourseDetails(id) {
     return async(dispatch, getState) => {
       
@@ -200,7 +202,6 @@ export function getCourseDetails(id) {
           
         }
         
-        console.log("Success", response.data);
         dispatch(setCourseDetails(response.data)) ;
         
   

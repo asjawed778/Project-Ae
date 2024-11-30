@@ -13,20 +13,16 @@ const CourseDetails = () => {
 
   const dispatch = useDispatch() ;
 
-  const courses = useSelector((state) => state.courses);
-  console.log("CourseDetials", courses.courses.courses) ;
-  const specificCourse = courses?.courses?.courses  ;
-  const title =  specificCourse ? specificCourse[0].courseTitle : "fetching" ;
-
   const {id} = useParams() ;
   const courseDetail = useSelector((state) => state.courseDetails) ;
-  console.log("courseDetail", courseDetail) ;
+  console.log("courseDetail", courseDetail.courseDetails.course) ;
+
+  const title = courseDetail?.courseDetails?.course?.courseTitle ;
 
   useEffect(()=>{
     dispatch(getCourseDetails(id)) ;
   },[dispatch]) ;
 
-  console.log("id", id) ;
   
   useEffect(()=> {
     const scrollToTop = () => {
@@ -57,8 +53,8 @@ const CourseDetails = () => {
       </div>
       <div className="mt-5 max-w-5xl mx-auto flex space-x-40">
         <div>
-        { specificCourse?.length > 0 ? (
-            <h1 className="text-3xl font-bold">{specificCourse[0].courseTitle} Course</h1>
+        { courseDetail ? (
+            <h1 className="text-3xl font-bold">{title} Course</h1>
         ) : (
           <p>Loading....</p>
         )
