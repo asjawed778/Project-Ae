@@ -4,6 +4,7 @@ import { addCourseEndpoints } from "../apis";
 import { setLoading } from "../../redux/slices/loadingSlice";
 import { setCategories } from "../../redux/slices/adminCategorySlice";
 import { setCourses } from "../../redux/slices/coursesSlice";
+import { setCourseDetails } from "../../redux/slices/courseDetails";
 
 const { 
 
@@ -30,7 +31,6 @@ export function addCategory(data) {
            
            if( !response.data.success ) {
               throw new Error(response.data.message);
-              console.log(response.error.message) ;
            }
            
             toast.success("Successful") ; 
@@ -65,7 +65,6 @@ export function getAllCategory() {
 
       if( !response.data.success ) {
         throw new Error(response.data.message);
-        console.log(response.error.message) ;
       }
       
       //console.log("Success", response.data);
@@ -100,7 +99,6 @@ export function addCourse(payload, resetForm) {
 
             if( !response.data.success ) {
                 throw new Error(response.data.message);
-                console.log(response.error.message) ;
             }
 
             toast.success(response.data.success) ;
@@ -139,7 +137,6 @@ export function getAllCourses() {
 
             if( !response.data.success ) {
                 throw new Error(response.data.message);
-                console.log(response.error.message) ;
               }
               
             console.log("Success courses", response);
@@ -171,7 +168,7 @@ export function getCourseByCategory(id) {
         
           if( !response.data.success ) {
             throw new Error(response.data.message);
-            console.log(response.error.message) ;
+            
           }
           console.log(response.data) ;
           dispatch(setCourses(response.data)) ;
@@ -188,3 +185,35 @@ export function getCourseByCategory(id) {
     }
   
 }
+
+export function getCourseDetails(id) {
+    return async(dispatch, getState) => {
+      
+      try{
+        const response = await apiConnector(
+          "GET" ,
+          GET_FULL_COURSE_DETAILS(id)
+        )
+  
+        if( !response.data.success ) {
+          throw new Error(response.data.message);
+          
+        }
+        
+        console.log("Success", response.data);
+        dispatch(setCourseDetails(response.data)) ;
+        
+  
+      } catch( error ) {
+          
+          if( error.response && error.response.status === 404 ) {
+              toast.error("Page not found");
+          } 
+          console.log("categories error",error) ;
+  
+      } finally {
+          dispatch(setLoading(false)) ;
+      } 
+  
+    }
+  }

@@ -2,12 +2,16 @@ import { GoHome } from "react-icons/go";
 import { FaCircleCheck } from "react-icons/fa6";
 import { RiSearchLine } from "react-icons/ri";
 import { PiGreaterThanBold } from "react-icons/pi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import coder from "./slider/coder.jpg" ;
 import { useEffect } from "react";
+import Header from "../components/common/Header";
+import { getCourseDetails } from "../services/operations/addCourses";
 
 const CourseDetails = () => { 
+
+  const dispatch = useDispatch() ;
 
   const courses = useSelector((state) => state.courses);
   console.log("CourseDetials", courses.courses.courses) ;
@@ -15,9 +19,15 @@ const CourseDetails = () => {
   const title =  specificCourse ? specificCourse[0].courseTitle : "fetching" ;
 
   const {id} = useParams() ;
+  const courseDetail = useSelector((state) => state.courseDetails) ;
+  console.log("courseDetail", courseDetail) ;
+
+  useEffect(()=>{
+    dispatch(getCourseDetails(id)) ;
+  },[dispatch]) ;
+
   console.log("id", id) ;
-  //const specificCourse = course?.filter((course) => course._id === id);
-  //console.log("specific course",specificCourse) ;
+  
   useEffect(()=> {
     const scrollToTop = () => {
       window.scrollTo({
@@ -31,19 +41,19 @@ const CourseDetails = () => {
 
   return (
     <div className="">
-        <div className="mt-3 border-b-2 pb-5">
-            <div className="max-w-5xl mx-auto flex justify-between">
-      <h1 className="text-3xl font-bold">Abilita<span className="text-blue-500">Edge</span></h1>
-     <div className="flex gap-1"><div  className="pt-3"style={{color:'grey'}}><RiSearchLine size={20} /></div> <input type="text"  placeholder="Type to Search" className="border-2 w-[400px] px-2 rounded-lg  flex justify-center"/></div>
-      <button className="text-blue-500">Learning</button>
-      </div>
-      </div>
+       
+      <Header/>
+
       <div className="flex space-x-5 mt-3 max-w-5xl mx-auto">
-        <h1 className="size-2.5"> <div style={{color: 'grey'}}>
-  <GoHome size={30} />
-</div></h1>
-        <p className="size-3"><PiGreaterThanBold color="grey" size={20} className="mt-1"/>{""}</p>
-        <h1 className="text-gray-600 font-semibold">{title}</h1>
+        
+        <h1 className="size-2.5"> 
+          <div style={{color: 'grey'}}>
+            <GoHome size={30} />
+          </div>
+        </h1> 
+
+        <p className="size-3"><PiGreaterThanBold color="grey" size={20} className="mt-2"/>{""}</p>
+        <h1 className="text-gray-600 font-semibold mt-1">{title}</h1>
       </div>
       <div className="mt-5 max-w-5xl mx-auto flex space-x-40">
         <div>
@@ -67,7 +77,7 @@ const CourseDetails = () => {
         </div>
         <div>
             <img src={coder}
-             className="w-[290px] rounded-md"
+             className="w-[290px] rounded-md ml-5"
              />
         </div>
       </div>
