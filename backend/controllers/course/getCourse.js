@@ -1,4 +1,5 @@
 const Course = require('../../models/course/Course');
+const RatingAndReview = require('../../models/course/RatingAndReviews');
 
 exports.getCourseByCategory = async (req, res, next) => {
     try {
@@ -36,35 +37,47 @@ exports.getFullCourseDetails = async (req, res, next) => {
 
         const course = await Course.findById(courseId)
             .populate({
-                path: 'courseContent',
-                select: 'topicName subTopic',
+                path: 'courseContent', 
+                select: 'topicName subTopic', 
                 populate: {
-                    path: 'subTopic',
-                    select: 'title description'
-                }
+                    path: 'subTopic', 
+                    select: 'title description', 
+                },
             })
-            .populate('ratingAndReviews', 'rating comment')
-            .populate('category', 'name')
+            .populate({
+                path: 'ratingAndReviews', 
+                select: 'rating review', 
+                populate: {
+                    path: 'user', 
+                    select: 'name profilePic', 
+                },
+            })
+            .populate({
+                path: 'category',
+                select: 'categoryName'
+            })
             .exec();
 
-
+        // Check if course exists
         if (!course) {
             return res.status(404).json({
                 success: false,
-                message: "Course not found."
+                message: "Course not found.",
             });
         }
 
+        // Return success response with course details
         res.status(200).json({
             success: true,
-            message: "course fetched succesfully",
-            course
+            message: "Course fetched successfully.",
+            course,
         });
     } catch (error) {
-        console.error(error);
+        console.error("Error fetching full course details:", error.message);
         res.status(500).json({
             success: false,
-            message: "Server error. Please try again later."
+            message: "Server error. Please try again later.",
+            error: error.message, // Provide detailed error for debugging
         });
     }
 };
@@ -96,4 +109,3 @@ exports.getAllCourse = async (req, res, next) => {
         });
     }
 }
-
