@@ -43,8 +43,8 @@ function App() {
         <Route path='/auth' element={
           <PublicRoute>
             {/* <AuthPage />  */}
-            <Learning/>
-            {/* <AdminDashboard/> */}
+            {/* <Learning/> */}
+            <AdminDashboard/>
           </PublicRoute>
         } />
        

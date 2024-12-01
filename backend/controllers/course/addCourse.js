@@ -22,15 +22,6 @@ exports.addCourse = async (req, res, next) => {
 
         let { brochure, thumbnail } = req.files || {};
 
-        //changes
-        const parsedContent = JSON.parse(courseContent);
-
-        if (!Array.isArray(parsedContent)) {
-            const err = new Error("Please send course content as an arry of Topic, and Topic is also array of subTopic");
-            err.status = 400;
-            return next(err);
-        }
-
         if (!courseTitle || !courseSubTitle || !courseDescription || !courseMode || !courseLanguage || !category) {
             const err = new Error("Please fill all the details, including course content as an array");
             err.status = 400;
@@ -46,10 +37,22 @@ exports.addCourse = async (req, res, next) => {
             err.status = 400;
             return next(err);
         }
+        const parsedContent = JSON.parse(req.body.courseContent);
 
+        if (!Array.isArray(parsedContent)) {
+            const err = new Error("Course content should be an array.");
+            err.status = 400;
+            return next(err);
+        }
 
         if (!thumbnail) {
             const err = new Error("Please upload a Thumbnail");
+            err.status = 400;
+            return next(err);
+        }
+
+        if (!brochure) {
+            const err = new Error("Please upload a Brochure");
             err.status = 400;
             return next(err);
         }
@@ -74,6 +77,7 @@ exports.addCourse = async (req, res, next) => {
             return next(err);
         }
 
+
         const existCategory = await Category.findById(category);
         if (!existCategory) {
             const err = new Error("Category not found.");
@@ -81,19 +85,7 @@ exports.addCourse = async (req, res, next) => {
             return next(err);
         }
 
-        // Parallel upload for better efficiency
-        const [thumbnail_res, brochur_res] = await Promise.all([
-            // uploadFileToCloudinary(thumbnail, "AbilitaEdge", 100),
-            // uploadFileToCloudinary(brochure, "AbilitaEdge", 100),
-            putObject(thumbnail, "Course"),
-            putObject(brochure, "Course")
-        ]);
-
-        // const thumbnailUrl = thumbnail_res[0].url.toString();
-        // const brochureUrl = brochur_res[0].url.toString();
-
         const newCourseContent = [];
-
 
         for (const topic of parsedContent) {
             const { topicName, subTopic } = topic;
@@ -124,6 +116,12 @@ exports.addCourse = async (req, res, next) => {
             newCourseContent.push(newTopic._id);
         }
 
+        // Uploading thumbnail and brochure to AWS-S3
+        const [thumbnail_res, brochur_res] = await Promise.all([
+            putObject(thumbnail, "Course"),
+            putObject(brochure, "Course")
+        ]);
+
         const newCourse = new Course({
             courseTitle,
             courseSubTitle,
@@ -132,8 +130,8 @@ exports.addCourse = async (req, res, next) => {
             courseDescription,
             courseMode,
             courseLanguage,
-            brochure: brochur_res,
-            thumbnail: thumbnail_res,
+            brochure: brochur_res.url,
+            thumbnail: thumbnail_res.url,
             category,
             courseContent: newCourseContent
         });
@@ -152,7 +150,8 @@ exports.addCourse = async (req, res, next) => {
     } catch (error) {
         console.error("Error in addCourse:", error);
         res.status(500).json({
-            error: "Something went wrong"
+            error: "Something went wrong",
+            message: error.message
         });
     }
 };
