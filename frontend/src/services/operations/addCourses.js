@@ -117,7 +117,7 @@ export function addCourse(payload, resetForm) {
                 toast.error("Internal Server Error")
             } 
 
-            console.log(error.response) ;
+            console.log(error) ;
 
         } finally {
             dispatch(setLoading(false)) ;
