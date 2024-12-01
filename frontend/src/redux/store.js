@@ -24,6 +24,8 @@ import categorySlice  from './slices/adminCategorySlice';
 import { combineReducers } from 'redux';
 import userPostSlice from './slices/userPostSlice';
 import courseSlice from './slices/coursesSlice';
+import courseDetailsSlice from './slices/courseDetails';
+
 
 // Create a persist configuration
 const persistConfig = {
@@ -40,6 +42,7 @@ const rootReducer = combineReducers({
   comments: commentSlice,
   categories: categorySlice ,
   courses:courseSlice ,
+  courseDetails:courseDetailsSlice ,
   loading: loadingSlice
 });
 

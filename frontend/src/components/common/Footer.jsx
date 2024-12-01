@@ -36,7 +36,7 @@ const Footer = () => {
         <div className="mt-52 text-white">
           <hr className="border-t border-gray-500" />
           <h1 className="mt-4 text-sm font-semibold">Trending Courses</h1>
-          <div className="flex flex-wrap text-[13px] mt-2 space-x-2">
+          <div className="flex flex-wrap text-[13px] mt-2 ">
             <span className="mr-2">Data Science Course</span>
             <span className="mr-2">Android App Development Course</span>
             <span className="mr-2">MERN Full Stack Website Development Course</span>
