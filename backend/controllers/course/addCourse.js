@@ -37,7 +37,7 @@ exports.addCourse = async (req, res, next) => {
             err.status = 400;
             return next(err);
         }
-        const parsedContent = JSON.parse(req.body.courseContent);
+        const parsedContent = JSON.parse(courseContent);
 
         if (!Array.isArray(parsedContent)) {
             const err = new Error("Course content should be an array.");
