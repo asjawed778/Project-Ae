@@ -1,6 +1,6 @@
 import Courses from "./Carousal";
 import Footer from "../../components/common/Footer";
-import backgroundImage from "../slider/Artboard.png" ;
+import backgroundImage from "../../assets/Artboard.png" ;
 //framer motion
 import {easeIn, motion} from 'framer-motion' ;
 import Header from "../../components/common/Header";

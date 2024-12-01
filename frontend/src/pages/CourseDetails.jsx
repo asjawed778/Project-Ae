@@ -1,10 +1,9 @@
 import { GoHome } from "react-icons/go";
 import { FaCircleCheck } from "react-icons/fa6";
-import { RiSearchLine } from "react-icons/ri";
 import { PiGreaterThanBold } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import coder from "./slider/coder.jpg" ;
+import coder from "../assets/coder.jpg" ;
 import { useEffect } from "react";
 import Header from "../components/common/Header";
 import { getCourseDetails } from "../services/operations/addCourses";
