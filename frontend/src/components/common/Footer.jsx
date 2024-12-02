@@ -1,4 +1,4 @@
-
+import logo from "../../assets/logo.jpg" ;
 
 const Footer = () => {
     return(
@@ -7,7 +7,9 @@ const Footer = () => {
         {/* Top component */}
         <div className="flex flex-col items-start gap-8 md:flex-row md:items-start md:gap-16 lg:gap-36">
           {/* Logo */}
-          <div className="text-white text-2xl md:text-4xl font-bold">Logo Here</div>
+          <div className="text-white text-2xl md:text-4xl font-bold">
+          <img src={logo} alt="bar" className="w-[180px] rounded-md"/>
+          </div>
           
           {/* Program Section */}
           <div className="text-white">

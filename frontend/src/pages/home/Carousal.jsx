@@ -82,8 +82,8 @@ export default function Carousal() {
       {/* <hr style={{backgroundColor:"#36454F", marginTop:"-40px", height:"1px",}}
           className='lg:w-[70%] lg:ml-[15%]'
       />  */}
-      <hr style={{backgroundColor:"#36454F", marginTop:"-40px", height:"1px",}}
-          className='lg:w-[70%]'
+      <hr style={{backgroundColor:"#36454F", marginTop:"-41px", height:"1px", position:"relative"}}
+          className='lg:w-[70%] '
       /> 
 
        {/* Scrollable Course Cards */}
