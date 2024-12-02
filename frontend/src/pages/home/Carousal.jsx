@@ -4,6 +4,8 @@ import clock from '../../assets/language2.png' ;
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllCategory, getCourseByCategory } from '../../services/operations/addCourses';
+import CourseCardSkeleton from '../../components/skeletons/CourseCardSkeleton';
+
 
 export default function Carousal() {
   
@@ -82,7 +84,7 @@ export default function Carousal() {
           className='w-[90vw] sm:w-[650px] md:w-[700px] lg:w-[920px]'
       /> 
 
-       {/* Scrollable Course Cards */}
+       {/* Scrollable Course Cards, coursesAll */}
        {coursesAll ? (
        <div className='space-x-2 carousel rounded-box w-[90vw] sm:w-[650px] md:w-[700px] lg:w-[920px] items-center mt-4 mb-2'>
         
@@ -118,7 +120,7 @@ export default function Carousal() {
           ))}
        
       </div> ) : (
-        <div className="text-center text-gray-600">Loading courses...</div>
+        <CourseCardSkeleton/>
       )}
       
       

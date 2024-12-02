@@ -3,11 +3,17 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { addCourse, getAllCategory } from '../../../services/operations/addCourses';
+//spinner 
+import ClipLoader from "react-spinners/ClipLoader";
+import toast from 'react-hot-toast';
+
 
 function AddCourse() {
   
   const dispatch = useDispatch() ;
   const categories = useSelector( (state) => state.categories.categories ); 
+  const loading = useSelector((state) => state.loading.loading) ;
+  
 
   // States
 
@@ -26,6 +32,7 @@ function AddCourse() {
   const [courseMode, setCourseMode] = useState('');
   const [courseLanguage, setCourseLanguage] = useState('');
   const [brochure, setBrochure] = useState(null);
+  const [error, setError] = useState(null) ;
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedCategories, setSelectedCategory] = useState("");
 
@@ -33,7 +40,19 @@ function AddCourse() {
   const [coursecontent, setCourseContent] = useState([]);
   const [savedContent, setSavedContent] = useState([]);
 
-  
+ 
+  const isFormValid = 
+   courseTitle && 
+   courseSubTitle && 
+   keyPoints && 
+   tags && 
+   value && 
+   courseMode && 
+   courseLanguage && 
+   brochure && 
+   selectedImage && 
+   selectedCategories ;
+
   // Fetch categories on component mount
   useEffect(() => {
       dispatch(getAllCategory());
@@ -60,8 +79,30 @@ function AddCourse() {
   // Handle brochure upload
   const handleBrochureUpload = (e) => {
     const file = e.target.files[0];
-    if (file) setBrochure(file);
+
+    const maxFileSize = 5 * 1024 * 1024  ;
+
+    if( file ) {
+
+      //check file type
+      if( file.type !== "application/pdf" ) {
+        setError("Please upload a valid PDF file") ;
+        setBrochure(null) ;
+        return ;
+      }
+    
+
+      if( file.size > maxFileSize ) {
+       setError("File size should not exceed 5MB") ;
+       setBrochure(null) ;
+       return ;
+      }
+
+      setBrochure(file); 
+      setError(null) ;
+  }
   };
+
 
   //course content 
 
@@ -119,7 +160,12 @@ function AddCourse() {
 
   const handleSubmit = async () => {
 
+    if( !isFormValid ) return ;
     // Create a FormData object
+    
+    try {
+
+    await new Promise(resolve => setTimeout(resolve, 2000)); 
     const formData = new FormData();
   
     // Append regular fields
@@ -147,7 +193,16 @@ function AddCourse() {
    // 1. Change courseContent to string  2. Send as key value pair  3.Parse it on server  
    formData.append("courseContent",JSON.stringify(savedContent)) ;
 
-   dispatch(addCourse(formData, resetForm));
+   dispatch(addCourse(formData, resetForm)); 
+   
+
+  } catch(error) {
+    toast.error("Submission error") ;
+    console.log("Submission Error",error) ;
+
+    
+  } 
+   
 
   };
   
@@ -200,6 +255,14 @@ function AddCourse() {
 
   return (
     <div className="p-5 space-y-5 w-full">
+     
+     { loading && (
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+          <ClipLoader size={70} loading={loading} color='#000000'  />
+        </div>
+      )}
+     
+     
       {/* Upper Section */}
 
       <div className="grid lg:grid-cols-2 gap-5">
@@ -309,6 +372,12 @@ function AddCourse() {
               onChange={handleBrochureUpload}
             />
             {brochure && <p className="text-sm text-green-600 mt-1">Uploaded: {brochure.name}</p>}
+            {error && (
+              <p className="text-sm text-red-600 mt-1">
+              {error}
+              </p>
+            )}
+            
           </div>
 
         </div>
@@ -388,7 +457,7 @@ function AddCourse() {
             <input
               id="image-upload"
               type="file"
-              accept="image/*"
+              accept=".jpg, .jpeg, .png"
               className="hidden"
               onChange={handleImageUpload}
             />
@@ -509,11 +578,18 @@ function AddCourse() {
       <div>
         <button
           onClick={handleSubmit}
-          className="bg-blue-500 text-white px-4 py-2 rounded mt-10"
+          disabled={!isFormValid || loading}
+          //className="bg-blue-500 text-white px-4 py-2 rounded mt-10"
+          className={`mt-10 px-4 py-2 text-white font-semibold rounded ${
+            isFormValid && !loading
+              ? "bg-blue-500 hover:bg-blue-600"
+              : "bg-gray-400 cursor-not-allowed"
+          }`}
         >
           Submit
         </button>
-      </div>
+        </div>
+        
       
 
     </div>

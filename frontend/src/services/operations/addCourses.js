@@ -88,7 +88,8 @@ export function getAllCategory() {
 
 export function addCourse(payload, resetForm) {
     return async(dispatch, getState) => {
-        console.log("Form", payload) ;
+        
+        dispatch(setLoading(true)) ;
         
         try{
             const response = await apiConnector(
@@ -101,7 +102,7 @@ export function addCourse(payload, resetForm) {
                 throw new Error(response.data.message);
             }
 
-            toast.success(response.data.success) ;
+            toast.success("Course Added") ;
             console.log("Success man, successfull")
             resetForm() ;
 
