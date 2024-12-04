@@ -1,7 +1,7 @@
 import React from 'react' ;
 import AddCourse from '../../../components/common/admin/AddCourse';
-import HambergIcon from '../../slider/menu.png' ;
-import DashboardIcon from '../../slider/dashboard_icon.png' ;
+import HambergIcon from '../../../assets/menu.png' ;
+
 
 const AdminDashboard = () => {
     

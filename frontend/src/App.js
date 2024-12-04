@@ -8,7 +8,7 @@ import PrivateRoute from './components/core/PrivateRoute';
 import './index.css';
 import Sidebar from './components/common/Sidebar.jsx';
 import UserPost from './components/common/UserPost.jsx';
-import Learning from './pages/home/HomePage.jsx' ;
+import HomePage from './pages/home/HomePage.jsx' ;
 import AdminDashboard from './pages/home/Admin/AdminDashboard.jsx';
 import CourseDetails from './pages/CourseDetails.jsx';
 
@@ -17,6 +17,7 @@ import CourseDetails from './pages/CourseDetails.jsx';
 
 function App() {
 
+  
   const location = useLocation() ;
 
   return (
@@ -33,19 +34,30 @@ function App() {
 
     {/* <div className='flex-1 flex justify-center home-component mr-32' > */}
       <Routes>
-       
+
         <Route path='/' element={
-          <PrivateRoute>
-            <Home />
-          </PrivateRoute>
+          <PublicRoute>
+            <HomePage/>    
+          </PublicRoute>
+                  
         } />
 
         <Route path='/auth' element={
           <PublicRoute>
-            {/* <AuthPage />  */}
-            <Learning/>
-            {/* <AdminDashboard/> */}
+             <AuthPage />
           </PublicRoute>
+           
+        } />
+
+        <Route path='/:id/dashboard' element={ 
+          // <PrivateRoute>
+          //    <AdminDashboard/>
+          // </PrivateRoute>
+          <PublicRoute>
+            <AdminDashboard/>
+          </PublicRoute>
+          //<AdminDashboard/>
+           
         } />
        
         <Route path='/user' element={

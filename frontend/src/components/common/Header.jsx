@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import bar from '../../assets/Hamburger_icon.png'
 import logo from "../../assets/logo.jpg" ;
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline" ;
@@ -7,7 +8,7 @@ function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false) ;
 
     return(
-       <header className='shadow-sm'>
+       <header className='shadow-md'>
            {/* Header w-full*/}
        <nav className="bg-white flex flex-row border-gray-200 lg:ml-[10%] md:gap-4 ">
          
@@ -15,9 +16,11 @@ function Header() {
         <div className="ml-7 mt-4 mb-4 md:mt-0 md:mb-0 flex flex-row items-center justify-between w-full md:justify-normal md:w-auto">
            
            {/* Logo */}
+           <Link to="/">
            <div className="md:p-2 ">
              <img src={logo} alt="Logo" className="w-[180px]"/>
            </div>
+           </Link>
            
            {/* Hamburger Icon */}
             <div

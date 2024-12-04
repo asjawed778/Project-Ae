@@ -5,10 +5,11 @@ import ButtonLoading from '../components/common/ButtonLoading';
 import ReactDOM from 'react-dom';
 import { loginUser } from "../services/operations/authApi";
 import './LoginModal.css';
-
+import { useNavigate } from "react-router-dom";
 
 function LoginModal({ loginModal, setLoginModal, setResetModal }) {
     
+    const navigate = useNavigate() ;
     const dispatch = useDispatch() ;
     const {loading } = useSelector( store => store.loading ) ;
 
@@ -51,7 +52,7 @@ function LoginModal({ loginModal, setLoginModal, setResetModal }) {
         console.log( loginFormData ) ;
 
         // calling utlity function to call login api
-        dispatch( loginUser( loginFormData )) ;
+        dispatch( loginUser( loginFormData, navigate )) ;
         setLoginFormData({
            identifier:'', 
            password:''
