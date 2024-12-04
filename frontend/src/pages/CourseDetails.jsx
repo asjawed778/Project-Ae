@@ -7,6 +7,7 @@ import coder from "../assets/coder.jpg" ;
 import { useEffect } from "react";
 import Header from "../components/common/Header";
 import { getCourseDetails } from "../services/operations/addCourses";
+import {easeIn, motion} from 'framer-motion' ;
 
 const CourseDetails = () => { 
 
@@ -17,6 +18,14 @@ const CourseDetails = () => {
   console.log("courseDetail", courseDetail.courseDetails.course) ;
 
   const title = courseDetail?.courseDetails?.course?.courseTitle ;
+  const subtitle = courseDetail?.courseDetails?.course?.courseSubTitle ;
+  const brochure = courseDetail?.courseDetails?.course?.brochure ;
+  const courseDesciption = courseDetail?.courseDetails?.course?.courseDescription ;
+  const keyPoints = courseDetail?.courseDetails.course?.keyPoints ;
+
+  const openPDF = () => {
+    window.open(brochure,"_blank") ;
+  } ;
 
   useEffect(()=>{
     dispatch(getCourseDetails(id)) ;
@@ -35,83 +44,116 @@ const CourseDetails = () => {
   },[]) 
 
   return (
-    <div className="">
-       
-      <Header/>
-
-      <div className="flex space-x-5 mt-3 max-w-5xl mx-auto">
+    
+      <div className="">
+        <Header/>
         
-        <h1 className="size-2.5"> 
+      <div className="bg-amber-50 mt-1 max-h-35 " >
+       <div className=" flex space-x-5  max-w-5xl mx-auto ">
+        <h1 classname="size-2.5 "> 
           <div style={{color: 'grey'}}>
-            <GoHome size={30} />
+           <GoHome size={30} />
           </div>
-        </h1> 
-
-        <p className="size-3"><PiGreaterThanBold color="grey" size={20} className="mt-2"/>{""}</p>
-        <h1 className="text-gray-600 font-semibold mt-1">{title}</h1>
+        </h1>
+        <p className="size-3"><PiGreaterThanBold color="grey" size={25} className="mt-1"/>{""}</p>
+        <h1 className="text-gray-600 font-medium pt-1 pl-3">{title}</h1>
       </div>
-      <div className="mt-5 max-w-5xl mx-auto flex space-x-40">
+      <div className="  mt-5 max-w-5xl mx-auto flex space-x-40">
         <div>
-        { courseDetail ? (
-            <h1 className="text-3xl font-bold">{title} Course</h1>
-        ) : (
-          <p>Loading....</p>
-        )
-      }
-       
-        <h2 className="mt-1.5 font-semibold">Learn Complete {title} from Basic to Advanced</h2>
+        <h1 className="text-3xl font-bold">{title}</h1>
+        <h2 className="mt-1.5 font-semibold">{subtitle}</h2>
         <ul className="mt-10">
-          <li className="mb-1 font-medium flex"> <div style={{color: '#3B82F6'}}>
-          <FaCircleCheck size={15} className="mt-2" /></div><div className="ml-2">Master  the core concepts of Python programming</div></li>
-            <li className="mb-1 font-medium  flex"><div style={{color: '#3B82F6'}}>
-            <FaCircleCheck size={15}  className="mt-1" /></div><div className="ml-2">Learn under the guidance of experienced trainners</div></li>
-             <li className="mb-2 font-medium flex">  <div style={{color: '#3B82F6'}}>
-             <FaCircleCheck size={15}  className="mt-1" /></div><div className="ml-2">Get hands on practise with guided excercises,work-like projects and more</div> </li>
-        </ul>
-        <button className="bg-blue-500 text-white p-3 rounded-md mt-5">Download Brochure</button>
+          {keyPoints?.map((point, index) => (
+           <li key={index} className="mb-2 font-medium flex">
+            <div style={{ color: "#3B82F6" }}>
+              <FaCircleCheck size={15} className="mt-1" />
+            </div>
+            <div className="ml-2">{point}</div>
+           </li>
+          ))}
+        </ul> 
+
+        <button onClick = {openPDF} className="bg-blue-500 text-white p-3 rounded-md mt-5">Download Brochure</button>
         </div>
+        
         <div>
-            <img src={coder}
-             className="w-[290px] rounded-md ml-5"
-             />
+            <img src={coder} alt="coding" className="h-[200px] rounded-lg mr-1"/>
         </div>
+      </div>
       </div>
       <div className="mt-10 max-w-5xl mx-auto flex space-x-10 mb-10">
         <div>
         <h1 className="font-bold">Explore Our Immersive {title} Bootcamp</h1>
-        <p>Designed to get you hired, our power-packed {title} Developer Bootcamp features bect in-class hardng, plenty of harals-on exercises and assignments with Cloud Labs, and so much more. Build a stellar project portfolio get ready to crack interviews at product based companies, and launch your career as a Full Stack Developer</p><br />
-        <p>Due revamped Full Stack Developer Bootcamp Online, now offers expertly crafted recorded streaming sessions that elevate your educationa вкритное. Those meticulously planned sessions, created by top intruttore and progenators, promsse unmutched clarity and engagement</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia consequuntur velit corporis unde. Reprehenderit dignissimos dolor cum. Alias, hic enim voluptatum necessitatibus ad, quod quibusdam earum pariatur iusto corrupti qui!
-        </p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia consequuntur velit corporis unde. Reprehenderit dignissimos dolor cum. Alias, hic enim voluptatum necessitatibus ad, quod quibusdam earum pariatur iusto corrupti qui!
-        </p><br />
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda cum repellendus sed voluptates. Tempora, laboriosam animi.</p>
-       
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia consequuntur velit corporis unde. Reprehenderit dignissimos dolor cum. Alias, hic enim voluptatum necessitatibus ad, quod quibusdam earum pariatur iusto corrupti qui!
-        </p><br />
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda cum repellendus sed voluptates. Tempora, laboriosam animi.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, veniam?</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia consequuntur velit corporis unde. Reprehenderit dignissimos dolor cum. Alias, hic enim voluptatum necessitatibus ad, quod quibusdam earum pariatur iusto corrupti qui!
-        </p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia consequuntur velit corporis unde. Reprehenderit dignissimos dolor cum. Alias, hic enim voluptatum necessitatibus ad, quod quibusdam earum pariatur iusto corrupti qui!
-        </p>
+        <p>{courseDesciption}</p>
         <p className="font-bold text-blue-500 pt-3.5">Course Highlights</p>
         </div>
         
-
         <div className="p-5 space-y-4 flex-col border-[2px] shadow-lg h-full">
-            <h1 className="text-blue-500 font-bold">Book a Live Class, For Free!</h1>
-            <input type="text" placeholder="Name" className="w-full border-2 px-2 text-blue-400"/>
-            <input type="text" placeholder="Mobile No." className="w-full border-2 px-2"/>
-            <input type="text" placeholder="Education" className="w-full border-2 px-2"/>
-            <input type="text" placeholder="Course" className="w-full border-2 px-2"/><br /> 
-            <input type="radio" name="Whatsapp" id="Whatsapp" className=""/><span className="pl-2">Send me an update on Whatsapp</span>
-            <br />
-            <input type="submit" className="w-full p-1 bg-blue-500 text-white rounded-md"/>
-        </div>
+
+        
+        <div className="bg-white p-2 sm:p-4 rounded-lg w-[350px] sm:w-80 md:w-80">
+          <h3 className=" sm:text-lg font-sans text-blue-600 mb-4">
+           Book a Live Class, For Free!
+          </h3>
+
+        <form className="space-y-4 font-sans">
+          
+          <motion.input
+           type="text"
+           placeholder="Name"
+           className="w-full px-4 py-2 sm:py-1.5 border rounded-md font-sans focus:border-blue-600 focus:outline-none"
+           initial={{ borderColor: "#ccc" }}
+           whileFocus={{ borderColor: "#00BFFF", scale: 1.05 }}
+           transition={{ duration: 0.2 }}
+          />
+          
+          <motion.input
+           type="number"
+           placeholder="Mobile No"
+           className="w-full px-4 py-2 sm:py-1.5 border rounded-md focus:border-blue-600 focus:outline-none"
+           initial={{ borderColor: "#ccc" }}
+           whileFocus={{ borderColor: "#00BFFF", scale: 1.05 }}
+           transition={{ duration: 0.2 }}
+          />
+          
+          <motion.input
+           type="text"
+           placeholder="Education"
+           className="w-full px-4 py-2 sm:py-1.5 border rounded-md focus:border-blue-600 focus:outline-none"
+           initial={{ borderColor: "#ccc" }}
+           whileFocus={{ borderColor: "#00BFFF", scale: 1.05 }}
+           transition={{ duration: 0.2 }}
+          />
+          
+          <motion.input
+           type="text"
+           placeholder="Course"
+           className="w-full px-4 py-2 sm:py-1.5 border rounded-md focus:border-blue-600 focus:outline-none"
+           initial={{ borderColor: "#ccc" }}
+           whileFocus={{ borderColor: "#00BFFF", scale: 1.05 }}
+           transition={{ duration: 0.2 }}
+          />
+
+         <label className="flex items-center space-x-2">
+           <input type="checkbox" />
+           <span className="text-sm font-sans">Send me updates on WhatsApp</span>
+         </label>
+         
+         <motion.button 
+           className="w-full bg-blue-600 hover:bg-blue-700 text-white font-sans py-2 sm:py-1.5 rounded-md"
+           whileHover={{ scale: 1.05, backgroundColor: "#007BFF" }}
+           whileTap={{ scale: 0.95 }}
+         >
+           Submit
+         </motion.button>
+
+       </form>
+      </div>
+</div>
       </div>
     </div>
   )
 }
+
 
 export default CourseDetails

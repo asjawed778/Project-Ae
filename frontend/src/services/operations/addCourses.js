@@ -3,7 +3,7 @@ import { apiConnector } from "../apiConnector";
 import { addCourseEndpoints } from "../apis";  
 import { setLoading } from "../../redux/slices/loadingSlice";
 import { setCategories } from "../../redux/slices/adminCategorySlice";
-import { setCourses } from "../../redux/slices/coursesSlice";
+import { setCourses, setCoursesNull } from "../../redux/slices/coursesSlice";
 import { setCourseDetails } from "../../redux/slices/courseDetails";
 
 const { 
@@ -116,7 +116,9 @@ export function addCourse(payload, resetForm) {
                 toast.error(" Unsupported Media Type ")
             }else if(error.response && error.response.status === 500){
                 toast.error("Internal Server Error")
-            } 
+            }else if( error.response && error.response.status === 403 ){
+                toast.error("You don't have access") ;
+            }
 
             console.log(error) ;
 
@@ -174,10 +176,11 @@ export function getCourseByCategory(id) {
           }
           console.log(response.data) ;
           dispatch(setCourses(response.data)) ;
-
+          
         } catch(error) {
           if( error.response && error.response.status === 404 ) {
              toast.error("No course found") ;
+             dispatch(setCourses([])) ;
           } else if( error.response && error.response.status === 500 ) {
              toast.error("Internal Server Error") ;
           }

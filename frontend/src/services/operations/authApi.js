@@ -112,9 +112,11 @@ export function loginUser( userLoginData , navigate ) {
             }
             
             const token = response.data.token;
-            const user = response.data.user;
+            const user = response.data.user.role.roleName;
 
             dispatch(login({ token, user }));
+
+            
             console.log("loginUser",response);
             
             console.log("token",response.data);
@@ -123,7 +125,14 @@ export function loginUser( userLoginData , navigate ) {
             Cookies.set("token", token, { expires: 7 }); // Token valid for 7 days
 
             toast.success("User Login successfully");
-            navigate("/");
+            console.log("user", user) ;
+            if( user === "SUPERADMIN"){
+              const id = user.toLowerCase() ;
+              navigate(`/${id}/dashboard`) ;
+            }else {
+              navigate("/") ;
+            }
+            
         } catch (error) {
             console.log("Error in user login: ", error);
            

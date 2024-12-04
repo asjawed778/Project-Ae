@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import user from '../../assets/user_icon2.png' ;
 import clock from '../../assets/language2.png' ;
+import noImage from "../../assets/no-image.png" ;
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllCategory, getCourseByCategory } from '../../services/operations/addCourses';
@@ -85,14 +86,20 @@ export default function Carousal() {
       /> 
 
        {/* Scrollable Course Cards, coursesAll */}
-       {coursesAll ? (
+       { coursesAll ? (
        <div className='space-x-2 carousel rounded-box w-[90vw] sm:w-[650px] md:w-[700px] lg:w-[920px] items-center mt-4 mb-2'>
         
           {coursesAll?.map((course, index) => (
             
             <Link to={`/course/${course._id}`} key={index} className="carousel-item min-w-[50%] sm:min-w-[40%] md:min-w-[30%] lg:min-w-[10%]">
-             <div className="flex flex-col bg-white rounded-lg shadow-lg p-0 w-[320px] mb-2 ">
-              <img src={course.thumbnail} alt={course.courseTitle} className="w-[100%] h-40 rounded-lg object-fill mb-2" />
+             <div className="flex flex-col bg-white rounded-lg shadow-lg p-0 w-[300px] mb-2 ">
+              { 
+                (typeof course.thumbnail === "string" && course.thumbnail.includes("[object Object]")) ? 
+                <img src={noImage} alt={course.title} className="w-[40%] h-40 rounded-lg object-fill mb-2 mx-auto" />
+                : 
+                <img src={course.thumbnail} alt={course.title} className="w-[100%] h-40 rounded-lg object-fill mb-2" />
+                
+              }
               <h3 className="text-base font-sans mb-2 ml-2">{course.courseTitle}</h3>
               
               <div className='flex flex-row gap-4 mt-3 h-[38px] ml-2'>

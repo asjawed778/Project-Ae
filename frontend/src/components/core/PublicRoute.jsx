@@ -5,11 +5,13 @@ import { Navigate } from "react-router-dom";
 function PublicRoute({ children }) {
     const { token } = useSelector((store) => store.auth)
 
-    if (token === null) {
-        return children
-    } else {
-        return <Navigate to="/" />
-    }
+    // if (token === null) {
+    //     return children
+    // } else {
+    //     return <Navigate to="/" />
+    // }
+    return children ;
+    
 }
 
 export default PublicRoute;

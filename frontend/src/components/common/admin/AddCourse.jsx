@@ -58,7 +58,7 @@ function AddCourse() {
       dispatch(getAllCategory());
   }, [dispatch]);
 
-  
+   
   // Handle selecting a category
    const handleSelectCategory = (e) => {
     const selectedCategoryId = e.target.value; // Get selected category ID
@@ -159,7 +159,8 @@ function AddCourse() {
   // form submit
 
   const handleSubmit = async () => {
-
+     
+   
     if( !isFormValid ) return ;
     // Create a FormData object
     
@@ -176,7 +177,8 @@ function AddCourse() {
     formData.append("courseLanguage", courseLanguage);
     formData.append("category", selectedCategories); // Assuming this is a single category ID
   
-  
+    console.log("keyPoints",keyPoints) ;
+    console.log("tags", tags) ;
     keyPoints.forEach((keyPoint) => formData.append("keyPoints", keyPoint));
     tags.forEach((tag) => formData.append("tags", tag));
   
@@ -221,6 +223,7 @@ function AddCourse() {
     setSelectedCategory("");
     setCourseContent([]);
     setSavedContent([]) ;
+   
   };
   
 
@@ -258,7 +261,8 @@ function AddCourse() {
      
      { loading && (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
-          <ClipLoader size={70} loading={loading} color='#000000'  />
+          <span className="loading loading-spinner loading-lg"></span>
+          {/* <ClipLoader size={70} loading={loading} color='#000000'  /> */}
         </div>
       )}
      
@@ -279,6 +283,7 @@ function AddCourse() {
               onChange={(e) => setCourseTitle(e.target.value)}
               className="w-full border-b border-gray-300 p-1 focus:outline-none focus:border-blue-500 text-gray-700 font-medium text-sm"
             />
+           
           </div>
           
           <div>
