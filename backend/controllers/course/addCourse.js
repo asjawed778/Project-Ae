@@ -155,3 +155,11 @@ exports.addCourse = async (req, res, next) => {
         });
     }
 };
+
+exports.updateCourseDetails = async (req, res) => {
+    try {
+        
+    } catch (error) {
+
+    }
+}
