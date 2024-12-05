@@ -5,6 +5,7 @@ import { setLoading } from "../../redux/slices/loadingSlice";
 import { setCategories } from "../../redux/slices/adminCategorySlice";
 import { setCourses, setCoursesNull } from "../../redux/slices/coursesSlice";
 import { setCourseDetails } from "../../redux/slices/courseDetails";
+import Cookies from "js-cookie" ;
 
 const { 
 
@@ -90,12 +91,16 @@ export function addCourse(payload, resetForm) {
     return async(dispatch, getState) => {
         
         dispatch(setLoading(true)) ;
-        
+        const token = Cookies.get("token") ;
+        console.log("token in add course", token) ;
         try{
             const response = await apiConnector(
                 "POST", 
                 ADD_COURSES,
-                payload
+                payload,
+                {
+                    'Authorization': `Bearer ${token}`  // Send token in Authorization header
+                }
             )
 
             if( !response.data.success ) {

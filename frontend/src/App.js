@@ -35,29 +35,23 @@ function App() {
     {/* <div className='flex-1 flex justify-center home-component mr-32' > */}
       <Routes>
 
-        <Route path='/' element={
-          <PublicRoute>
+        <Route path='/' element={ 
             <HomePage/>    
-          </PublicRoute>
-                  
         } />
 
         <Route path='/auth' element={
           <PublicRoute>
              <AuthPage />
           </PublicRoute>
+          // <AuthPage/>
            
         } />
 
         <Route path='/:id/dashboard' element={ 
-          // <PrivateRoute>
-          //    <AdminDashboard/>
-          // </PrivateRoute>
-          <PublicRoute>
-            <AdminDashboard/>
-          </PublicRoute>
+          <PrivateRoute requiredRole="SUPERADMIN" >
+             <AdminDashboard/>
+          </PrivateRoute>  
           //<AdminDashboard/>
-           
         } />
        
         <Route path='/user' element={
@@ -66,10 +60,8 @@ function App() {
           </PrivateRoute>
         } />
 
-        <Route path='/course/:id' element={
-          <PublicRoute>
+        <Route path='/course/:id' element={ 
             <CourseDetails/>
-          </PublicRoute>
         } />
 
         <Route path='*' element={<PageNotFound />} />
