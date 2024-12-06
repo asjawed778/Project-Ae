@@ -9,6 +9,7 @@ import Header from "../components/common/Header";
 import { getCourseDetails } from "../services/operations/addCourses";
 import {easeIn, motion} from 'framer-motion' ;
 import parse from "html-react-parser" ;
+import { Link } from "react-router-dom"; 
 
 const CourseDetails = () => { 
 
@@ -54,10 +55,13 @@ const CourseDetails = () => {
        <div className=" flex space-x-5  max-w-5xl mx-auto ">
         <h1 classname="size-2.5 "> 
           <div style={{color: 'grey'}}>
-           <GoHome size={30} />
+            <Link to="/">
+             <GoHome size={30} />
+            </Link>
+          
           </div>
         </h1>
-        <p className="size-3"><PiGreaterThanBold color="grey" size={25} className="mt-1"/>{""}</p>
+        <p className="size-2"><PiGreaterThanBold color="slate" size={16} className="mt-2 p-0 "/>{""}</p>
         <h1 className="text-gray-600 font-medium pt-1 pl-3">{title}</h1>
       </div>
       <div className="  mt-5 max-w-5xl mx-auto flex space-x-40">

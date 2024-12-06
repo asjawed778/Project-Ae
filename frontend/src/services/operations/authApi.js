@@ -93,7 +93,7 @@ export function logoutUser(navigate) {
 
             dispatch(logout());
             toast.success("Logged out successfully");
-            navigate("/auth");
+            //navigate("/auth");
         } catch (error) {
             // console.log("Error in logging out: ", error);
             toast.error("Error", error);

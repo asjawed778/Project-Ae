@@ -114,7 +114,7 @@ export function addCourse(payload, resetForm) {
         } catch(error) {
             
             if( error.response && error.response.status === 400 ) {
-                toast.error(" Bad Request  Validation errors such as missing required fields or invalid file formats.");
+                toast.error(" Bad Request Validation errors such as missing required fields or invalid file formats.");
             } else if(error.response && error.response.status === 404){
                 toast.error(" Category not found ")
             }else if(error.response && error.response.status === 415){
