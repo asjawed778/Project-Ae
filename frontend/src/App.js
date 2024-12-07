@@ -11,6 +11,8 @@ import UserPost from './components/common/UserPost.jsx';
 import HomePage from './pages/home/HomePage.jsx' ;
 import AdminDashboard from './pages/home/Admin/AdminDashboard.jsx';
 import CourseDetails from './pages/CourseDetails.jsx';
+import AddCourse from './components/common/admin/AddCourse.jsx';
+import Category from './components/common/admin/Category.jsx';
 
 
 
@@ -47,12 +49,17 @@ function App() {
            
         } />
 
-        <Route path='/:id/dashboard' element={ 
+        <Route path='/:id/dashboard/*' element={ 
           <PrivateRoute requiredRole="SUPERADMIN" >
              <AdminDashboard/>
           </PrivateRoute>  
           //<AdminDashboard/>
-        } />
+        } > 
+          <Route index element={<AddCourse />} />
+          <Route path="add-course" element={<AddCourse/>} />
+          <Route path="category" element={<Category/>} />
+
+        </Route>
        
         <Route path='/user' element={
           <PrivateRoute>

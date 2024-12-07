@@ -116,6 +116,7 @@ import React from 'react';
 import AddCourse from '../../../components/common/admin/AddCourse';
 import HambergIcon from '../../../assets/menu.png';
 import logo from "../../../assets/logo.jpg" ;
+import { Link, Outlet, Route, Routes } from 'react-router-dom';
 
 const AdminDashboard = () => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -142,12 +143,12 @@ const AdminDashboard = () => {
         <h2 className="text-xl px-6 py-4 font-sans">Dashboard</h2>
         <div className="px-4">
           {/* Dropdown */}
-          <div
+          <Link to="add-course"
             onClick={toggleDropdown}
             className="flex items-center justify-between px-4 py-3 hover:bg-[#fff] hover:text-[#1d1b31] text-white rounded-lg cursor-pointer"
           >
-            <span>Courses</span>
-            <svg
+            <span>Add Course</span>
+            {/* <svg
               className={`w-5 h-5 transform transition-transform ${drawer ? 'rotate-180' : ''}`}
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -155,9 +156,9 @@ const AdminDashboard = () => {
               stroke="currentColor"
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-            </svg>
-          </div>
-          {drawer && (
+            </svg> */}
+          </Link>
+          {/* {drawer && (
             <div className="bg-[#1d1b31] mt-2 rounded-lg shadow-lg">
               <a href="#add-course" className="block px-6 py-2 hover:bg-[#fff] hover:text-[#1d1b31]">
                 Add Course
@@ -169,8 +170,17 @@ const AdminDashboard = () => {
                 View Courses
               </a>
             </div>
-          )}
+          )} */}
+
+          <Link to="category"
+            onClick={toggleDropdown}
+            className="flex items-center justify-between px-4 py-3 hover:bg-[#fff] hover:text-[#1d1b31] text-white rounded-lg cursor-pointer"
+          >
+            <span>Category</span>
+          </Link>
         </div>
+
+       
       </div>
 
       {/* Main Content */}
@@ -186,7 +196,8 @@ const AdminDashboard = () => {
 
         {/* Main Content Area */}
         <div className="p-6 bg-gray-100 h-full overflow-y-auto">
-          <AddCourse />
+          {/* <AddCourse /> */}
+          <Outlet/>
         </div>
       </div>
     </div>
