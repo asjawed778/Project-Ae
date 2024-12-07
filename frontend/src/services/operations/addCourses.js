@@ -54,7 +54,10 @@ export function addCategory(data) {
                 toast.error("Conflict: Same name exists") ;
             } else if( error.response.status === 500 ) {
                 toast.error("Internal Server Error");
-            }
+            } else {
+                toast.error(error.response.data.message) ;
+            } 
+            
             console.log("something is wrong",error) ;
 
         } finally {
@@ -95,9 +98,10 @@ export function editCategories(data, id) {
                 toast.error("Category not found") ;
             } else if( error.response.status === 500 ) {
                 toast.error("Internal Server Error");
+            } else {
+                toast.error(error.response.data.message) ;
             }
             
-            console.log("error in edit",error) ;
         } finally {
             dispatch(setLoading(false)) ;
         }

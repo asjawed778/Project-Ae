@@ -279,7 +279,6 @@ function AddCourse() {
      { loading && (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
           <span className="loading loading-spinner loading-lg"></span>
-          {/* <ClipLoader size={70} loading={loading} color='#000000'  /> */}
         </div>
       )}
      

@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addCategory, getAllCategory, editCategories } from '../../../services/operations/addCourses';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 const Category = () => {
 
   const dispatch = useDispatch() ;
   const category = useSelector( (state) => state.categories.categories ); 
+  const loading = useSelector((state) => state.loading.loading) ;
   console.log(category) ;
 
   const [categories, setCategories] = useState( category ); // To store all categories
@@ -24,25 +26,37 @@ const Category = () => {
 
   const handleAddCategory = async () => {
     if (!newCategory.name || !newCategory.description) {
-      return alert('Please fill in both the name and description');
+      return toast.error('Please fill in both the name and description');
     }
     
     console.log(newCategory) ;
     dispatch(addCategory(newCategory)) ;
+    setNewCategory({ name: '', description: '' });
+    dispatch(getAllCategory()) ;
   };
 
   const handleEditCategory = async (id) => {
     if (!editedCategory.name || !editedCategory.description) {
-      return alert('Please fill in both the name and description');
+      return toast.error('Please fill in both the name and description');
     }
     
     console.log("edit", id, "editedCategory", editedCategory) ;
-    dispatch(editCategories(editedCategory, id)) ;
+    dispatch(editCategories(editedCategory, id)) ; 
+    setEditCategory(null) ;
+    setEditedCategory({name:'', description:''}) ;
   };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-lg max-w-[800px] mx-auto">
-      <h1 className="text-2xl font-semibold mb-4">Add Category</h1>
+    <div className="p-6 bg-white rounded-lg shadow-lg max-w-[800px] mx-auto"> 
+
+      { loading && (
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+          <span className="loading loading-spinner loading-lg"></span>
+        </div>
+      )} 
+
+
+      <h1 className="text-xl font-sans mb-4">Add Category</h1>
 
       {/* Add Category */}
       <div className="mb-4">
@@ -52,17 +66,17 @@ const Category = () => {
           onChange={(e) =>
             setNewCategory({ ...newCategory, name: e.target.value })
           }
-          placeholder="Enter category name"
-          className="border p-2 rounded w-full mb-2"
+          placeholder="category name"
+          className="border-b font-sans p-1 w-full mb-2 outline-none focus:border-blue-400  text-gray-700 font-sm text-sm"
         />
-        <textarea
+        <input
           value={newCategory.description}
           onChange={(e) =>
             setNewCategory({ ...newCategory, description: e.target.value })
           }
-          placeholder="Enter category description"
-          className="border p-2 rounded w-full mb-2"
-        ></textarea>
+          placeholder="category description"
+          className="border-b font-sans p-1 w-full mb-2 outline-none focus:border-blue-400  text-gray-700 font-sm text-sm"
+        ></input>
         <button
           onClick={handleAddCategory}
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
@@ -122,7 +136,7 @@ const Category = () => {
                         description: category.description,
                       });
                     }}
-                    className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+                    className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
                   >
                     Edit
                   </button>
