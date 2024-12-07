@@ -85,7 +85,7 @@ export function editCategories(data, id) {
            if( !response.data.success ) {
               throw new Error(response.data.message);
            }
-           
+            dispatch(getAllCategory()) ;
             toast.success("Successful") ; 
 
         } catch(error) {
