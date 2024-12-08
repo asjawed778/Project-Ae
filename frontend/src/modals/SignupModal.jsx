@@ -5,12 +5,15 @@ import './SignupModal.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { sendSignupOTP } from '../services/operations/authApi';
 import ButtonLoading from '../components/common/ButtonLoading';
-
+import eye from "../assets/visible.png" ;
+import eyeClose from "../assets/no_visibility.png" ;
 
 function SignupModal({ signupModal, setSignupModal, setOtpModal, setSignupData }) {
     
     const dispatch = useDispatch();
     const { loading } = useSelector(store => store.loading);
+    
+    const [showpassword, setshowpassword] = useState(false) ;
     const [signupFormData, setSignupFormData] = useState({
         name: '',
         email: '',
@@ -79,15 +82,25 @@ function SignupModal({ signupModal, setSignupModal, setOtpModal, setSignupData }
                         />
                     </div>
 
-                    <div className="input-group">
+                    <div className=" relative signup-input">
                         <input
-                            type="password"
-                            className="signup-input"
+                            type={showpassword ? "text" : "password"}
+                            className="w-[95%] text-gray-[#fff] bg-[#111] focus:outline-none"
                             placeholder="Enter Password"
                             value={password}
                             name='password'
                             onChange={signupFormChangeHandler}
-                        />
+                        /> 
+                         <span onClick={() => setshowpassword(!showpassword)} className="absolute right-2 top-3 w-4">
+                            { showpassword ? 
+                              (<>
+                                <img src={eye} alt="not found" className="w-4 h-5"/>
+                               </>) 
+                              : 
+                              (<>
+                                <img src={eyeClose} alt="not found" className="w-4 h-5"/>
+                               </>) } 
+                        </span>
                     </div>
 
                     <div className="input-group">

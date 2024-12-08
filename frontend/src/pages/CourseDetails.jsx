@@ -8,6 +8,8 @@ import { useEffect } from "react";
 import Header from "../components/common/Header";
 import { getCourseDetails } from "../services/operations/addCourses";
 import {easeIn, motion} from 'framer-motion' ;
+import parse from "html-react-parser" ;
+import { Link } from "react-router-dom"; 
 
 const CourseDetails = () => { 
 
@@ -21,6 +23,7 @@ const CourseDetails = () => {
   const subtitle = courseDetail?.courseDetails?.course?.courseSubTitle ;
   const brochure = courseDetail?.courseDetails?.course?.brochure ;
   const courseDesciption = courseDetail?.courseDetails?.course?.courseDescription ;
+  //console.log(courseDesciption.toString()) ;
   const keyPoints = courseDetail?.courseDetails.course?.keyPoints ;
 
   const openPDF = () => {
@@ -52,14 +55,17 @@ const CourseDetails = () => {
        <div className=" flex space-x-5  max-w-5xl mx-auto ">
         <h1 classname="size-2.5 "> 
           <div style={{color: 'grey'}}>
-           <GoHome size={30} />
+            <Link to="/">
+             <GoHome size={30} />
+            </Link>
+          
           </div>
         </h1>
-        <p className="size-3"><PiGreaterThanBold color="grey" size={25} className="mt-1"/>{""}</p>
+        <p className="size-2"><PiGreaterThanBold color="slate" size={16} className="mt-2 p-0 "/>{""}</p>
         <h1 className="text-gray-600 font-medium pt-1 pl-3">{title}</h1>
       </div>
       <div className="  mt-5 max-w-5xl mx-auto flex space-x-40">
-        <div>
+        <div className="w-[500px]">
         <h1 className="text-3xl font-bold">{title}</h1>
         <h2 className="mt-1.5 font-semibold">{subtitle}</h2>
         <ul className="mt-10">
@@ -77,14 +83,17 @@ const CourseDetails = () => {
         </div>
         
         <div>
-            <img src={coder} alt="coding" className="h-[200px] rounded-lg mr-1"/>
+            <img src={coder} alt="coding" className="h-[200px] rounded-lg mr-1 "/>
         </div>
       </div>
       </div>
       <div className="mt-10 max-w-5xl mx-auto flex space-x-10 mb-10">
-        <div>
+        <div className="w-[560px]">
         <h1 className="font-bold">Explore Our Immersive {title} Bootcamp</h1>
-        <p>{courseDesciption}</p>
+        {/* <p>{courseDesciption}</p> */}
+        <div
+         dangerouslySetInnerHTML={{ __html: courseDesciption }}
+        />
         <p className="font-bold text-blue-500 pt-3.5">Course Highlights</p>
         </div>
         

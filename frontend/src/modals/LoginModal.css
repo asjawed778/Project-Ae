@@ -41,13 +41,14 @@
 
 .login-input {
     width: 100%;
-    padding: 12px;
+    padding:12px;
     border-radius: 18px;
     border: 1px solid #444;
     background-color: #111;
     color: #fff;
     font-size: 16px;
     margin-bottom: 20px;
+    overflow: hidden;
 }
 
 .login-input::placeholder {

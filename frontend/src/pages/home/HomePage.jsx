@@ -12,7 +12,7 @@ function HomePage() {
     <> 
      <Header/>
 
-     <div className="h-[110%] flex flex-col items-center w-full font-sans">
+     <div className=" flex flex-col items-center w-full font-sans">
       
       {/* Main Section */}
       <div  style={{
@@ -149,24 +149,24 @@ function HomePage() {
 
       {/* Skill Boxes */} 
       <motion.div 
-         className="mt-10 flex flex-wrap flex-col sm:flex-row gap-4 justify-center px-4"
+         className="mt-10 flex flex-col sm:flex-row gap-4 justify-center px-4"
          initial={{ opacity: 0, y: 20 }}
          animate={{ opacity: 1, y: 0 }}
          transition={{ ease:"linear", duration: 2}} 
       >
-        <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-sans p-8 sm:p-6 rounded-lg shadow-lg h-48 w-80 md:w-56 lg:w-80 flex flex-col items-start">
-         <h1 className="text-2xl lg:text-2xl">Foundational</h1>
-         <h1 className="text-2xl lg:text-2xl">Skills</h1>
+        <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-sans p-8 sm:p-6 rounded-lg shadow-lg h-48 w-80 sm:w-48 md:w-56 lg:w-80 flex flex-col items-start">
+         <h1 className="text-2xl sm:text-xl lg:text-2xl">Foundational</h1>
+         <h1 className="text-2xl sm:text-xl lg:text-2xl">Skills</h1>
         </div>
         
-        <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-sans p-8 sm:p-6 rounded-lg shadow-lg h-48 w-80 md:w-56 lg:w-80 flex flex-col items-start">
-         <h1 className="text-2xl lg:text-2xl">Employability</h1>
-         <h1 className="text-2xl lg:text-2xl">Skills</h1>
+        <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-sans p-8 sm:p-6 rounded-lg shadow-lg h-48 w-80 sm:w-48 md:w-56 lg:w-80 flex flex-col items-start">
+         <h1 className="text-2xl sm:text-xl lg:text-2xl">Employability</h1>
+         <h1 className="text-2xl sm:text-xl lg:text-2xl">Skills</h1>
         </div>
         
-        <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-sans p-8 sm:p-6 rounded-lg shadow-lg h-48 w-80 md:w-56 lg:w-80 flex flex-col items-start">
-         <h1 className="text-2xl lg:text-2xl">Entrepreneurial</h1>
-         <h1 className="text-2xl lg:text-2xl">Skills</h1>
+        <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-sans p-8 sm:p-6 rounded-lg shadow-lg h-48 w-80 sm:w-48 md:w-56 lg:w-80 flex flex-col items-start">
+         <h1 className="text-2xl sm:text-xl lg:text-2xl">Entrepreneurial</h1>
+         <h1 className="text-2xl sm:text-xl lg:text-2xl">Skills</h1>
         </div>
       </motion.div>
 

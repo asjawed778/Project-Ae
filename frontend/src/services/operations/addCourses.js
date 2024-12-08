@@ -5,28 +5,37 @@ import { setLoading } from "../../redux/slices/loadingSlice";
 import { setCategories } from "../../redux/slices/adminCategorySlice";
 import { setCourses, setCoursesNull } from "../../redux/slices/coursesSlice";
 import { setCourseDetails } from "../../redux/slices/courseDetails";
+import Cookies from "js-cookie" ;
 
 const { 
 
+    ADD_CATEGORY ,
+    EDIT_CATEGORY,
     GET_ALL_CATEGORY,
     ADD_COURSES ,
     GET_ALL_COURSES ,
     GET_COURSE_BY_CATEGORY ,
     GET_FULL_COURSE_DETAILS , 
-    ADD_CATEGORY ,
+    
 
 } = addCourseEndpoints ;
 
 
 export function addCategory(data) {
     return async (dispatch, getState) => {
-      
+        
+        dispatch(setLoading(true)) ;
+        const token = Cookies.get("token") ;
+
         try{
 
            const response = await apiConnector(
              "POST" ,
              ADD_CATEGORY ,
-             data
+             data ,
+             {
+                'Authorization': `Bearer ${token}`  // Send token in Authorization header
+             }
            )
            
            if( !response.data.success ) {
@@ -45,7 +54,11 @@ export function addCategory(data) {
                 toast.error("Conflict: Same name exists") ;
             } else if( error.response.status === 500 ) {
                 toast.error("Internal Server Error");
-            }
+            } else {
+                toast.error(error.response.data.message) ;
+            } 
+            
+            console.log("something is wrong",error) ;
 
         } finally {
             dispatch(setLoading(false)) ;
@@ -53,6 +66,48 @@ export function addCategory(data) {
     }
 }
 
+export function editCategories(data, id) {
+    return async (dispatch, getState) => {
+        
+        dispatch(setLoading(true)) ;
+        const token = Cookies.get("token") ;
+        try{
+
+           const response = await apiConnector(
+             "PUT" ,
+             EDIT_CATEGORY(id) ,
+             data ,
+             {
+                'Authorization': `Bearer ${token}`  // Send token in Authorization header
+             }
+           )
+           
+           if( !response.data.success ) {
+              throw new Error(response.data.message);
+           }
+            dispatch(getAllCategory()) ;
+            toast.success("Successful") ; 
+
+        } catch(error) {
+            
+            if( error.response.status === 400 ) {
+                toast.error("Missing required fields or invalid categoryId.")
+            } else if( error.response.status === 403 ) {
+                toast.error("Unauthorized access") ;
+            } else if( error.response.status === 404 ) {
+                toast.error("Category not found") ;
+            } else if( error.response.status === 500 ) {
+                toast.error("Internal Server Error");
+            } else {
+                toast.error(error.response.data.message) ;
+            }
+            
+        } finally {
+            dispatch(setLoading(false)) ;
+        }
+    }
+
+}
 
 export function getAllCategory() {
   return async(dispatch, getState) => {
@@ -90,12 +145,16 @@ export function addCourse(payload, resetForm) {
     return async(dispatch, getState) => {
         
         dispatch(setLoading(true)) ;
-        
+        const token = Cookies.get("token") ;
+        console.log("token in add course", token) ;
         try{
             const response = await apiConnector(
                 "POST", 
                 ADD_COURSES,
-                payload
+                payload,
+                {
+                    'Authorization': `Bearer ${token}`  // Send token in Authorization header
+                }
             )
 
             if( !response.data.success ) {
@@ -109,7 +168,7 @@ export function addCourse(payload, resetForm) {
         } catch(error) {
             
             if( error.response && error.response.status === 400 ) {
-                toast.error(" Bad Request  Validation errors such as missing required fields or invalid file formats.");
+                toast.error(" Bad Request Validation errors such as missing required fields or invalid file formats.");
             } else if(error.response && error.response.status === 404){
                 toast.error(" Category not found ")
             }else if(error.response && error.response.status === 415){

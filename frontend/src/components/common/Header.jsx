@@ -3,9 +3,12 @@ import bar from '../../assets/Hamburger_icon.png'
 import logo from "../../assets/logo.jpg" ;
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline" ;
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+
 function Header() {
 
     const [isMenuOpen, setIsMenuOpen] = useState(false) ;
+    const {token, user} = useSelector((state) => state.auth) ;
 
     return(
        <header className='shadow-md'>
@@ -54,12 +57,24 @@ function Header() {
               Learning
             </button>
 
+            {/* Admin Panel */}
+            {
+               token && user === "SUPERADMIN" && (
+                <Link to={`/${user.toLowerCase()}/dashboard`}>
+                   <button className=" hidden md:block text-blue-600 font-sans mt-4  md:mt-7  md:ml-10">
+                    Admin Panel
+                   </button>
+                </Link>
+               )
+            }
+
         </div>
 
        </nav>
        
        {/* Hamburger Action Section */}
           <section className={`overflow-hidden transition-all duration-700 ${isMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0' } md:hidden ml-8`}>
+             
               <div className="relative">
                  <span className="absolute inset-y-10 left-3 flex items-center">
                  <MagnifyingGlassIcon className="h-5 w-5 text-[#0b66c3]" />
@@ -74,6 +89,17 @@ function Header() {
 
                 {/* Learning */}
               <button className="text-blue-600 font-sans mt-4 mb-4">Learning</button>
+               {/* Admin Panel */}
+               {
+               token && user === "SUPERADMIN" && (
+                <Link to={`/${user.toLowerCase()}/dashboard`}>
+                   <button className=" text-blue-600 font-sans mt-0 mb-1 ml-2">
+                    Admin Panel
+                   </button>
+                </Link>
+               )
+              }
+              
           </section>
         </header>
     )
