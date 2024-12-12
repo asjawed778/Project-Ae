@@ -175,17 +175,17 @@ function HomePage() {
          animate={{ opacity: 1, y: 0 }}
          transition={{ ease:"linear", duration: 2}} 
       >
-        <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-sans p-8 sm:p-6 rounded-lg shadow-lg h-48 w-80 sm:w-48 md:w-56 lg:w-80 lg:h-[226px] flex flex-col items-start justify-center">
+        <div className="bg-custom-gradient text-white font-sans p-8 sm:p-6 rounded-lg shadow-lg h-48 w-80 sm:w-48 md:w-56 lg:w-80 lg:h-[226px] flex flex-col items-start justify-center">
          <h1 className="text-[38px] sm:text-[28px] md:text-[25px] lg:text-[40px] ">Foundational</h1>
          <h1 className="text-[38px] sm:text-[28px] md:text-[25px] lg:text-[40px]">Skills</h1>
         </div>
         
-        <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-sans p-8 sm:p-6 rounded-lg shadow-lg h-48 w-80 sm:w-48 md:w-56 lg:w-80 lg:h-[226px] flex flex-col items-start justify-center">
+        <div className="bg-custom-gradient text-white font-sans p-8 sm:p-6 rounded-lg shadow-lg h-48 w-80 sm:w-48 md:w-56 lg:w-80 lg:h-[226px] flex flex-col items-start justify-center">
          <h1 className="text-[38px] sm:text-[28px] md:text-[25px] lg:text-[40px] ">Employability</h1>
          <h1 className="text-[38px] sm:text-[28px] md:text-[25px] lg:text-[40px]">Skills</h1>
         </div>
         
-        <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-sans p-8 sm:p-6 rounded-lg shadow-lg h-48 w-80 sm:w-48 md:w-56 lg:w-80 lg:h-[226px] flex flex-col items-start justify-center">
+        <div className="bg-custom-gradient text-white font-sans p-8 sm:p-6 rounded-lg shadow-lg h-48 w-80 sm:w-48 md:w-56 lg:w-80 lg:h-[226px] flex flex-col items-start justify-center">
          <h1 className="text-[38px] sm:text-[28px] md:text-[25px] lg:text-[40px]">Entrepreneurial</h1>
          <h1 className="text-[38px] sm:text-[28px] md:text-[25px] lg:text-[40px]">Skills</h1>
         </div>
