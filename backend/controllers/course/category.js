@@ -80,14 +80,14 @@ exports.editCategory = async (req, res, next) => {
         }
         const { name, description } = req.body;
 
-        // Check if name and description are provided and not empty
+        // Checking if name and description are provided and not empty
         if (!name?.trim() || !description?.trim()) {
             const err = new Error("Category name and description cannot be empty.");
             err.status = 400;
             return next(err);
         }
 
-        // Check if the category already exists
+        // Checking if the category already exists
         const existingCategory = await Category.findOne({ categoryName: name });
         if (existingCategory) {
             const err = new Error("Category with this name already exists.");
