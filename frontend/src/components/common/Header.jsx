@@ -39,21 +39,21 @@ function Header() {
         <div className="flex flex-row ">
             
             {/* Search bar */}
-            <div className="hidden md:block relative w-auto rounded-[14px] ">
+               <div className="hidden md:block relative w-auto rounded-[10px]">
              <span className="absolute inset-y-0 left-3 flex items-center">
-             <MagnifyingGlassIcon className="h-5 w-5 text-[#0b66c3]" />
+             <MagnifyingGlassIcon className="h-5 w-5 text-[#787486]" />
              </span>
       
              <input
               type="text"
-              placeholder="Type to search"
-              className="w-auto mt-5 pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 bg-[#f1f2f5] text-[#707070] font-sans"           
+              placeholder="search for anything"
+              className="w-auto mt-5 pl-10 pr-4 py-2 border border-[#DBDBDB] rounded-md focus:outline-none focus:border-blue-500 bg-[#F5F5F5] text-[#787486] font-sans font-normal text-[14px]"           
              />
 
             </div>
          
            {/* Learning */}
-            <button className=" hidden md:block text-blue-600 font-sans mt-4  md:mt-0  md:ml-10">
+            <button className=" hidden md:block text-[#0766C6] font-sans font-bold mt-4  md:mt-0  md:ml-10">
               Learning
             </button>
 
@@ -61,7 +61,7 @@ function Header() {
             {
                token && user === "SUPERADMIN" && (
                 <Link to={`/${user.toLowerCase()}/dashboard`}>
-                   <button className=" hidden md:block text-blue-600 font-sans mt-4  md:mt-7  md:ml-10">
+                   <button className=" hidden md:block text-[#0766C6] font-bold font-sans mt-4  md:mt-7  md:ml-10">
                     Admin Panel
                    </button>
                 </Link>
