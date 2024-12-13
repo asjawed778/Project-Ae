@@ -86,7 +86,7 @@ function HomePage() {
         
         <div className="bg-[#FFFFFF] p-6 sm:p-4 rounded-lg shadow-black lg:w-[400px] lg:h-[408px] sm:w-80 md:w-80">
           <h3 className=" sm:text-lg font-extrabold font-sans text-[#0766C6] mb-4 text-[20px]">
-           Book a Live Class, For Free!
+           Book Your Free Demo Class
           </h3>
 
         <form className="space-y-4 font-sans">
@@ -95,7 +95,7 @@ function HomePage() {
           <motion.input
            type="text"
            placeholder="First Name"
-           className="w-[50%] px-4 py-2 sm:py-1.5 border rounded-md font-rale text-[15px] focus:border-blue-600 focus:outline-none inline-block"
+           className="w-[50%] px-4 py-2 sm:py-1.5 text-[#000] border rounded-md font-rale text-[15px] focus:border-blue-600 focus:outline-none inline-block"
            initial={{ borderColor: "#ccc" }}
            whileFocus={{ borderColor: "#00BFFF", scale: 1.05 }}
            transition={{ duration: 0.2 }}
@@ -104,7 +104,7 @@ function HomePage() {
           <motion.input
           type="text"
           placeholder=" Last Name"
-          className="w-[50%] px-4 py-2 sm:py-1.5 border rounded-md font-rale text-[15px] focus:border-blue-600 focus:outline-none "
+          className="w-[50%] px-4 py-2 sm:py-1.5 text-[#000] border rounded-md font-rale text-[15px] focus:border-blue-600 focus:outline-none "
           initial={{ borderColor: "#ccc" }}
           whileFocus={{ borderColor: "#00BFFF", scale: 1.05 }}
           transition={{ duration: 0.2 }}
@@ -114,7 +114,7 @@ function HomePage() {
           <motion.input
            type="email"
            placeholder="Email Address"
-           className="w-full px-4 py-2 sm:py-1.5 border rounded-md font-rale text-[15px] focus:border-blue-600 focus:outline-none"
+           className="w-full px-4 py-2 sm:py-1.5 text-[#000] border rounded-md font-rale text-[15px] focus:border-blue-600 focus:outline-none"
            initial={{ borderColor: "#ccc" }}
            whileFocus={{ borderColor: "#00BFFF", scale: 1.05 }}
            transition={{ duration: 0.2 }}
@@ -123,7 +123,7 @@ function HomePage() {
           <motion.input
            type="number"
            placeholder="Mobile No"
-           className="w-full px-4 py-2 sm:py-1.5 border rounded-md font-rale text-[15px] focus:border-blue-600 focus:outline-none"
+           className="w-full px-4 py-2 sm:py-1.5 text-[#000] border rounded-md font-rale text-[15px] focus:border-blue-600 focus:outline-none"
            initial={{ borderColor: "#ccc" }}
            whileFocus={{ borderColor: "#00BFFF", scale: 1.05 }}
            transition={{ duration: 0.2 }}
@@ -132,7 +132,7 @@ function HomePage() {
           <motion.input
            type="text"
            placeholder="Education"
-           className="w-full px-4 py-2 sm:py-1.5 border rounded-md font-rale text-[15px] focus:border-blue-600 focus:outline-none"
+           className="w-full px-4 py-2 sm:py-1.5 text-[#000] border rounded-md font-rale text-[15px] focus:border-blue-600 focus:outline-none"
            initial={{ borderColor: "#ccc" }}
            whileFocus={{ borderColor: "#00BFFF", scale: 1.05 }}
            transition={{ duration: 0.2 }}
@@ -141,7 +141,7 @@ function HomePage() {
           <motion.input
            type="text"
            placeholder="Interested Course"
-           className="w-full px-4 py-2 sm:py-1.5 border rounded-md font-rale text-[15px] focus:border-blue-600 focus:outline-none"
+           className="w-full px-4 py-2 sm:py-1.5 text-[#000] border rounded-md font-rale text-[15px] focus:border-blue-600 focus:outline-none"
            initial={{ borderColor: "#ccc" }}
            whileFocus={{ borderColor: "#00BFFF", scale: 1.05 }}
            transition={{ duration: 0.2 }}
@@ -161,11 +161,11 @@ function HomePage() {
          </motion.button>
 
        </form>
-      </div>
+        </div>
 
     
 
-  </div>
+      </div>
 
 
       {/* Skill Boxes */} 
@@ -200,7 +200,7 @@ function HomePage() {
      
       
       {/* Banner Section */} 
-    <div className= " w-[74%] sm:w-[80%] md:w-[700px] md:h-[220px] lg:w-[900px] lg:h-[254px]  mb-20 mt-20 bg-[#DF1C25] text-white md:p-10 rounded-lg flex flex-col md:flex-row p-2 md:items-center justify-between relative">
+    <div className= " w-[74%] sm:w-[80%] md:w-[700px] md:h-[220px] lg:w-[880px] lg:h-[254px]  mb-20 mt-20 bg-[#DF1C25] text-white md:p-10 rounded-lg flex flex-col md:flex-row p-2 md:items-center justify-between relative">
       
       <div className=" w-[50%] md:w-1/2">
         <h2 className="text-[8px] sm:text-[14px] mb-1 md:text-md lg:text-3xl font-bold ">
@@ -232,7 +232,7 @@ function HomePage() {
         <img
           src={banner_girl}
           alt="Membership"
-          className="w-[181px] -mt-6 ml-[20%] sm:mt-[-83px] sm:w-[213px] sm:h-[200px] md:w-[270px] md:h-[313px] md:mt-0 lg:w-[400px] lg:h-[350px] lg:ml-32 md:ml-28 sm:object-cover "
+          className="w-[181px] -mt-6 ml-[20%] sm:mt-[-83px] sm:w-[213px] sm:h-[200px] md:w-[270px] md:h-[313px] md:mt-0 lg:w-[380px] lg:h-[350px] lg:ml-32 md:ml-28 sm:object-cover "
         />
       </div>
     </div> 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import user from '../../assets/user_icon2.png' ;
 import live from '../../assets/liveTv.png' ;
 // import clock from '../../assets/language2.png' ;
@@ -12,6 +12,7 @@ import CourseCardSkeleton from '../../components/skeletons/CourseCardSkeleton';
 
 export default function Carousal() {
   
+  const carouselRef = useRef(null) ;
   const dispatch = useDispatch() ; 
 
   // otherwise it is called again and again
@@ -56,7 +57,7 @@ export default function Carousal() {
       {/* Tab Menu */}
       
       {/* <div className="flex w-auto gap-4 lg:ml-[15%] space-x-1 mb-10 overflow-x-auto carousel  scroll-snap-x scroll-smooth"> */}
-      <div className="flex w-auto gap-4 space-x-1 mb-[-17.5px] overflow-x-auto carousel  scroll-snap-x scroll-smooth ">
+      <div className="flex w-auto gap-4 space-x-1 mb-[-17.5px] overflow-x-auto carousel  scroll-snap-x scroll-smooth lg:ml-3 ">
         {categories.map((tab) => (
           tab.courses.length > 0 && <button
             key={tab._id}
@@ -80,16 +81,16 @@ export default function Carousal() {
         
         
       </div>
-      {/* <hr style={{backgroundColor:"#36454F", marginTop:"-40px", height:"1px",}}
-          className='lg:w-[70%] lg:ml-[15%]'
-      />  */}
+    
       <hr style={{backgroundColor:"#36454F", height:"1px", position:"relative"}}
-          className='w-[90vw] sm:w-[650px] md:w-[620px] lg:w-[900px] inline-block'
+          className='w-[90vw] sm:w-[650px] md:w-[620px] lg:w-[900px] lg:ml-3 inline-block'
       /> <span className='text-[#0766C6] ml-1 text-nowrap'>View More</span>
 
        {/* Scrollable Course Cards, coursesAll */}
-       { coursesAll ? (
-       <div className='space-x-2 carousel w-[90vw] sm:w-[650px] md:w-[700px] lg:w-[920px] items-center  mt-4 mb-2'>
+       { coursesAll ? ( 
+        
+       <div ref={carouselRef}
+       className='space-x-2 carousel w-[90vw] sm:w-[650px] md:w-[700px] lg:w-[920px] items-center  mt-4 mb-2'>
         
           {coursesAll?.map((course, index) => (
             
@@ -135,12 +136,31 @@ export default function Carousal() {
             </div>
             </Link>
           ))}
-       
+        
       </div> ) : (
         <CourseCardSkeleton/>
       )}
       
-      
+      {/* navigation buttons */}
+       <div className='flex flex-row item-center justify-between w-[90vw] sm:w-[650px] md:w-[700px] lg:w-[1010px] mt-8'>
+          
+          {/* backward */}
+          <div
+          onClick={() => carouselRef.current.scrollBy({ left: -300, behavior: 'smooth' })}
+          className=" z-10 w-[50px] h-[50px] bg-[#FFFFFF] text-[#5F6368] text-[24px] rounded-full shadow-custom flex items-center justify-center cursor-pointer "
+        >
+           &#x2190;
+        </div>
+
+        {/* forward */}
+        <div
+          onClick={() => carouselRef.current.scrollBy({ left: 300, behavior: 'smooth' })}
+          className="z-10 w-[50px] h-[50px] bg-[#FFFFFF] text-[#5F6368] text-[24px] rounded-full shadow-custom flex items-center justify-center cursor-pointer "
+        >
+           &#x2192;
+        </div>
+
+      </div> 
     </div>
   );
 }

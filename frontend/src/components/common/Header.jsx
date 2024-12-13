@@ -39,16 +39,17 @@ function Header() {
         <div className="flex flex-row ">
             
             {/* Search bar */}
-               <div className="hidden md:block relative w-auto rounded-[10px]">
-             <span className="absolute inset-y-0 left-3 flex items-center">
-             <MagnifyingGlassIcon className="h-5 w-5 text-[#787486]" />
-             </span>
+            <div className="hidden md:block relative rounded-[10px] w-auto">
+              
+              <span className="absolute inset-y-0 left-3 flex items-center">
+              <MagnifyingGlassIcon className="h-5 w-5 text-[#787486]" />
+              </span>
       
-             <input
-              type="text"
-              placeholder="search for anything"
-              className="w-auto mt-5 pl-10 pr-4 py-2 border border-[#DBDBDB] rounded-md focus:outline-none focus:border-blue-500 bg-[#F5F5F5] text-[#787486] font-sans font-normal text-[14px]"           
-             />
+              <input
+               type="text"
+               placeholder="search for anything..."
+               className="w-[300px] mt-5 pl-10 pr-4 py-2 border border-[#DBDBDB] rounded-md focus:outline-none focus:border-blue-500 bg-[#F5F5F5] text-[#787486] font-sans font-normal text-[14px]"           
+              />
 
             </div>
          
@@ -83,17 +84,17 @@ function Header() {
                  <input
                    type="text"
                    placeholder="Type to search"
-                   className="w-auto mt-5 pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 bg-[#f1f2f5] text-[#707070] font-sans"
+                   className="w-auto mt-5 pl-10 pr-4 py-2 border border-[#DBDBDB] rounded-md focus:outline-none focus:border-blue-500 bg-[#F5F5F5] text-[#787486] font-sans font-normal text-[14px]"           
                  />
               </div>
 
                 {/* Learning */}
-              <button className="text-blue-600 font-sans mt-4 mb-4">Learning</button>
+              <button className=" text-[#0766C6] font-sans font-bold mt-4 mb-4">Learning</button>
                {/* Admin Panel */}
                {
                token && user === "SUPERADMIN" && (
                 <Link to={`/${user.toLowerCase()}/dashboard`}>
-                   <button className=" text-blue-600 font-sans mt-0 mb-1 ml-2">
+                   <button className="text-[#0766C6] font-sans font-bold mt-0 mb-1 ml-2">
                     Admin Panel
                    </button>
                 </Link>
