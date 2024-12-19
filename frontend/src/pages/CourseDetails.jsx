@@ -23,6 +23,7 @@ const CourseDetails = () => {
   const subtitle = courseDetail?.courseDetails?.course?.courseSubTitle ;
   const brochure = courseDetail?.courseDetails?.course?.brochure ;
   const courseDesciption = courseDetail?.courseDetails?.course?.courseDescription ;
+  const thumbnail = courseDetail?.courseDetails?.course?.thumbnail ;
   //console.log(courseDesciption.toString()) ;
   const keyPoints = courseDetail?.courseDetails.course?.keyPoints ;
 
@@ -65,7 +66,7 @@ const CourseDetails = () => {
         <h1 className="text-gray-600 font-medium pt-1 pl-3">{title}</h1>
       </div>
       <div className="  mt-5 max-w-5xl mx-auto flex space-x-40">
-        <div className="w-[500px]">
+        <div className="w-[560px]">
         <h1 className="text-3xl font-bold">{title}</h1>
         <h2 className="mt-1.5 font-semibold">{subtitle}</h2>
         <ul className="mt-10">
@@ -83,12 +84,12 @@ const CourseDetails = () => {
         </div>
         
         <div>
-            <img src={coder} alt="coding" className="h-[200px] rounded-lg mr-1 "/>
+            <img src={thumbnail} alt="coding" className="h-[200px] rounded-lg "/>
         </div>
       </div>
       </div>
       <div className="mt-10 max-w-5xl mx-auto flex space-x-10 mb-10">
-        <div className="w-[560px]">
+        <div className="w-[620px]">
         <h1 className="font-bold">Explore Our Immersive {title} Bootcamp</h1>
         {/* <p>{courseDesciption}</p> */}
         <div

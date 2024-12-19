@@ -123,7 +123,7 @@ function HomePage() {
           <motion.input
            type="number"
            placeholder="Mobile No"
-           className="w-full px-4 py-2 sm:py-1.5 text-[#000] border rounded-md font-rale text-[15px] focus:border-blue-600 focus:outline-none"
+           className=" appearance-none w-full px-4 py-2 sm:py-1.5 text-[#000] border rounded-md font-rale text-[15px]  focus:border-blue-600 focus:outline-none "
            initial={{ borderColor: "#ccc" }}
            whileFocus={{ borderColor: "#00BFFF", scale: 1.05 }}
            transition={{ duration: 0.2 }}
