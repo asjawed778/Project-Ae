@@ -3,45 +3,67 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { addCourse, getAllCategory } from '../../../services/operations/addCourses';
+//spinner 
+import ClipLoader from "react-spinners/ClipLoader";
+import toast from 'react-hot-toast';
+import { logoutUser } from '../../../services/operations/authApi';
+
 
 function AddCourse() {
   
   const dispatch = useDispatch() ;
   const categories = useSelector( (state) => state.categories.categories ); 
+  const loading = useSelector((state) => state.loading.loading) ;
+  
 
   // States
 
+  //course title and subtitle
   const [courseTitle, setCourseTitle] = useState('') ;
   const [courseSubTitle, setCourseSubTitle] = useState('') ;
+
+  //keypoints and tags
   const [keyPoints, setKeyPoints] = useState([]) ;
   const [tags, setTags] = useState([]) ;
+  const [keyPointInput, setKeyPointInput] = useState("");
+  const [tagInput, setTagInput] = useState("");
+
   //course description
   const [value, setValue] = useState('');
   const [courseMode, setCourseMode] = useState('');
   const [courseLanguage, setCourseLanguage] = useState('');
   const [brochure, setBrochure] = useState(null);
+  const [error, setError] = useState(null) ;
   const [selectedImage, setSelectedImage] = useState(null);
-  //category string
   const [selectedCategories, setSelectedCategory] = useState("");
+
+  //course content 
   const [coursecontent, setCourseContent] = useState([]);
   const [savedContent, setSavedContent] = useState([]);
 
-  
+ 
+  const isFormValid = 
+   courseTitle && 
+   courseSubTitle && 
+   keyPoints && 
+   tags && 
+   value && 
+   courseMode && 
+   courseLanguage && 
+   brochure && 
+   selectedImage && 
+   selectedCategories ;
+
   // Fetch categories on component mount
   useEffect(() => {
       dispatch(getAllCategory());
   }, [dispatch]);
 
-  
+   
   // Handle selecting a category
    const handleSelectCategory = (e) => {
     const selectedCategoryId = e.target.value; // Get selected category ID
     setSelectedCategory(selectedCategoryId); // Save it directly as a string
-  };
-
-  // Remove a selected category
-  const removeCategory = (category) => {
-    setSelectedCategory(selectedCategories.filter((cat) => cat !== category));
   };
 
   // Handle onChange for ReactQuill editor
@@ -58,8 +80,30 @@ function AddCourse() {
   // Handle brochure upload
   const handleBrochureUpload = (e) => {
     const file = e.target.files[0];
-    if (file) setBrochure(file);
+
+    const maxFileSize = 5 * 1024 * 1024  ;
+
+    if( file ) {
+
+      //check file type
+      if( file.type !== "application/pdf" ) {
+        setError("Please upload a valid PDF file") ;
+        setBrochure(null) ;
+        return ;
+      }
+    
+
+      if( file.size > maxFileSize ) {
+       setError("File size should not exceed 5MB") ;
+       setBrochure(null) ;
+       return ;
+      }
+
+      setBrochure(file); 
+      setError(null) ;
+  }
   };
+
 
   //course content 
 
@@ -67,7 +111,7 @@ function AddCourse() {
   const addTopic = () => {
     setCourseContent([
       ...coursecontent,
-      { topicName: '', subtopics: [{ title: '', description: '' }] },
+      { topicName: '', subTopic: [{ title: '', description: '' }] },
     ]);
   };
 
@@ -81,21 +125,21 @@ function AddCourse() {
     // Handle adding a new subtopic
   const addSubtopic = (topicIndex) => {
       const updatedContent = [...coursecontent];
-      updatedContent[topicIndex].subtopics.push({ title: '', description: '' });
+      updatedContent[topicIndex].subTopic.push({ title: '', description: '' });
       setCourseContent(updatedContent);
   };
 
    // Handle subtopic title and description change
    const handleSubtopicChange = (topicIndex, subtopicIndex, field, value) => {
     const updatedContent = [...coursecontent];
-    updatedContent[topicIndex].subtopics[subtopicIndex][field] = value;
+    updatedContent[topicIndex].subTopic[subtopicIndex][field] = value;
     setCourseContent(updatedContent);
   };
 
   // Handle removing a subtopic
   const removeSubtopic = (topicIndex, subtopicIndex) => {
     const updatedContent = [...coursecontent];
-    updatedContent[topicIndex].subtopics.splice(subtopicIndex, 1);
+    updatedContent[topicIndex].subTopic.splice(subtopicIndex, 1);
     setCourseContent(updatedContent);
   };
 
@@ -116,8 +160,14 @@ function AddCourse() {
   // form submit
 
   const handleSubmit = async () => {
-
+     
+   
+    if( !isFormValid ) return ;
     // Create a FormData object
+    
+    try {
+
+    await new Promise(resolve => setTimeout(resolve, 2000)); 
     const formData = new FormData();
   
     // Append regular fields
@@ -128,10 +178,8 @@ function AddCourse() {
     formData.append("courseLanguage", courseLanguage);
     formData.append("category", selectedCategories); // Assuming this is a single category ID
   
-    // Append array fields
-    const keyPoints = ["Point 1", "Point 2"];
-    const tags = ["React", "Node"];
-
+    console.log("keyPoints",keyPoints) ;
+    console.log("tags", tags) ;
     keyPoints.forEach((keyPoint) => formData.append("keyPoints", keyPoint));
     tags.forEach((tag) => formData.append("tags", tag));
   
@@ -144,13 +192,20 @@ function AddCourse() {
     }
   
     
-  // Append the courseContent object
+   // Append the courseContent object
    // 1. Change courseContent to string  2. Send as key value pair  3.Parse it on server  
-  formData.append("courseContent",JSON.stringify(coursecontent)) ;
+   formData.append("courseContent",JSON.stringify(savedContent)) ;
+
+   dispatch(addCourse(formData, resetForm)); 
+   
+
+  } catch(error) {
+    toast.error("Submission error") ;
+    console.log("Submission Error",error) ;
+
     
-  
-  // Dispatch or send the FormData
-  dispatch(addCourse(formData, resetForm));
+  } 
+   
 
   };
   
@@ -169,82 +224,188 @@ function AddCourse() {
     setSelectedCategory("");
     setCourseContent([]);
     setSavedContent([]) ;
+   
   };
   
-  const handleTagChange = (e) => {
-    const newTag = e.target.value;
-    if (newTag.trim()) {
-      setTags((prevTags) => [...prevTags, newTag]); // Add new tag to the array
-    }
-  };
 
-  const handleKeyChange = (e) => {
-    const newTag = e.target.value;
-    if (newTag.trim()) {
-      setKeyPoints((prevTags) => [...prevTags, newTag]); // Add new tag to the array
+   // Add a key point
+   const addKeyPoint = () => {
+    if (keyPointInput.trim() !== "") {
+        setKeyPoints([...keyPoints, keyPointInput.trim()]);
+        setKeyPointInput("");
     }
+  }; 
+
+  const handleKeyPoints = (e) => {
+    if( e.key === "Enter" ) {
+      addKeyPoint();
+    }
+  }
+
+   // Add a tag
+   const addTag = () => {
+    if (tagInput.trim() !== "") {
+        setTags([...tags, tagInput.trim()]);
+        setTagInput("");
+    }
+  }; 
+
+  const handleTag = (e) => {
+    if( e.key === "Enter" ) {
+      addTag();
+    }
+  }
+
+   // Remove a key point
+   const removeKeyPoint = (index) => {
+    const updatedKeyPoints = keyPoints.filter((_, i) => i !== index);
+    setKeyPoints(updatedKeyPoints);
+};
+
+  // Remove a tag
+  const removeTag = (index) => {
+    const updatedTags = tags.filter((_, i) => i !== index);
+    setTags(updatedTags);
   };
+  
+  //logout
+  function handleClick() {
+    dispatch(logoutUser()) ;
+  }
 
   return (
-    <div className="p-5 space-y-5 w-full">
+    <div className=" space-y-5 max-w-[900px] mx-auto">
+     
+     { loading && (
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+          <span className="loading loading-spinner loading-lg"></span>
+        </div>
+      )}
+     
+      {/* Button Container */}
+    <div className="flex">
+      <button 
+        onClick={() => handleClick()}
+        className="ml-auto shadow-sm px-3 py-2 rounded-md bg-white hover:bg-slate-500 hover:text-white">
+      Logout
+     </button>
+    </div>
       {/* Upper Section */}
 
-      <div className="grid lg:grid-cols-2 gap-5">
+      {/* <div className="grid lg:grid-cols-2 gap-5"> */}
 
         {/* Left Section */}
-        <div className="space-y-4 bg-white p-5 shadow-md rounded-md w-full">
+        <div className="space-y-4 bg-white p-5 shadow-md rounded-md">
           
           {/* Title, Subtitle, Tag , Key Points and Brochure Upload */}
           <div>
-            <label className="block text-black font-sans text-xl">Title</label>
+            <label className="block text-md font-medium text-gray-700">Title</label>
             <input
               type="text"
               value={courseTitle}
               onChange={(e) => setCourseTitle(e.target.value)}
-              className="w-full border-b border-gray-300 p-1 focus:outline-none focus:border-blue-500 text-gray-700 font-medium text-sm"
+              className=" mt-1 w-full border-b border-gray-300 p-1 focus:outline-none focus:border-blue-500 text-gray-700 font-sm text-sm"
             />
+           
           </div>
           
           <div>
-            <label className="block text-black font-sans text-xl">Subtitle</label>
+            <label className="block text-md font-medium text-gray-700">Subtitle</label>
             <input
               type="text"
               value={courseSubTitle}
               onChange={(e) => setCourseSubTitle(e.target.value)}
-              className="w-full border-b border-gray-300 p-2 focus:outline-none focus:border-blue-500  text-gray-700"
+              className=" mt-1 w-full border-b border-gray-300 p-1 focus:outline-none focus:border-blue-500  text-gray-700 font-sm text-sm"
             />
           </div>
           
-          <div className='flex flex-row justify-between'>
+          {/* <div className='flex flex-row justify-between'> */}
 
+          {/* key Points */}
+           <div>
+
+                {/* input */}
+
+                <h3 className='block text-md font-medium text-gray-700'>Key Points</h3>
+                <input
+                    type="text"
+                    value={keyPointInput}
+                    onChange={(e) => setKeyPointInput(e.target.value)}
+                    onKeyDown={handleKeyPoints}
+                    className=" mt-1 w-full border-b border-gray-300 p-1 focus:outline-none  text-gray-700 font-sm text-sm "
+                />
+
+                {/* add button */}
+
+                <button onClick={addKeyPoint} 
+                  className='text-blue-600 font-sans text-sm'
+                >+Add Key</button>
+
+                {/* display key Points */} 
+
+                <ul className='flex flex-row flex-wrap gap-2'>
+                    {keyPoints.map((keyPoint, index) => (
+                        <li key={index} className='text-sm text-blue-600 border border-gray-600 w-max rounded-lg p-1'>
+                            {keyPoint}{" "}
+                            <button onClick={() => removeKeyPoint(index)}
+                              className='text-black'  
+                            >X</button>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+
+          {/* Tags */}
+            <div>
+
+                 {/* input */}
+
+                <h3 className='block text-md font-medium text-gray-700'>Tags</h3>
+                <input
+                    type="text"
+                    value={tagInput}
+                    onChange={(e) => setTagInput(e.target.value)}
+                    onKeyDown={handleTag}
+                    className=" mt-1 w-full border-b border-gray-300 p-1 focus:outline-none  text-gray-700 font-sm text-sm"
+                />
+
+                {/* add button */} 
+
+                <button onClick={addTag}
+                   className='text-blue-600 font-sans text-sm'
+                >+Add Tag</button>
+
+                {/* display */} 
+
+                <ul className='flex flex-row flex-wrap gap-2'>
+                    {tags.map((tag, index) => (
+                        <li key={index} className='text-sm text-blue-600 border border-gray-600 w-max rounded-lg p-1'>
+                            {tag}{" "}
+                            <button onClick={() => removeTag(index)}
+                             className='text-black'  
+                            >X</button>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+
+          {/* </div> */}
+         
+         {/* Brochure file upload */}
           <div>
-            <label className="block text-black font-sans text-xl">Tag</label>
-            <input
-              type="text"
-              onBlur={handleTagChange}
-              className="w-full border-b border-gray-300 p-1 focus:outline-none focus:border-blue-500 text-gray-700"
-            />
-          </div>
-
-          <div>
-            <label className="block text-black font-sans text-xl">Key Points</label>
-            <input
-              type="text"
-              onBlur={handleKeyChange}
-              className="w-full border-b border-gray-300 p-1 focus:outline-none focus:border-blue-500 text-gray-700"
-            />
-          </div>
-
-          </div>
-
-          <div>
-            <label className="block text-black font-sans ">Add Brochure</label>
+            <label className='block text-md font-medium text-gray-700 '>Add Brochure</label>
             <input
               type="file"
               className="w-full"
               onChange={handleBrochureUpload}
             />
             {brochure && <p className="text-sm text-green-600 mt-1">Uploaded: {brochure.name}</p>}
+            {error && (
+              <p className="text-sm text-red-600 mt-1">
+              {error}
+              </p>
+            )}
+            
           </div>
 
         </div>
@@ -254,10 +415,10 @@ function AddCourse() {
           
           {/* Course Mode */}
           <div className='flex flex-row justify-between mb-4'>
-          <div className='w-[25%] shadow-md'>
+          <div className=' shadow-md'>
             
             <select
-              className="w-full border-gray-300 p-2 focus:outline-none rounded"
+              className="w-full border-gray-300 p-2 focus:outline-none rounded block text-md font-medium text-gray-700"
               value={courseMode}
               onChange={(e) => setCourseMode(e.target.value)}
             >
@@ -274,7 +435,7 @@ function AddCourse() {
           <div className='shadow-md'>
            
             <select
-              className="w-full  border-gray-300 p-2 focus:outline-none rounded, "
+              className="w-full  border-gray-300 p-2 focus:outline-none rounded block text-md font-medium text-gray-700"
               value={courseLanguage}
               onChange={(e) => setCourseLanguage(e.target.value)}
             >
@@ -292,12 +453,12 @@ function AddCourse() {
           <div className='shadow-md mb-4'>
             
           <select
-           className="w-full border-gray-300 p-2 focus:outline-none rounded mb-2"
+           className="w-full border-gray-300 p-2 focus:outline-none rounded mb-2 block text-md font-medium text-gray-700"
            onChange={handleSelectCategory}
            value={selectedCategories} // Bind to the state
            >
             <option value="">Select Category</option>
-             {categories.map((category) => (
+             {categories?.map((category) => (
                <option key={category._id} value={category._id}>
                {category.categoryName}
             </option>
@@ -324,20 +485,20 @@ function AddCourse() {
             <input
               id="image-upload"
               type="file"
-              accept="image/*"
+              accept=".jpg, .jpeg, .png"
               className="hidden"
               onChange={handleImageUpload}
             />
           </label>
         </div>
 
-      </div>
+      {/* </div> */}
       
       {/* Lower Section [ Course Content, React Editor ]*/}
 
       <div className="bg-white p-5 shadow-md rounded-md space-y-4">
-        <h3 className="text-xl font-sans text-black">Course Content</h3>
-        {coursecontent.map((topic, topicIndex) => (
+        <h3 className="font-sans block text-md font-medium text-gray-700">Course Content</h3>
+        {coursecontent?.map((topic, topicIndex) => (
           <div key={topicIndex} className="space-y-3 border-b pb-4">
             {/* Topic Name */}
             <div className="flex items-center space-x-3">
@@ -346,7 +507,7 @@ function AddCourse() {
                 placeholder="Topic Name"
                 value={topic.topicName}
                 onChange={(e) => handleTopicChange(topicIndex, e.target.value)}
-                className="w-full border-b border-gray-300 p-2 focus:outline-none focus:border-blue-500  text-gray-400"
+                className="w-full border-b border-gray-300 p-2 focus:outline-none focus:border-blue-500 text-gray-700 font-sm text-sm"
               />
               <button
                 className="text-red-500"
@@ -357,7 +518,7 @@ function AddCourse() {
             </div>
 
             {/* Subtopics */}
-            {topic.subtopics.map((subtopic, subtopicIndex) => (
+            {topic?.subTopic?.map((subtopic, subtopicIndex) => (
               <div key={subtopicIndex} className="pl-4 space-y-2">
                 <input
                   type="text"
@@ -366,7 +527,7 @@ function AddCourse() {
                   onChange={(e) =>
                     handleSubtopicChange(topicIndex, subtopicIndex, 'title', e.target.value)
                   }
-                  className="w-full border-b border-gray-300 p-1 focus:outline-none focus:border-blue-500  text-gray-400"
+                  className="w-full border-b border-gray-300 p-1 focus:outline-none focus:border-blue-500  text-gray-700 font-sm text-sm"
                 />
                 <textarea
                   placeholder="Subtopic Description"
@@ -374,7 +535,7 @@ function AddCourse() {
                   onChange={(e) =>
                     handleSubtopicChange(topicIndex, subtopicIndex, 'description', e.target.value)
                   }
-                  className="w-full border border-gray-300 p-2 focus:outline-none focus:border-blue-500"
+                  className="w-full border border-gray-300 p-2 focus:outline-none focus:border-blue-500 text-gray-700 font-sm text-sm"
                 />
                 <button
                   className="text-red-500 text-sm"
@@ -404,12 +565,12 @@ function AddCourse() {
         </button>
         
          {/* Save Content Button */}
-         {coursecontent.length > 0 && (
+         {coursecontent?.length > 0 && (
           <button
-            className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+            className="bg-blue-500 text-white px-4 py-2 rounded mt-4 ml-3"
             onClick={saveContent}
           >
-            Save Course Content
+            Save
           </button>
         )}
 
@@ -422,7 +583,7 @@ function AddCourse() {
           {savedContent.map((topic, topicIndex) => (
             <div key={topicIndex} className="space-y-2 border-b pb-4">
               <h4 className="font-medium text-gray-600">{topic.topicName}</h4>
-              {topic.subtopics.map((subtopic, subtopicIndex) => (
+              {topic.subTopic.map((subtopic, subtopicIndex) => (
                 <div key={subtopicIndex} className="pl-4">
                   <p className="font-medium text-gray-500">- {subtopic.title}</p>
                   <p className="text-gray-500">{subtopic.description}</p>
@@ -434,22 +595,34 @@ function AddCourse() {
       )}
 
       {/* Rich Text Editor */}
+      
+      <div className="bg-white shadow-md h-[242px]">
       <ReactQuill
         theme="snow"
         value={value}
         onChange={handleOnChange}
-        className="lg:h-[30vh] mb-10"
+        style={{ height: "200px" }} // Inline styles
+        
       />
+      </div>
+     
       
       {/* Submit Button */}
       <div>
         <button
           onClick={handleSubmit}
-          className="bg-blue-500 text-white px-4 py-2 rounded mt-10"
+          disabled={!isFormValid || loading}
+          //className="bg-blue-500 text-white px-4 py-2 rounded mt-10"
+          className={`mt-1 px-4 py-2 text-white font-semibold rounded ${
+            isFormValid && !loading
+              ? "bg-blue-500 hover:bg-blue-600"
+              : "bg-gray-400 cursor-not-allowed"
+          }`}
         >
           Submit
         </button>
-      </div>
+        </div>
+        
       
 
     </div>

@@ -3,34 +3,43 @@ import { apiConnector } from "../apiConnector";
 import { addCourseEndpoints } from "../apis";  
 import { setLoading } from "../../redux/slices/loadingSlice";
 import { setCategories } from "../../redux/slices/adminCategorySlice";
-import { setCourses } from "../../redux/slices/coursesSlice";
+import { setCourses, setCoursesNull } from "../../redux/slices/coursesSlice";
+import { setCourseDetails } from "../../redux/slices/courseDetails";
+import Cookies from "js-cookie" ;
 
 const { 
 
+    ADD_CATEGORY ,
+    EDIT_CATEGORY,
     GET_ALL_CATEGORY,
     ADD_COURSES ,
     GET_ALL_COURSES ,
     GET_COURSE_BY_CATEGORY ,
     GET_FULL_COURSE_DETAILS , 
-    ADD_CATEGORY ,
+    
 
 } = addCourseEndpoints ;
 
 
 export function addCategory(data) {
     return async (dispatch, getState) => {
-      
+        
+        dispatch(setLoading(true)) ;
+        const token = Cookies.get("token") ;
+
         try{
 
            const response = await apiConnector(
              "POST" ,
              ADD_CATEGORY ,
-             data
+             data ,
+             {
+                'Authorization': `Bearer ${token}`  // Send token in Authorization header
+             }
            )
            
            if( !response.data.success ) {
               throw new Error(response.data.message);
-              console.log(response.error.message) ;
            }
            
             toast.success("Successful") ; 
@@ -45,7 +54,11 @@ export function addCategory(data) {
                 toast.error("Conflict: Same name exists") ;
             } else if( error.response.status === 500 ) {
                 toast.error("Internal Server Error");
-            }
+            } else {
+                toast.error(error.response.data.message) ;
+            } 
+            
+            console.log("something is wrong",error) ;
 
         } finally {
             dispatch(setLoading(false)) ;
@@ -53,6 +66,48 @@ export function addCategory(data) {
     }
 }
 
+export function editCategories(data, id) {
+    return async (dispatch, getState) => {
+        
+        dispatch(setLoading(true)) ;
+        const token = Cookies.get("token") ;
+        try{
+
+           const response = await apiConnector(
+             "PUT" ,
+             EDIT_CATEGORY(id) ,
+             data ,
+             {
+                'Authorization': `Bearer ${token}`  // Send token in Authorization header
+             }
+           )
+           
+           if( !response.data.success ) {
+              throw new Error(response.data.message);
+           }
+            dispatch(getAllCategory()) ;
+            toast.success("Successful") ; 
+
+        } catch(error) {
+            
+            if( error.response.status === 400 ) {
+                toast.error("Missing required fields or invalid categoryId.")
+            } else if( error.response.status === 403 ) {
+                toast.error("Unauthorized access") ;
+            } else if( error.response.status === 404 ) {
+                toast.error("Category not found") ;
+            } else if( error.response.status === 500 ) {
+                toast.error("Internal Server Error");
+            } else {
+                toast.error(error.response.data.message) ;
+            }
+            
+        } finally {
+            dispatch(setLoading(false)) ;
+        }
+    }
+
+}
 
 export function getAllCategory() {
   return async(dispatch, getState) => {
@@ -65,7 +120,6 @@ export function getAllCategory() {
 
       if( !response.data.success ) {
         throw new Error(response.data.message);
-        console.log(response.error.message) ;
       }
       
       //console.log("Success", response.data);
@@ -89,37 +143,43 @@ export function getAllCategory() {
 
 export function addCourse(payload, resetForm) {
     return async(dispatch, getState) => {
-        console.log("Form", payload) ;
         
+        dispatch(setLoading(true)) ;
+        const token = Cookies.get("token") ;
+        console.log("token in add course", token) ;
         try{
             const response = await apiConnector(
                 "POST", 
                 ADD_COURSES,
-                payload
+                payload,
+                {
+                    'Authorization': `Bearer ${token}`  // Send token in Authorization header
+                }
             )
 
             if( !response.data.success ) {
                 throw new Error(response.data.message);
-                console.log(response.error.message) ;
             }
 
-            toast.success(response.data.success) ;
+            toast.success("Course Added") ;
             console.log("Success man, successfull")
             resetForm() ;
 
         } catch(error) {
             
             if( error.response && error.response.status === 400 ) {
-                toast.error(" Bad Request  Validation errors such as missing required fields or invalid file formats.");
+                toast.error(" Bad Request Validation errors such as missing required fields or invalid file formats.");
             } else if(error.response && error.response.status === 404){
                 toast.error(" Category not found ")
             }else if(error.response && error.response.status === 415){
                 toast.error(" Unsupported Media Type ")
             }else if(error.response && error.response.status === 500){
                 toast.error("Internal Server Error")
-            } 
+            }else if( error.response && error.response.status === 403 ){
+                toast.error("You don't have access") ;
+            }
 
-            console.log(error.response) ;
+            console.log(error) ;
 
         } finally {
             dispatch(setLoading(false)) ;
@@ -139,7 +199,6 @@ export function getAllCourses() {
 
             if( !response.data.success ) {
                 throw new Error(response.data.message);
-                console.log(response.error.message) ;
               }
               
             console.log("Success courses", response);
@@ -160,6 +219,7 @@ export function getAllCourses() {
     }
 }
 
+
 export function getCourseByCategory(id) {
     return async(dispatch, getState) => {
         console.log("id", id)
@@ -171,14 +231,15 @@ export function getCourseByCategory(id) {
         
           if( !response.data.success ) {
             throw new Error(response.data.message);
-            console.log(response.error.message) ;
+            
           }
           console.log(response.data) ;
           dispatch(setCourses(response.data)) ;
-
+          
         } catch(error) {
           if( error.response && error.response.status === 404 ) {
              toast.error("No course found") ;
+             dispatch(setCourses([])) ;
           } else if( error.response && error.response.status === 500 ) {
              toast.error("Internal Server Error") ;
           }
@@ -188,3 +249,35 @@ export function getCourseByCategory(id) {
     }
   
 }
+
+
+export function getCourseDetails(id) {
+    return async(dispatch, getState) => {
+      
+      try{
+        const response = await apiConnector(
+          "GET" ,
+          GET_FULL_COURSE_DETAILS(id)
+        )
+  
+        if( !response.data.success ) {
+          throw new Error(response.data.message);
+          
+        }
+        
+        dispatch(setCourseDetails(response.data)) ;
+        
+  
+      } catch( error ) {
+          
+          if( error.response && error.response.status === 404 ) {
+              toast.error("Page not found");
+          } 
+          console.log("categories error",error) ;
+  
+      } finally {
+          dispatch(setLoading(false)) ;
+      } 
+  
+    }
+  }

@@ -4,6 +4,8 @@ import { setLoading } from '../../redux/slices/loadingSlice';
 import { apiConnector } from '../apiConnector';
 import { login, logout } from '../../redux/slices/authSlice';
 import Cookies from "js-cookie" ;
+import { useNavigate } from 'react-router-dom';
+
 
 // Endpoints for user Auth methods
 const {
@@ -35,7 +37,7 @@ export function sendSignupOTP(signupFormData, setSignupModal, setOtpModal) {
                 toast.error("User Already Registered, Please login");
             }
             if (error.status === 400) {
-                toast.error("Please Enter all details");
+                toast.error("Missing fields or password mismatch");
             }
             if (error.status === 500) {
                 toast.error("Internal Server Error");
@@ -91,7 +93,7 @@ export function logoutUser(navigate) {
 
             dispatch(logout());
             toast.success("Logged out successfully");
-            navigate("/auth");
+            //navigate("/auth");
         } catch (error) {
             // console.log("Error in logging out: ", error);
             toast.error("Error", error);
@@ -102,8 +104,9 @@ export function logoutUser(navigate) {
     }
 }
 
-export function loginUser( userLoginData , navigate ) {
+export function loginUser( userLoginData, resetFormHandler) {
     return async (dispatch) => { 
+        
         dispatch(setLoading(true));
         try {
             const response = await apiConnector("POST", LOGIN_API, userLoginData);
@@ -112,24 +115,29 @@ export function loginUser( userLoginData , navigate ) {
             }
             
             const token = response.data.token;
-            const user = response.data.user;
+            const user = response.data.user.role.roleName;
 
             dispatch(login({ token, user }));
-            console.log("loginUser",response);
-            
-            console.log("token",response.data);
-
-            
+            resetFormHandler() ;
+             
             Cookies.set("token", token, { expires: 7 }); // Token valid for 7 days
-
-            toast.success("User Login successfully");
-            navigate("/");
+            
+            
         } catch (error) {
             console.log("Error in user login: ", error);
            
             if (error.status === 400) {
                 toast.error("Please Enter all details");
+            } 
+            
+            if( error.status === 401) {
+                toast.error("Incorrect Password") ;
             }
+
+            if( error.status === 404 ) {
+                toast.error("User Not Found") ;
+            }
+
             if (error.status === 500) {
                 toast.error("Internal Server Error");
             }

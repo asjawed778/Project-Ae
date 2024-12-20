@@ -1,12 +1,12 @@
 const Category = require('../../models/course/Category');
+const mongoose = require('mongoose');
 
 exports.addCategory = async (req, res, next) => {
     try {
         const { name, description } = req.body;
 
-        // Check if name and description are provided
-        if (!name || !description) {
-            const err = new Error("Please enter Category name and description.");
+        if (!name?.trim() || !description?.trim()) {
+            const err = new Error("Category name and description cannot be empty.");
             err.status = 400;
             return next(err);
         }
@@ -80,17 +80,25 @@ exports.editCategory = async (req, res, next) => {
         }
         const { name, description } = req.body;
 
-        // Check if name and description are provided and not empty
+        // Checking if name and description are provided and not empty
         if (!name?.trim() || !description?.trim()) {
             const err = new Error("Category name and description cannot be empty.");
             err.status = 400;
             return next(err);
         }
 
+        // Checking if the category already exists
+        const existingCategory = await Category.findOne({ categoryName: name });
+        if (existingCategory) {
+            const err = new Error("Category with this name already exists.");
+            err.status = 409;
+            return next(err);
+        }
+
         const category = await Category.findByIdAndUpdate(
             categoryId,
             {
-                name: name.trim(),
+                categoryName: name.trim(),
                 description: description.trim()
             },
             { new: true }
@@ -113,6 +121,7 @@ exports.editCategory = async (req, res, next) => {
         res.status(500).json({
             success: false,
             error: "Internal Server Error",
+            message: error.message
         });
     }
 }

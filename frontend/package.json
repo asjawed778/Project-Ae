@@ -14,6 +14,7 @@
     "axios": "^1.7.7",
     "daisyui": "^4.12.13",
     "dotenv": "^16.4.5",
+    "html-react-parser": "^5.1.19",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
     "motion": "^11.11.17",
@@ -29,6 +30,7 @@
     "react-router-dom": "^6.26.2",
     "react-scripts": "5.0.1",
     "react-slick": "^0.30.2",
+    "react-spinners": "^0.14.1",
     "redux-persist": "^6.0.0",
     "slick-carousel": "^1.8.1",
     "web-vitals": "^2.1.4"

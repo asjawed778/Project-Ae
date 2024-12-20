@@ -8,15 +8,18 @@ import PrivateRoute from './components/core/PrivateRoute';
 import './index.css';
 import Sidebar from './components/common/Sidebar.jsx';
 import UserPost from './components/common/UserPost.jsx';
-import Learning from './pages/home/HomePage.jsx' ;
+import HomePage from './pages/home/HomePage.jsx' ;
 import AdminDashboard from './pages/home/Admin/AdminDashboard.jsx';
 import CourseDetails from './pages/CourseDetails.jsx';
+import AddCourse from './components/common/admin/AddCourse.jsx';
+import Category from './components/common/admin/Category.jsx';
 
 
 
 
 function App() {
 
+  
   const location = useLocation() ;
 
   return (
@@ -33,20 +36,30 @@ function App() {
 
     {/* <div className='flex-1 flex justify-center home-component mr-32' > */}
       <Routes>
-       
-        <Route path='/' element={
-          <PrivateRoute>
-            <Home />
-          </PrivateRoute>
+
+        <Route path='/' element={ 
+            <HomePage/>    
         } />
 
         <Route path='/auth' element={
           <PublicRoute>
-            {/* <AuthPage />  */}
-            <Learning/>
-            {/* <AdminDashboard/> */}
+             <AuthPage />
           </PublicRoute>
+          // <AuthPage/>
+           
         } />
+
+        <Route path='/:id/dashboard/*' element={ 
+          <PrivateRoute requiredRole="SUPERADMIN" >
+             <AdminDashboard/>
+          </PrivateRoute>  
+          //<AdminDashboard/>
+        } > 
+          <Route index element={<AddCourse />} />
+          <Route path="add-course" element={<AddCourse/>} />
+          <Route path="category" element={<Category/>} />
+
+        </Route>
        
         <Route path='/user' element={
           <PrivateRoute>
@@ -54,10 +67,8 @@ function App() {
           </PrivateRoute>
         } />
 
-        <Route path='/course/:id' element={
-          <PublicRoute>
+        <Route path='/course/:id' element={ 
             <CourseDetails/>
-          </PublicRoute>
         } />
 
         <Route path='*' element={<PageNotFound />} />
