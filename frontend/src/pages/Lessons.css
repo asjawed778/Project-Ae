@@ -1,0 +1,64 @@
+.main{
+    padding-left: 45px;
+        background-color: #F4F6FC;
+        height: 359px;
+}
+.b1{
+    background-color:#F4F6FC;
+    text-decoration: none;
+    color: #0766C6;
+    height: 64px;
+    width: 189px;
+    border-radius: 10px 10px 0px 1px ;
+    border: none;
+    padding-left: 10px;
+    font-size: medium;
+    font-weight:400px;
+    text-align: center;
+        padding-top: 16px;
+        
+    }
+   
+
+    .b1:hover{
+        background-color: #0766C6;
+        color: whitesmoke;
+        border: none;
+    }
+    .b3{
+        background-color:#F4F6FC;
+        text-decoration: none;
+        color: #0766C6;
+        height: 64px;
+        width: 189px;
+        border-radius: 10px 10px 0px 1px ;
+        border: none;
+        padding-left: 10px;
+        font-size: medium;
+        font-weight:400px;
+        text-align: center;
+        padding-top: 16px;
+
+        }
+        
+    
+        .b3:hover{
+            background-color: #0766C6;
+            color: whitesmoke;
+            border: none;
+        }
+    .read p {
+        color: #0766C6;
+    }
+    .lesson1{
+        display: flex;
+    }
+    #a1{
+        color: #0766C6;
+    }
+.slot{
+    height: 300px;
+}
+.bm{
+    display: flex;
+}
