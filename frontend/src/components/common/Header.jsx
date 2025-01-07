@@ -11,9 +11,9 @@ function Header() {
     const {token, user} = useSelector((state) => state.auth) ;
 
     return(
-       <header className='shadow-md'>
+       <header className='shadow-md '>
            {/* Header w-full*/}
-       <nav className="bg-white flex flex-row border-gray-200 lg:ml-[10%] md:gap-4 ">
+       <nav className="bg-white flex flex-row border-gray-200 md:gap-4 xl:ml-[130px]">
          
          {/* Logo and Hamburger Icon in small screen and logo else only */}
         <div className="ml-7 mt-4 mb-4 md:mt-0 md:mb-0 flex flex-row items-center justify-between w-full md:justify-normal md:w-auto">
@@ -65,7 +65,7 @@ function Header() {
 
              {/* Learning */}
              <button className=" hidden md:block text-[#0766C6] font-sans font-bold mt-4  md:mt-0  md:ml-10">
-              Blog
+             <Link to="/blog" >Blog</Link>
             </button>
 
              {/* Learning */}
@@ -113,7 +113,7 @@ function Header() {
 
              {/* Blog */}
              <div className=" text-[#0766C6] font-sans font-bold mt-4 mb-4">
-              Blog
+              <Link to="/blog" >Blog</Link>
              </div>
 
              {/* Contact us */}
