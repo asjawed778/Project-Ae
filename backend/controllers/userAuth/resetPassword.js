@@ -89,7 +89,7 @@ exports.verifyForgotPasswordOTP = async (req, res, next) => {
             .is().not().oneOf(['Passw0rd', 'Password123']);
 
 
-        if (!schema.validate(password)) {
+        if (!schema.validate(newPassword)) {
             const err = new Error(
                 "Password must be at least 8 characters long and max 100 char long, contain at least one uppercase letter, one lowercase letter, and one number."
             );
@@ -105,6 +105,7 @@ exports.verifyForgotPasswordOTP = async (req, res, next) => {
             err.status = 401;
             return next(err);
         }
+        
 
         const hashedPassword = await bcrypt.hash(newPassword, 10);
 
