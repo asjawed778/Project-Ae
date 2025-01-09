@@ -3,7 +3,7 @@ import { IoCloseSharp } from "react-icons/io5";
 import { CiImageOn } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
 import { createPost } from "../../services/operations/createPostApi.js";
-import boy from '../boy2.png' ;
+import boy from '../../assets/user_icon2.png' ;
 
 const CreatePost = () => {
 

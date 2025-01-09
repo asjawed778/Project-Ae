@@ -13,6 +13,7 @@ import AdminDashboard from './pages/home/Admin/AdminDashboard.jsx';
 import CourseDetails from './pages/CourseDetails.jsx';
 import AddCourse from './components/common/admin/AddCourse.jsx';
 import Category from './components/common/admin/Category.jsx';
+import Blog from './pages/home/Blog.jsx';
 
 
 
@@ -39,6 +40,10 @@ function App() {
 
         <Route path='/' element={ 
             <HomePage/>    
+        } />
+
+        <Route path='/blog' element={ 
+            <Blog/>    
         } />
 
         <Route path='/auth' element={
