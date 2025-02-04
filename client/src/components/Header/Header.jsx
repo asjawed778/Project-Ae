@@ -1,7 +1,9 @@
+import logo from "../../../public/logo.svg";
 import bar from "../../../public/imgs/slider/Hamburger_icon.png";
 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   // useState
@@ -13,9 +15,9 @@ export default function Header() {
       <div
         className={`max-w-screen-xl flex flex-wrap items-center gap-20 mx-auto p-4 justify-around md:ml-[10%] sm:justify-normal`}
       >
-        <span className="text-2xl md:text-3xl font-sans text-black-600">
-          Abilita<span className="text-blue-600 font-sans">Edge</span>
-        </span>
+        <Link to="/">
+          <img src={logo} alt="logo" />
+        </Link>
 
         <div className=" md:order-2">
           <button
@@ -47,9 +49,33 @@ export default function Header() {
             />
           </div>
 
-          <button className="text-blue-600 font-sans mt-4  md:mt-0  md:ml-10">
+          <Link
+            to=""
+            className="text-[var(--color-primary)] font-sans mt-4  md:mt-0  md:ml-10"
+          >
             Learning
-          </button>
+          </Link>
+
+          <Link
+            to=""
+            className="text-[var(--color-primary)] font-sans mt-4  md:mt-0  md:ml-10"
+          >
+            Resource
+          </Link>
+
+          <Link
+            to="/blog"
+            className="text-[var(--color-primary)] font-sans mt-4  md:mt-0  md:ml-10"
+          >
+            Blog
+          </Link>
+
+          <Link
+            to=""
+            className="text-[var(--color-primary)] font-sans mt-4  md:mt-0  md:ml-10"
+          >
+            Contact Us
+          </Link>
         </div>
       </div>
     </nav>

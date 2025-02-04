@@ -9,19 +9,22 @@ function PageNotFound() {
   };
 
   return (
-    <div className="page-not-found">
-      <img
-        src={pageNotFoundImage}
-        alt="Page Not Found"
-        className="not-found-image"
-      />
-      <h1 id="page-not-found">Oops! This page got lost...</h1>
-      <p id="page-not-found-desc">
-        We couldn’t find the page you’re looking for.
-      </p>
-      <button className="home-button" onClick={goToHome}>
-        Go to Home
-      </button>
+    <div className="flex flex-col gap-5 items-center justify-center h-screen">
+      <img src={pageNotFoundImage} alt="Page Not Found" className="w-[350px]" />
+
+      <div className="flex flex-col items-center gap-3">
+        <h1 className="text-4xl text-orange-400">
+          Oops! This page got lost...
+        </h1>
+        <p className="text-lg">We couldn’t find the page you’re looking for.</p>
+
+        <button
+          className="text-white bg-orange-400 px-5 py-3 rounded-lg"
+          onClick={goToHome}
+        >
+          Go to Home
+        </button>
+      </div>
     </div>
   );
 }

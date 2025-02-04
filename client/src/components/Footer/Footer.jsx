@@ -1,40 +1,34 @@
+import logo from "../../../public/logo.svg";
+
 const Footer = () => {
   return (
-    <footer className="bg-[#1f2737] w-full px-4 py-8 md:px-14 md:py-10">
+    <footer className="bg-[#1f2737] flex flex-col gap-20 px-4 py-8 md:px-14 md:py-10">
       {/* Top component */}
-      <div className="flex flex-col items-start gap-8 md:flex-row md:items-start md:gap-16 lg:gap-36">
+      <div className="flex flex-col items-start gap-8 md:flex-row md:items-start md:justify-between md:gap-16 lg:gap-36">
         {/* Logo */}
-        <div className="text-white text-2xl md:text-4xl font-bold">
-          Logo Here
-        </div>
+        <img src={logo} alt="logo" />
 
         {/* Program Section */}
-        <div className="text-white">
-          <ul>
-            <li className="text-[14px] font-semibold mb-2">
-              AbilitaEdge Program
-            </li>
-            <li className="text-[12px]">MERN Stack Website</li>
-            <li className="text-[12px]">Android Development</li>
-            <li className="text-[12px]">Frontend Development</li>
-            <li className="text-[12px]">Backend Development</li>
-          </ul>
-        </div>
+        <ul className="text-white flex flex-col gap-5">
+          <li className="text-xl font-semibold mb-2">AbilitaEdge Program</li>
+          <li>MERN Stack Website</li>
+          <li>Android Development</li>
+          <li>Frontend Development</li>
+          <li>Backend Development</li>
+        </ul>
 
         {/* Resources Section */}
-        <div className="text-white">
-          <ul>
-            <li className="text-[14px] font-semibold mb-2">Resources</li>
-            <li className="text-[12px]">Documentation</li>
-            <li className="text-[12px]">Tutorials</li>
-            <li className="text-[12px]">Community</li>
-            <li className="text-[12px]">Support</li>
-          </ul>
-        </div>
+        <ul className="text-white flex flex-col gap-5">
+          <li className="text-xl font-semibold mb-2">Resources</li>
+          <li>Documentation</li>
+          <li>Tutorials</li>
+          <li>Community</li>
+          <li>Support</li>
+        </ul>
       </div>
 
       {/* Bottom component */}
-      <div className="mt-52 text-white">
+      <div className="text-white">
         <hr className="border-t border-gray-500" />
         <h1 className="mt-4 text-sm font-semibold">Trending Courses</h1>
         <div className="flex flex-wrap text-[13px] mt-2 ">
