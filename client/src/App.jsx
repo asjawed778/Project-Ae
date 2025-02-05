@@ -9,8 +9,9 @@ import PageNotFound from "./pages/pagenotfound";
 const AuthPage = lazy(() => import("./pages/authpage"));
 const HomePage = lazy(() => import("./pages/homepage"));
 const BlogPage = lazy(() => import("./pages/blogpage"));
-const CourseDetailsPage = lazy(() => import("./pages/coursedetailspage"));
-const UserPostPage = lazy(() => import("./pages/userpostpage"));
+const AdminPage = lazy(() => import("./pages/Admin/adminpage"));
+const CourseLandingPage = lazy(() => import("./pages/Course/landingpage"));
+const UserPostPage = lazy(() => import("./pages/Post/userpostpage"));
 
 function App() {
   return (
@@ -42,10 +43,18 @@ function App() {
             }
           />
           <Route
+            path="/admin"
+            element={
+              <LazyComponent>
+                <AdminPage />
+              </LazyComponent>
+            }
+          />
+          <Route
             path="/course/:id"
             element={
               <LazyComponent>
-                <CourseDetailsPage />
+                <CourseLandingPage />
               </LazyComponent>
             }
           />
