@@ -41,7 +41,7 @@ export default function courseLandingpage() {
           {overview ? (
             <Overview specificCourse={specificCourse} />
           ) : (
-            <Curriculum />
+            <Curriculum specificCourse={specificCourse} />
           )}
         </div>
 
