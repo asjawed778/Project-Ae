@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import img1 from "../../../public/imgs/blogs/img1.svg";
 import img2 from "../../../public/imgs/blogs/img2.svg";
 import img3 from "../../../public/imgs/blogs/img3.svg";
@@ -7,6 +8,7 @@ import MorePosts from "./MorePosts";
 export default function blogpage() {
   const blogs = [
     {
+      id: 982374,
       img: img1,
       techs: ["Technology", "Technology"],
       title:
@@ -15,6 +17,7 @@ export default function blogpage() {
         "Music expresses feeling and thought, without language. It was below and before speech,…",
     },
     {
+      id: 345345,
       img: img2,
       techs: ["Technology", "Technology"],
       title:
@@ -23,6 +26,7 @@ export default function blogpage() {
         "Music expresses feeling and thought, without language. It was below and before speech,…",
     },
     {
+      id: 98798734,
       img: img1,
       techs: ["Technology", "Technology"],
       title:
@@ -31,6 +35,7 @@ export default function blogpage() {
         "Music expresses feeling and thought, without language. It was below and before speech,…",
     },
     {
+      id: 48433,
       img: img2,
       techs: ["Technology", "Technology"],
       title:
@@ -39,6 +44,7 @@ export default function blogpage() {
         "Music expresses feeling and thought, without language. It was below and before speech,…",
     },
     {
+      id: 6879879,
       img: img1,
       techs: ["Technology", "Technology"],
       title:
@@ -47,6 +53,7 @@ export default function blogpage() {
         "Music expresses feeling and thought, without language. It was below and before speech,…",
     },
     {
+      id: 77765,
       img: img2,
       techs: ["Technology", "Technology"],
       title:
@@ -55,6 +62,7 @@ export default function blogpage() {
         "Music expresses feeling and thought, without language. It was below and before speech,…",
     },
     {
+      id: 82374,
       img: img1,
       techs: ["Technology", "Technology"],
       title:
@@ -94,15 +102,17 @@ export default function blogpage() {
       <div className="grid grid-cols-3 gap-6">
         {/* First Row: Two Blogs + Info Section */}
         {blogs.slice(0, 2).map((blog, index) => (
-          <div key={index} className="bg-white p-4 shadow-lg rounded-lg">
-            <img
-              src={blog.img}
-              alt="blog img"
-              className="/h-[280px] w-[400px]"
-            />
-            <h2 className="font-semibold">{blog.title}</h2>
-            <p className="text-sm text-gray-600">{blog.content}</p>
-          </div>
+          <Link to={`/blog/${blog.id}`}>
+            <div key={index} className="bg-white p-4 shadow-lg rounded-lg">
+              <img
+                src={blog.img}
+                alt="blog img"
+                className="/h-[280px] w-[400px]"
+              />
+              <h2 className="font-semibold">{blog.title}</h2>
+              <p className="text-sm text-gray-600">{blog.content}</p>
+            </div>
+          </Link>
         ))}
 
         <div className="flex flex-col gap-3 p-6 shadow-lg rounded-lg">
@@ -128,15 +138,17 @@ export default function blogpage() {
 
         {/* Remaining Rows: 3 Blogs Each */}
         {blogs.slice(2).map((blog, index) => (
-          <div key={index} className="bg-white p-4 shadow-lg rounded-lg">
-            <img
-              src={blog.img}
-              alt="blog img"
-              className="/h-[280px] w-[400px]"
-            />
-            <h2 className="font-semibold">{blog.title}</h2>
-            <p className="text-sm text-gray-600">{blog.content}</p>
-          </div>
+          <Link to={`/blog/${blog.id}`}>
+            <div key={index} className="bg-white p-4 shadow-lg rounded-lg">
+              <img
+                src={blog.img}
+                alt="blog img"
+                className="/h-[280px] w-[400px]"
+              />
+              <h2 className="font-semibold">{blog.title}</h2>
+              <p className="text-sm text-gray-600">{blog.content}</p>
+            </div>
+          </Link>
         ))}
       </div>
 

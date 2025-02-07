@@ -63,7 +63,7 @@ export default function MorePosts() {
   };
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 border-t border-neutral-300 pt-10">
       {/* Header */}
       <div className="flex items-center justify-between gap-5">
         <h1 className="font-semibold text-lg space-x-1">
