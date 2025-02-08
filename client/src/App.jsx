@@ -7,12 +7,12 @@ import BasicLayout from "./layouts/Basic";
 import LazyComponent from "./components/lazy loading/LazyComponent";
 import PageNotFound from "./pages/pagenotfound";
 const AuthPage = lazy(() => import("./pages/authpage"));
-const HomePage = lazy(() => import("./pages/homepage"));
+const HomePage = lazy(() => import("./pages/Home page/homepage"));
 const BlogPage = lazy(() => import("./pages/Blog/landingpage"));
 const AdminPage = lazy(() => import("./pages/Admin/adminpage"));
 const CourseLandingPage = lazy(() => import("./pages/Course/landingpage"));
 const UserPostPage = lazy(() => import("./pages/Post/userpostpage"));
-const SinglePost = lazy(() => import("./pages/Single_Post/landingpage"))
+const SinglePost = lazy(() => import("./pages/Single_Post/landingpage"));
 
 function App() {
   return (

@@ -42,7 +42,7 @@ export default function Carousal() {
       {/* Title and Subtitle */}
       {/* <div className=" mb-6 items-center lg:ml-[15%]"> */}
       <div className=" mb-6 items-center">
-        <h2 className="text-2xl font-sans text-blue-600">
+        <h2 className="font-sans font-semibold text-2xl text-[var(--color-primary)]">
           All the skills you need in one place
         </h2>
         <p className="text-gray-600 font-sans">

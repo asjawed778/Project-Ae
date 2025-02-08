@@ -1,7 +1,6 @@
 import { toast } from "react-hot-toast";
 import { apiConnector } from "../api";
 import { addCourseEndpoints } from "../course.api";
-// import { setLoading } from "../../redux/slices/loadingSlice";
 import { setCategories } from "../../store/reducers/adminCategoryReducer";
 import { setCourses } from "../../store/reducers/coursesReducer";
 
@@ -20,8 +19,8 @@ export function addCategory(data) {
       const response = await apiConnector("POST", ADD_CATEGORY, data);
 
       if (!response.data.success) {
-        throw new Error(response.data.message);
         console.log(response.error.message);
+        throw new Error(response.data.message);
       }
 
       toast.success("Successful");
@@ -35,8 +34,6 @@ export function addCategory(data) {
       } else if (error.response.status === 500) {
         toast.error("Internal Server Error");
       }
-    } finally {
-      dispatch(setLoading(false));
     }
   };
 }
@@ -47,8 +44,8 @@ export function getAllCategory() {
       const response = await apiConnector("GET", GET_ALL_CATEGORY);
 
       if (!response.data.success) {
-        throw new Error(response.data.message);
         console.log(response.error.message);
+        throw new Error(response.data.message);
       }
 
       //console.log("Success", response.data);
@@ -58,8 +55,6 @@ export function getAllCategory() {
         toast.error("Page not found");
       }
       console.log("categories error", error);
-    } finally {
-      dispatch(setLoading(false));
     }
   };
 }
@@ -72,12 +67,11 @@ export function addCourse(payload, resetForm) {
       const response = await apiConnector("POST", ADD_COURSES, payload);
 
       if (!response.data.success) {
-        throw new Error(response.data.message);
         console.log(response.error.message);
+        throw new Error(response.data.message);
       }
 
       toast.success(response.data.success);
-      console.log("Success man, successfull");
       resetForm();
     } catch (error) {
       if (error.response && error.response.status === 400) {
@@ -93,8 +87,6 @@ export function addCourse(payload, resetForm) {
       }
 
       console.log(error.response);
-    } finally {
-      dispatch(setLoading(false));
     }
   };
 }
@@ -105,8 +97,8 @@ export function getAllCourses() {
       const response = await apiConnector("GET", GET_ALL_COURSES);
 
       if (!response.data.success) {
-        throw new Error(response.data.message);
         console.log(response.error.message);
+        throw new Error(response.data.message);
       }
 
       console.log("Success courses", response);
@@ -117,8 +109,6 @@ export function getAllCourses() {
         toast.error("Page not found");
       }
       console.log(error.response);
-    } finally {
-      dispatch(setLoading(false));
     }
   };
 }
@@ -130,8 +120,8 @@ export function getCourseByCategory(id) {
       const response = await apiConnector("GET", GET_COURSE_BY_CATEGORY(id));
 
       if (!response.data.success) {
-        throw new Error(response.data.message);
         console.log(response.error.message);
+        throw new Error(response.data.message);
       }
       console.log(response.data);
       dispatch(setCourses(response.data));
@@ -141,8 +131,6 @@ export function getCourseByCategory(id) {
       } else if (error.response && error.response.status === 500) {
         toast.error("Internal Server Error");
       }
-    } finally {
-      dispatch(setLoading(false));
     }
   };
 }

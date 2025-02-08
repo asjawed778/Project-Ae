@@ -1,6 +1,6 @@
 export default function BookDemoClass() {
   return (
-    <div className="flex flex-col gap-5 p-5 h-[460px] w-[451px] shadow-xl shadow-gray-300 rounded-xl">
+    <div className="bg-white flex flex-col gap-5 p-5 h-[460px] w-[451px] shadow-xl shadow-gray-300 rounded-xl">
       <h1 className="font-bold text-lg text-[var(--color-primary)]">
         Book Your Free Demo Class
       </h1>

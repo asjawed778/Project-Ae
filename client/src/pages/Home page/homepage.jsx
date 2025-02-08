@@ -1,7 +1,9 @@
-import backgroundImage from "../../public/imgs/slider/Artboard.png";
+import backgroundImage from "../../../public/imgs/slider/Artboard.png";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import Courses from "../components/Carousal";
+import BookDemoClass from "../Course/BookDemoClass";
+import Courses from "../../components/Carousal";
+import Membership from "../../components/Membership";
 
 function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -88,42 +90,7 @@ function HomePage() {
         </motion.div>
 
         {/* Form Section */}
-        <motion.div
-          className="bg-white p-6 sm:p-4 rounded-lg shadow-black w-[350px] sm:w-80 md:w-80"
-          variants={itemVariants}
-        >
-          <h3 className="sm:text-lg font-sans text-blue-600 mb-4">
-            Book a Live Class, For Free!
-          </h3>
-
-          <motion.form className="space-y-4 font-sans">
-            {["Name", "Mobile No", "Education", "Course"].map((placeholder) => (
-              <motion.input
-                key={placeholder}
-                type="text"
-                placeholder={placeholder}
-                className="w-full px-4 py-2 sm:py-1.5 border rounded-md font-sans focus:border-blue-600 focus:outline-none"
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ type: "spring", stiffness: 100, damping: 10 }}
-              />
-            ))}
-            <label className="flex items-center space-x-2">
-              <input type="checkbox" />
-              <span className="text-sm font-sans">
-                Send me updates on WhatsApp
-              </span>
-            </label>
-
-            <motion.button
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-sans py-2 sm:py-1.5 rounded-md"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Submit
-            </motion.button>
-          </motion.form>
-        </motion.div>
+        <BookDemoClass />
       </motion.div>
 
       {/* Skill Boxes */}
@@ -135,12 +102,14 @@ function HomePage() {
           (skill, index) => (
             <motion.div
               key={index}
-              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-sans p-8 sm:p-6 rounded-lg shadow-lg h-48 w-80 md:w-56 lg:w-80 flex flex-col items-start"
+              className="bg-gradient-to-r from-[#426BE1] to-[#E69CC1] text-white font-sans flex flex-col items-start justify-center p-8 sm:p-6 h-48 w-80 md:w-56 lg:w-80 rounded-lg shadow-lg"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               variants={itemVariants}
             >
-              <h1 className="text-2xl lg:text-2xl">{skill} Skills</h1>
+              <h1 className="font-semibold text-2xl lg:text-3xl">
+                {skill} Skills
+              </h1>
             </motion.div>
           )
         )}
@@ -153,6 +122,8 @@ function HomePage() {
       >
         <Courses />
       </motion.div>
+
+      <Membership />
     </motion.div>
   );
 }
