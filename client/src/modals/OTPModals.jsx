@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import ReactDOM from "react-dom";
 import { RxCross2 } from "react-icons/rx";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -8,20 +7,13 @@ import ButtonLoading from "../components/Button/ButtonLoading";
 import { verifySignupOTP } from "../services/operations/authApi";
 
 function OTPModal({ otpModal, setOtpModal, signupData }) {
-  // useRef
   const otpInputRefs = useRef([]);
-
-  // useDispatch
   const dispatch = useDispatch();
-
-  // useNavigate
   const navigate = useNavigate();
 
-  // useState
   const [loading, setLoading] = useState(false);
   const [isOtpComplete, setIsOtpComplete] = useState(false);
 
-  // useEffect
   useEffect(() => {
     if (otpModal) {
       otpInputRefs.current[0]?.focus();
@@ -34,6 +26,13 @@ function OTPModal({ otpModal, setOtpModal, signupData }) {
     setOtpModal(false);
   };
 
+  // Close modal when clicking outside
+  const handleOverlayClick = (e) => {
+    if (e.target.id === "otp-modal-overlay") {
+      closeModal();
+    }
+  };
+
   const handleInputChange = (e, index) => {
     const { value } = e.target;
 
@@ -41,11 +40,8 @@ function OTPModal({ otpModal, setOtpModal, signupData }) {
       otpInputRefs.current[index].value = value[value.length - 1];
     }
 
-    const currentValue = otpInputRefs.current[index].value;
-    if (currentValue.length > 0 && /^[0-9]$/.test(currentValue)) {
-      if (index < 5) {
-        otpInputRefs.current[index + 1]?.focus();
-      }
+    if (value && /^[0-9]$/.test(value) && index < 5) {
+      otpInputRefs.current[index + 1]?.focus();
     }
 
     const otpValues = otpInputRefs.current.map((ref) => ref.value).join("");
@@ -62,56 +58,65 @@ function OTPModal({ otpModal, setOtpModal, signupData }) {
     }
   };
 
-  const handleInputBlur = (e, index) => {
-    const { value } = e.target;
-    otpInputRefs.current[index].value =
-      value.length > 1 ? value[value.length - 1] : value;
-  };
-
   const otpSubmitHandler = (e) => {
     e.preventDefault();
     const otpValues = otpInputRefs.current.map((ref) => ref.value).join("");
-    const userRegisterData = {
-      ...signupData,
-      otp: otpValues,
-    };
+    const userRegisterData = { ...signupData, otp: otpValues };
     dispatch(verifySignupOTP(userRegisterData, setOtpModal, navigate));
   };
 
-  return ReactDOM.createPortal(
-    <div className="otp-modal-overlay">
-      <form className="otp-modal-container" onSubmit={otpSubmitHandler}>
-        <div className="otp-modal-header">
-          <h3>Email Verification</h3>
-          <RxCross2 className="close-icon" onClick={closeModal} />
+  return (
+    <div
+      id="otp-modal-overlay"
+      className="fixed inset-0 flex items-center justify-center backdrop-blur-lg"
+      onClick={handleOverlayClick}
+    >
+      <form
+        className="bg-white p-6 rounded-lg shadow-lg w-96 relative"
+        onSubmit={otpSubmitHandler}
+        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
+      >
+        <div className="flex justify-between items-center border-b pb-2 mb-4">
+          <h3 className="text-xl font-semibold">Email Verification</h3>
+          <button
+            onClick={closeModal}
+            className="text-gray-600 hover:text-gray-900"
+          >
+            <RxCross2 size={20} />
+          </button>
         </div>
-        <p className="otp-modal-description">
-          A six-digit OTP has been sent to your Email. Please enter it below to
-          verify your Email.
+
+        <p className="text-sm text-gray-600 mb-4">
+          A six-digit OTP has been sent to your email. Please enter it below to
+          verify your email.
         </p>
-        <div className="otp-input-container">
+
+        <div className="flex justify-center gap-2 mb-4">
           {[...Array(6)].map((_, index) => (
             <input
               key={index}
               type="text"
-              className="otp-input"
+              className="w-10 h-10 border rounded-md text-center text-lg focus:ring-2 focus:ring-blue-500"
               maxLength="1"
               ref={(el) => (otpInputRefs.current[index] = el)}
               onChange={(e) => handleInputChange(e, index)}
               onKeyDown={(e) => handleKeyDown(e, index)}
-              onBlur={(e) => handleInputBlur(e, index)} // Ensure value is updated on blur
             />
           ))}
         </div>
+
         <button
-          className={` ${loading ? "spinner" : "otp-submit-btn"}`}
+          className={`w-full p-2 rounded-md text-white ${
+            isOtpComplete
+              ? "bg-blue-600 hover:bg-blue-700"
+              : "bg-gray-400 cursor-not-allowed"
+          }`}
           disabled={!isOtpComplete}
         >
           {loading ? <ButtonLoading /> : <p>Submit</p>}
         </button>
       </form>
-    </div>,
-    document.getElementById("modal")
+    </div>
   );
 }
 

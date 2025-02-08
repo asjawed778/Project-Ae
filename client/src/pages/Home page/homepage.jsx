@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import BookDemoClass from "../Course/BookDemoClass";
 import Courses from "../../components/Carousal";
 import Membership from "../../components/Membership";
+import { Link } from "react-router-dom";
 
 function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -79,14 +80,13 @@ function HomePage() {
             from Microsoft, KPMG, Amazon, and Rapido.
           </motion.p>
 
-          <motion.button
-            className="relative bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
+          <Link
+            to="/course"
             variants={itemVariants}
+            className="relative bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg duration-200"
           >
             Explore Program
-          </motion.button>
+          </Link>
         </motion.div>
 
         {/* Form Section */}

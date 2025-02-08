@@ -2,13 +2,16 @@ import { GoHome } from "react-icons/go";
 import { FaCircleCheck } from "react-icons/fa6";
 import { PiGreaterThanBold } from "react-icons/pi";
 
+import Button from "../../components/Button/Button";
 import coder from "../../../public/imgs/slider/coder.jpg";
 
 export default function CourseHeadline({ specificCourse }) {
   return (
-    <div className="bg-[#FFF7ED] flex flex-col gap-5 px-[250px] pt-5 pb-16">
+    <div className="bg-[#FFF7ED] flex flex-col gap-5 px-10 md:px-40 lg:px-[250px] pt-5 pb-16">
       <div className="flex gap-3">
         <GoHome size={20} />
+        <PiGreaterThanBold color="grey" size={15} className="mt-1" />
+        <h1 className="text-gray-600 font-semibold">Course</h1>
         <PiGreaterThanBold color="grey" size={15} className="mt-1" />
         <h1 className="text-gray-600 font-semibold">
           {Array.isArray(specificCourse) && specificCourse[0]?.courseTitle}
@@ -60,9 +63,7 @@ export default function CourseHeadline({ specificCourse }) {
               </div>
             </li>
           </ul>
-          <button className="text-white bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] active:bg-[var(--color-primary-active)] w-fit p-3 rounded-md duration-300">
-            Download Brochure
-          </button>
+          <Button className="w-fit">Download Brochure</Button>
         </div>
 
         {/* Course Image */}

@@ -1,17 +1,13 @@
 import { RxCross1 } from "react-icons/rx";
-
 import { useDispatch } from "react-redux";
 import { useState } from "react";
-import ReactDOM from "react-dom";
 
 import ButtonLoading from "../components/Button/ButtonLoading";
 import { loginUser } from "../services/operations/authApi";
 
 function LoginModal({ loginModal, setLoginModal, setResetModal }) {
-  // useDispatch
   const dispatch = useDispatch();
 
-  // useState
   const [loading, setLoading] = useState(false);
   const [loginFormData, setLoginFormData] = useState({
     identifier: "",
@@ -20,60 +16,46 @@ function LoginModal({ loginModal, setLoginModal, setResetModal }) {
 
   if (!loginModal) return null;
 
-  // reset password invoked
-  const forgetPasswordHandler = () => {
-    setResetModal(true);
-    setLoginModal(false);
-  };
-
-  // to close login modal
-  const loginModalCloseHandler = () => {
-    setLoginModal(false);
-  };
-
   const { identifier, password } = loginFormData;
-  // validation
   const isFormValid = identifier && password;
 
-  //saved data
   const loginFormChangeHandler = (e) => {
-    setLoginFormData((prev) => {
-      return {
-        ...prev,
-        [e.target.name]: e.target.value,
-      };
-    });
+    setLoginFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
-  // handling form events
   const loginFormSubmitHandler = (e) => {
     e.preventDefault();
-
-    console.log(loginFormData);
-
-    // calling utlity function to call login api
     dispatch(loginUser(loginFormData));
-    setLoginFormData({
-      identifier: "",
-      password: "",
-    });
+    setLoginFormData({ identifier: "", password: "" });
   };
 
-  return ReactDOM.createPortal(
-    <div className="login-modal-overlay">
-      <div className="login-modal-container">
-        <button className="close-btn" onClick={loginModalCloseHandler}>
-          <RxCross1 />
+  return (
+    <div
+      className="fixed inset-0 flex items-center justify-center backdrop-blur-lg"
+      onClick={() => setLoginModal(false)}
+    >
+      <div
+        className="bg-white p-6 rounded-lg shadow-lg w-96 relative"
+        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
+      >
+        <button
+          className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+          onClick={() => setLoginModal(false)}
+        >
+          <RxCross1 size={20} />
         </button>
 
-        <h2 className="login-title">Login</h2>
+        <h2 className="text-2xl font-semibold text-center mb-4">Login</h2>
 
-        <form className="login-form" onSubmit={loginFormSubmitHandler}>
-          <div className="input-group">
+        <form className="space-y-4" onSubmit={loginFormSubmitHandler}>
+          <div>
             <input
               type="email"
-              className="login-input"
-              placeholder="email"
+              className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+              placeholder="Email"
               maxLength="50"
               value={identifier}
               name="identifier"
@@ -81,29 +63,40 @@ function LoginModal({ loginModal, setLoginModal, setResetModal }) {
             />
           </div>
 
-          <div className="input-group">
+          <div>
             <input
               type="password"
-              className="login-input"
-              placeholder="password"
+              className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+              placeholder="Password"
               value={password}
               name="password"
               onChange={loginFormChangeHandler}
             />
           </div>
 
-          <p className="forget-password" onClick={forgetPasswordHandler}>
-            forget password ?
+          <p
+            className="text-sm text-blue-600 cursor-pointer hover:underline text-center"
+            onClick={() => {
+              setResetModal(true);
+              setLoginModal(false);
+            }}
+          >
+            Forgot password?
           </p>
 
-          <button className="login-next-btn" disabled={!isFormValid}>
+          <button
+            className={`w-full p-2 rounded-md text-white ${
+              isFormValid
+                ? "bg-blue-600 hover:bg-blue-700"
+                : "bg-gray-400 cursor-not-allowed"
+            }`}
+            disabled={!isFormValid}
+          >
             {loading ? <ButtonLoading /> : <p>Submit</p>}
           </button>
         </form>
       </div>
-    </div>,
-
-    document.getElementById("modal")
+    </div>
   );
 }
 

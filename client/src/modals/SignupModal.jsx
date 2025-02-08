@@ -1,8 +1,6 @@
 import { useState } from "react";
-import ReactDOM from "react-dom";
 import { RxCross1 } from "react-icons/rx";
 import { useDispatch } from "react-redux";
-
 import { sendSignupOTP } from "../services/operations/authApi";
 import ButtonLoading from "../components/Button/ButtonLoading";
 
@@ -12,10 +10,7 @@ function SignupModal({
   setOtpModal,
   setSignupData,
 }) {
-  // useDispatch
   const dispatch = useDispatch();
-
-  // useState
   const [loading, setLoading] = useState(false);
   const [signupFormData, setSignupFormData] = useState({
     name: "",
@@ -30,6 +25,12 @@ function SignupModal({
     setSignupModal(false);
   };
 
+  const overlayClickHandler = (e) => {
+    if (e.target.id === "signup-modal-overlay") {
+      setSignupModal(false);
+    }
+  };
+
   const { name, email, password, confirmPassword } = signupFormData;
   const isFormValid =
     name &&
@@ -39,15 +40,13 @@ function SignupModal({
     password === confirmPassword;
 
   const signupFormChangeHandler = (e) => {
-    setSignupFormData((prev) => {
-      return {
-        ...prev,
-        [e.target.name]: e.target.value,
-      };
-    });
+    setSignupFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
-  const signupFormSubmitHander = (e) => {
+  const signupFormSubmitHandler = (e) => {
     e.preventDefault();
     setSignupData(signupFormData);
     dispatch(sendSignupOTP(signupFormData, setSignupModal, setOtpModal));
@@ -59,68 +58,71 @@ function SignupModal({
     });
   };
 
-  return ReactDOM.createPortal(
-    <div className="signup-modal-overlay">
-      <div className="signup-modal-container">
-        <button className="close-btn" onClick={signupModalCloseHandler}>
-          <RxCross1 />
+  return (
+    <div
+      className="fixed inset-0 backdrop-blur-lg z-50 flex items-center justify-center"
+      onClick={overlayClickHandler}
+    >
+      <div
+        className="bg-white rounded-lg shadow-lg p-6 relative w-96"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          className="absolute top-2 right-2 text-gray-600 hover:text-black"
+          onClick={signupModalCloseHandler}
+        >
+          <RxCross1 size={20} />
         </button>
-        <h2 className="signup-title">Create your account</h2>
-
-        <form className="signup-form" onSubmit={signupFormSubmitHander}>
-          <div className="input-group">
+        <h2 className="text-xl font-semibold text-center mb-4">
+          Create your account
+        </h2>
+        <form className="space-y-4" onSubmit={signupFormSubmitHandler}>
+          <div>
             <input
               type="text"
-              className="signup-input"
+              className="w-full p-2 border rounded"
               placeholder="Name"
               maxLength="50"
               value={name}
               name="name"
               onChange={signupFormChangeHandler}
             />
-            <span className="char-counter">{name.length} / 50</span>
+            <span className="text-sm text-gray-500">{name.length} / 50</span>
           </div>
-
-          <div className="input-group">
-            <input
-              type="email"
-              className="signup-input"
-              placeholder="Email"
-              value={email}
-              name="email"
-              onChange={signupFormChangeHandler}
-            />
-          </div>
-
-          <div className="input-group">
-            <input
-              type="password"
-              className="signup-input"
-              placeholder="Enter Password"
-              value={password}
-              name="password"
-              onChange={signupFormChangeHandler}
-            />
-          </div>
-
-          <div className="input-group">
-            <input
-              type="password"
-              className="signup-input"
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              name="confirmPassword"
-              onChange={signupFormChangeHandler}
-            />
-          </div>
-
-          <button className="signup-next-btn" disabled={!isFormValid}>
-            {loading ? <ButtonLoading /> : <p>Register</p>}
+          <input
+            type="email"
+            className="w-full p-2 border rounded"
+            placeholder="Email"
+            value={email}
+            name="email"
+            onChange={signupFormChangeHandler}
+          />
+          <input
+            type="password"
+            className="w-full p-2 border rounded"
+            placeholder="Enter Password"
+            value={password}
+            name="password"
+            onChange={signupFormChangeHandler}
+          />
+          <input
+            type="password"
+            className="w-full p-2 border rounded"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            name="confirmPassword"
+            onChange={signupFormChangeHandler}
+          />
+          <button
+            type="submit"
+            className="w-full p-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400"
+            disabled={!isFormValid || loading}
+          >
+            {loading ? <ButtonLoading /> : "Register"}
           </button>
         </form>
       </div>
-    </div>,
-    document.getElementById("modal")
+    </div>
   );
 }
 

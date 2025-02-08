@@ -4,11 +4,20 @@ import bar from "../../../public/imgs/slider/Hamburger_icon.png";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../store/reducers/authReducer";
 
 export default function Header() {
+  const { token } = useSelector((store) => store.auth);
+
+  const dispatch = useDispatch();
+
   // useState
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const handleLogout = async () => {
+    dispatch(logout());
+  };
   return (
     // Header
     <nav className="bg-white border-gray-200 w-full">
@@ -32,7 +41,7 @@ export default function Header() {
         </div>
 
         <div
-          className={` items-center justify-between ${
+          className={`items-center justify-between ${
             isMenuOpen ? "block" : "hidden"
           } w-full md:flex md:w-auto md:order-1 `}
           id="navbar-search"
@@ -50,18 +59,18 @@ export default function Header() {
           </div>
 
           <Link
-            to=""
+            to="/course"
             className="text-[var(--color-primary)] font-sans mt-4  md:mt-0  md:ml-10"
           >
             Learning
           </Link>
 
-          <Link
+          {/* <Link
             to=""
             className="text-[var(--color-primary)] font-sans mt-4  md:mt-0  md:ml-10"
           >
             Resource
-          </Link>
+          </Link> */}
 
           <Link
             to="/blog"
@@ -70,12 +79,28 @@ export default function Header() {
             Blog
           </Link>
 
-          <Link
+          {/* <Link
             to=""
             className="text-[var(--color-primary)] font-sans mt-4  md:mt-0  md:ml-10"
           >
             Contact Us
-          </Link>
+          </Link> */}
+
+          {token ? (
+            <button
+              onClick={handleLogout}
+              className="text-[var(--color-primary)] font-sans mt-4 md:mt-0 md:ml-10 cursor-pointer"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link
+              to="/auth"
+              className="text-[var(--color-primary)] font-sans mt-4 md:mt-0 md:ml-10"
+            >
+              Login
+            </Link>
+          )}
         </div>
       </div>
     </nav>

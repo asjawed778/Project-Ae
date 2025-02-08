@@ -19,9 +19,7 @@ export default function Carousal() {
   }, []);
 
   const categories = useSelector((state) => state.categories.categories);
-  console.log(categories);
   const coursesAll = useSelector((state) => state.courses.courses.courses);
-  console.log("courses", coursesAll);
 
   const [activeTab, setActiveTab] = useState(null); // Start with null or a default value
 
@@ -40,7 +38,6 @@ export default function Carousal() {
   return (
     <div className="p-8 mt-4 w-full ">
       {/* Title and Subtitle */}
-      {/* <div className=" mb-6 items-center lg:ml-[15%]"> */}
       <div className=" mb-6 items-center">
         <h2 className="font-sans font-semibold text-2xl text-[var(--color-primary)]">
           All the skills you need in one place
@@ -52,84 +49,83 @@ export default function Carousal() {
       </div>
 
       {/* Tab Menu */}
-
-      {/* <div className="flex w-auto gap-4 lg:ml-[15%] space-x-1 mb-10 overflow-x-auto carousel  scroll-snap-x scroll-smooth"> */}
-      <div className="flex w-auto gap-4 space-x-1 mb-10 overflow-x-auto carousel  scroll-snap-x scroll-smooth ">
-        {categories.map((tab) => (
-          <button
-            key={tab._id}
-            onClick={() => {
-              setActiveTab(tab._id);
-            }}
-            // min-w-fit font-semibold px-4 py-2 flex justify-center items-center
-            className={` min-w-fit font-sans px-0 py-2 flex justify-center items-center border-b-2 ${
-              activeTab === tab._id
-                ? " border-blue-600 text-blue-500"
-                : " border-transparent text-gray-600 carousel-item"
-            }`}
-          >
-            {tab.categoryName}
-          </button>
-        ))}
+      <div className="flex w-auto gap-4 space-x-1 overflow-x-auto carousel  scroll-snap-x scroll-smooth ">
+        {categories
+          .filter((_, i) => i < 4)
+          .map((tab) => (
+            <button
+              key={tab._id}
+              onClick={() => {
+                setActiveTab(tab._id);
+              }}
+              className={`flex justify-center items-center w-fit px-0 py-2 border-b-2 cursor-pointer ${
+                activeTab === tab._id
+                  ? " border-[var(--color-primary)] text-[var(--color-primary)]"
+                  : " border-transparent text-gray-600 carousel-item"
+              }`}
+            >
+              {tab.categoryName}
+            </button>
+          ))}
       </div>
-      {/* <hr style={{backgroundColor:"#36454F", marginTop:"-40px", height:"1px",}}
-          className='lg:w-[70%] lg:ml-[15%]'
-      />  */}
-      <hr
-        style={{
-          backgroundColor: "#36454F",
-          marginTop: "-40px",
-          height: "1px",
-        }}
-        className="lg:w-[70%]"
-      />
+      <div className="relative w-[80%]">
+        <hr className="border-gray-200" />
+        <Link
+          to="/course"
+          className="absolute right-0 -top-3 font-bold text-xs text-[var(--color-primary)] bg-white px-5"
+        >
+          View More
+        </Link>
+      </div>
 
       {/* Scrollable Course Cards */}
       {coursesAll ? (
-        <div className="space-x-2 carousel rounded-box w-[100%] lg:w-3/4 items-center lg:ml p-4 ">
+        <div className="flex items-center gap-5 p-4">
           {coursesAll?.map((course, index) => (
             <Link
-              to={`/course/${course._id}`}
               key={index}
-              className="carousel-item min-w-[50%] sm:min-w-[40%] md:min-w-[30%] lg:min-w-[10%]"
+              to={`/course/${course._id}`}
+              className="bg-white flex flex-col gap-2 w-[296px] pb-3 rounded-lg shadow-md"
             >
-              <div className="flex flex-col bg-white rounded-lg shadow-md p-0">
-                <img
-                  src={course.thumbnail}
-                  alt={course.courseTitle}
-                  className="w-[100%] h-40 rounded-lg object-cover mb-2"
-                />
-                <h3 className="text-base font-sans mb-2 ml-2">
+              <img
+                src={course.thumbnail}
+                alt={course.courseTitle}
+                className="w-[100%] h-40 rounded-lg object-cover"
+              />
+              <div className="flex flex-col px-5">
+                <h3 className="font-sans text-[var(--color-secondary)]">
                   {course.courseTitle}
                 </h3>
 
-                <div className="flex flex-row gap-2 mt-3 h-[38px]">
-                  <div className="flex flex-row items-center gap-1 mb-3 ml-2">
+                <hr className="mt-5 border-gray-200" />
+                <div className="text-xs flex flex-row items-center justify-between gap-2 h-[38px]">
+                  <div className="flex flex-row items-center gap-1">
                     <img
                       src={user}
                       alt="userLive"
                       className="w-[25px] h-[25px] text-blue-950"
                     />
-                    <p className="text-gray-600 text-sm font-sans">
+                    <p className="text-gray-600">
                       {course.courseMode.charAt(0).toUpperCase() +
                         course.courseMode.slice(1).toLowerCase()}
                     </p>
                   </div>
 
-                  <div className="flex flex-row items-center gap-1 mb-3 ml-2">
+                  <div className="flex flex-row items-center gap-1">
                     <img
                       src={clock}
                       alt="clock"
                       className="w-[25px] h-[25px]"
                     />
-                    <p className="text-gray-600 text-sm font-sans">
+                    <p className="text-gray-600">
                       {course.courseLanguage.charAt(0).toUpperCase() +
                         course.courseLanguage.slice(1).toLowerCase()}
                     </p>
-                    <button className=" h-[28px] ml-6 px-1 text-gray-600 border-2 border-gray-600 rounded-lg hover-shadow-[4px_4px_0px_rgba(128,128,128,1)] bg-white font-medium hover:shadow-[6px_6px_0px_rgba(128,128,128,1)] transition-all duration-200">
-                      Learn More
-                    </button>
                   </div>
+
+                  <button className="text-white whitespace-nowrap bg-[var(--color-secondary)] hover:bg-[var(--color-secondary-hover)] active:bg-[var(--color-secondary-active)] px-3 py-1 ml-auto rounded-md duration-200">
+                    Learn More
+                  </button>
                 </div>
               </div>
             </Link>

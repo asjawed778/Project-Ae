@@ -4,5 +4,17 @@
   --color-primary: #0766c6;
   --color-primary-hover: #0a7be0;
   --color-primary-active: #0555a4;
-  --color-secondary: #3ab7bf;
+  --color-secondary: #0b7077;
+  --color-secondary-hover: #0d858d;
+  --color-secondary-active: #095a5f;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
 }

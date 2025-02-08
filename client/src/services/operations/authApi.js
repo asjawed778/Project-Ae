@@ -2,7 +2,6 @@ import Cookies from "js-cookie";
 import { toast } from "react-hot-toast";
 
 import { userAuthEndpoints } from "../user.api";
-// import { setLoading } from '../../redux/slices/loadingSlice';
 import { apiConnector } from "../api";
 import { login, logout } from "../../store/reducers/authReducer";
 
@@ -19,7 +18,6 @@ const {
 
 export function sendSignupOTP(signupFormData, setSignupModal, setOtpModal) {
   return async (dispatch) => {
-    dispatch(setLoading(true));
     try {
       const response = await apiConnector(
         "POST",
@@ -45,15 +43,12 @@ export function sendSignupOTP(signupFormData, setSignupModal, setOtpModal) {
         toast.error("Internal Server Error");
       }
       console.log("Error in Sending OTP........", error);
-    } finally {
-      dispatch(setLoading(false));
     }
   };
 }
 
 export function verifySignupOTP(userRegisterData, setOtpModal, navigate) {
   return async (dispatch) => {
-    dispatch(setLoading(true));
     try {
       const response = await apiConnector(
         "POST",
@@ -81,8 +76,6 @@ export function verifySignupOTP(userRegisterData, setOtpModal, navigate) {
       if (error.status === 500) {
         toast.error("Internal Server Error");
       }
-    } finally {
-      dispatch(setLoading(false));
     }
   };
 }
@@ -111,7 +104,6 @@ export function logoutUser(navigate) {
 
 export function loginUser(userLoginData, navigate) {
   return async (dispatch) => {
-    dispatch(setLoading(true));
     try {
       const response = await apiConnector("POST", LOGIN_API, userLoginData);
       if (!response.data.success) {
@@ -139,8 +131,6 @@ export function loginUser(userLoginData, navigate) {
       if (error.status === 500) {
         toast.error("Internal Server Error");
       }
-    } finally {
-      dispatch(setLoading(false));
     }
   };
 }
@@ -151,9 +141,6 @@ export function resetPassword(
   setUpdatePasswordModal
 ) {
   return async (dispatch) => {
-    console.log(userEmail);
-    dispatch(setLoading(true));
-
     try {
       const response = await apiConnector(
         "POST",
@@ -177,8 +164,6 @@ export function resetPassword(
       }
 
       console.log("Error in Sending OTP......", error);
-    } finally {
-      dispatch(setLoading(false));
     }
   };
 }
@@ -189,8 +174,6 @@ export function updatePassword(
   setLoginModal
 ) {
   return async (dispatch) => {
-    dispatch(setLoading(true));
-    console.log("updatePasswordAPI", userRegisterData);
     try {
       const response = await apiConnector(
         "POST",
@@ -204,7 +187,6 @@ export function updatePassword(
       toast.success("Password Updated Successfully");
 
       setUpdatePassswordModal(false);
-      setLoginModal(true);
     } catch (error) {
       if (error.status === 400) {
         toast.error("Please Enter all details");
@@ -213,9 +195,6 @@ export function updatePassword(
       if (error.status === 500) {
         toast.error(" Internal Server Error ");
       }
-      console.log("there is error", error);
-    } finally {
-      dispatch(setLoading(false));
     }
   };
 }

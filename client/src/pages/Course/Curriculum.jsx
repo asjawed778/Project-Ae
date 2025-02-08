@@ -78,7 +78,7 @@ export default function Curriculum({ specificCourse }) {
   return (
     <div
       style={{ backgroundColor: "rgb(244, 246, 252)" }}
-      className="w-[45vw] px-6 py-4 rounded-2xl"
+      className="px-6 py-4 rounded-2xl"
     >
       <div className="flex flex-col gap-4 w-full">
         {lessonsData?.map((lesson, index) => {
@@ -93,7 +93,7 @@ export default function Curriculum({ specificCourse }) {
               >
                 <div>
                   <div className="flex items-center gap-1.5">
-                  {hasSubLessons ? (
+                    {hasSubLessons ? (
                       isExpanded ? (
                         <RiArrowDropUpLine className="text-2xl" />
                       ) : (
@@ -102,7 +102,11 @@ export default function Curriculum({ specificCourse }) {
                     ) : (
                       <span className="w-6" />
                     )}
-                    <span className={`${isExpanded && "text-orange-500"} font-semibold text-lg`}>
+                    <span
+                      className={`${
+                        isExpanded && "text-orange-500"
+                      } font-semibold text-lg`}
+                    >
                       {lesson.title}
                     </span>
                   </div>
@@ -113,8 +117,15 @@ export default function Curriculum({ specificCourse }) {
                 </div>
               </div>
 
-              <div className={`${isExpanded && "mt-6"} overflow-hidden transition-all duration-400 ${
-                  isExpanded ? "max-h-[1200px] opacity-100" : "max-h-0 opacity-0"} `}>
+              <div
+                className={`${
+                  isExpanded && "mt-6"
+                } overflow-hidden transition-all duration-400 ${
+                  isExpanded
+                    ? "max-h-[1200px] opacity-100"
+                    : "max-h-0 opacity-0"
+                } `}
+              >
                 {lesson.subLessons.map((subLesson, index) => (
                   <div key={index} className="mb-4 ml-6 pr-2">
                     <div className="flex justify-between">

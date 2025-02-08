@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addCourse,
   getAllCategory,
-} from "../../services/operations/addCourses";
+} from "../../../services/operations/addCourses";
 
 function AddCourse() {
   const dispatch = useDispatch();

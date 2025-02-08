@@ -9,9 +9,7 @@ import Curriculum from "./Curriculum";
 import { useState } from "react";
 
 export default function courseLandingpage() {
-  const [overview, setOverview] = useState(true);
-
-  const handleSection = () => setOverview(!overview);
+  const [section, setSection] = useState(0);
 
   const courses = useSelector((state) => state.courses);
   const specificCourse = courses.courses.courses;
@@ -22,26 +20,37 @@ export default function courseLandingpage() {
       <CourseHeadline specificCourse={specificCourse} />
 
       {/* Second Section */}
-      <div className="flex gap-8 px-[250px]">
-        <div className="flex flex-col gap-3">
+      <div className="flex flex-wrap md:flex-nowrap gap-8 px-10 md:px-40 lg:px-[250px]">
+        <div className="flex flex-col gap-3 min-w-[20rem]">
           <div>
-            <Button onClick={handleSection}>Overview</Button>
-            <button
-              onClick={handleSection}
-              className="text-[var(--color-primary)] px-5 py-2 rounded-t-md"
+            <Button
+              onClick={() => setSection(0)}
+              variant={`${section === 1 && "inverse"}`}
+              className="rounded-b-none"
+            >
+              Overview
+            </Button>
+            <Button
+              onClick={() => setSection(1)}
+              variant={`${section === 0 && "inverse"}`}
+              className="rounded-b-none"
             >
               Curriculum
-            </button>
+            </Button>
           </div>
 
-          {overview ? (
-            <Overview specificCourse={specificCourse} />
-          ) : (
-            <Curriculum specificCourse={specificCourse} />
-          )}
+          <div>
+            {section === 0 ? (
+              <Overview specificCourse={specificCourse} />
+            ) : (
+              <Curriculum specificCourse={specificCourse} />
+            )}
+          </div>
         </div>
 
-        <BookDemoClass />
+        <div className="flex-1">
+          <BookDemoClass />
+        </div>
       </div>
     </div>
   );
