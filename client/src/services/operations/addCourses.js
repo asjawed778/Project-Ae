@@ -14,6 +14,7 @@ const {
 } = addCourseEndpoints;
 
 export function addCategory(data) {
+  console.log("add", data)
   return async (dispatch, getState) => {
     try {
       const response = await apiConnector("POST", ADD_CATEGORY, data);
@@ -39,9 +40,11 @@ export function addCategory(data) {
 }
 
 export function getAllCategory() {
-  return async (dispatch, getState) => {
+  return async (dispatch, getState=0) => {
+    console.log("hello i am here")
     try {
       const response = await apiConnector("GET", GET_ALL_CATEGORY);
+      console.log("response data", response.data.categories)
 
       if (!response.data.success) {
         console.log(response.error.message);
