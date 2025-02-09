@@ -3,6 +3,8 @@ const postRoutes = require("./postRoutes");
 const courseRoutes = require("./courseRoutes");
 const adminRoutes = require("./adminRoutes");
 
+const port = process.env.PORT;
+
 module.exports = {
   openapi: "3.0.0",
   info: {
@@ -19,7 +21,7 @@ module.exports = {
   },
   servers: [
     {
-      url: "http://localhost:4000/api/v1",
+      url: `http://localhost:${port}/api/v1`,
     },
   ],
   paths: {

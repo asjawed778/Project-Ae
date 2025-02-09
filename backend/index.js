@@ -52,7 +52,7 @@ app.use(errorMiddleware);
 
 registerRoutes(app);
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server is Running on the PORT: ${PORT}`);
     console.log(`visit for API Doc: http://localhost:${PORT}/api-docs`)
 })
