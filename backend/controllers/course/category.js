@@ -48,11 +48,12 @@ exports.getAllCategory = async (req, res, next) => {
     const categories = await Category.find();
 
     // Check if categories exist
-    if (!categories || categories.length === 0) {
+    if (!categories) {
       const err = new Error("No categories found.");
       err.status = 404;
       return next(err);
     }
+    // if(categories.le)
 
     // Send response with the list of categories
     res.status(200).json({

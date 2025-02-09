@@ -11,7 +11,7 @@ exports.getCourseByCategory = async (req, res, next) => {
             .select('courseTitle thumbnail courseMode courseLanguage') // Select specific fields
             .exec();
 
-        if (!courses || courses.length === 0) {
+        if (!courses) {
             return res.status(404).json({
                 success: false,
                 message: "No courses found for the given category."
@@ -19,6 +19,7 @@ exports.getCourseByCategory = async (req, res, next) => {
         }
 
         res.status(200).json({
+            message: "courses fetched",
             success: true,
             courses
         });
@@ -89,7 +90,7 @@ exports.getAllCourse = async (req, res, next) => {
             .select('courseTitle thumbnail courseMode courseLanguage') // Select specific fields
             .exec();
 
-        if (!allCourse || allCourse.length === 0) {
+        if (!allCourse) {
             return res.status(404).json({
                 success: false,
                 message: "No courses found."
