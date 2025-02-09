@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 export const token = Cookies.get("token");
-export const SERVER_URL = `${import.meta.env.VITE_BE_URL}/api/v1`;
+export const SERVER_URL = `${import.meta.env.VITE_BE_URL}/api/v1/`;
 export const axiosInstance = axios.create({});
 
 export const apiConnector = (method, url, bodyData, headers, params) => {

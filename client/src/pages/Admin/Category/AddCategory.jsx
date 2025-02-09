@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { addCategory } from "../../../services/operations/addCourses";
+import { useDispatch } from "react-redux";
 
 const CourseDetailsForm = () => {
-  const { register, handleSubmit, setValue, watch } = useForm();
+  const { register, handleSubmit, setValue, reset, watch } = useForm();
   const [keyPoints, setKeyPoints] = useState([]);
   const [tags, setTags] = useState([]);
+  const dispatch = useDispatch();
   const [categories] = useState([
     { id: "1", name: "Programming" },
     { id: "2", name: "Design" },
@@ -19,7 +22,10 @@ const CourseDetailsForm = () => {
   };
 
   const onSubmit = (data) => {
+    const result = addCategory(data)
+    dispatch(result)
     console.log("Submitted Data:", data);
+    reset()
   };
 
   return (
@@ -28,7 +34,8 @@ const CourseDetailsForm = () => {
       className="space-y-4 max-w-lg mx-auto bg-white shadow-lg rounded-lg p-6"
     >
       <input
-        {...register("courseTitle", { required: true })}
+        {...register("name", { required: true })}
+        // {...register("courseTitle", { required: true })}
         placeholder="Course Title *"
         className="input w-full p-2 border rounded"
       />
@@ -89,7 +96,8 @@ const CourseDetailsForm = () => {
       </div>
 
       <textarea
-        {...register("courseDescription", { required: true })}
+        {...register("description", { required: true })}
+        // {...register("courseDescription", { required: true })}
         placeholder="Course Description *"
         className="input w-full p-2 border rounded"
       />
