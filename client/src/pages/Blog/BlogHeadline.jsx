@@ -15,7 +15,7 @@ export default function BlogHeadline() {
         </Link>
       </div>
 
-      <p className="font-bold text-3xl space-x-1 whitespace-nowrap">
+      <p className="font-bold text-[15px] md:text-2xl lg:text-3xl space-x-1 whitespace-nowrap">
         <span className="text-[var(--color-primary)]">Popular Feeds.</span>
         <span className="text-gray-600">Click On The Post And Enjoy.</span>
       </p>

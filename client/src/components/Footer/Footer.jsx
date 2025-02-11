@@ -9,7 +9,7 @@ const Footer = () => {
         <img src={logo} alt="logo" />
 
         {/* Program Section */}
-        <ul className="text-white flex flex-col gap-5">
+        <ul className="text-white flex flex-col gap-5 mx-auto text-left">
           <li className="text-xl font-semibold mb-2">AbilitaEdge Program</li>
           <li>MERN Stack Website</li>
           <li>Android Development</li>
@@ -18,7 +18,7 @@ const Footer = () => {
         </ul>
 
         {/* Resources Section */}
-        <ul className="text-white flex flex-col gap-5">
+        <ul className="text-white flex flex-col gap-5 mx-auto text-left">
           <li className="text-xl font-semibold mb-2">Resources</li>
           <li>Documentation</li>
           <li>Tutorials</li>

@@ -25,7 +25,7 @@ const landingpage = () => {
   };
   const { id } = useParams();
   return (
-    <div className="flex flex-col gap-5 px-[250px] py-10">
+    <div className="flex flex-col gap-5 px-[50px] md:px-[90px] lg:px-[200px] py-10">
       <Headline title={blogData.title} />
       <div className="flex gap-13 flex-col md:flex-row">
         <div className="flex-1 flex flex-col gap-4">
@@ -72,7 +72,7 @@ const landingpage = () => {
         
           <p className="text-sm">{blogData.para3}</p>
         </div>
-        <div className="w-[35%] flex flex-col gap-7">
+        <div className="lg:w-[35%] md:w-[38%] sm:w-[50%] mx-auto flex flex-col gap-7">
             <SubscribeBox />
             <Socials />
         </div>
