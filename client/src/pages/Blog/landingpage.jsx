@@ -96,7 +96,7 @@ export default function blogpage() {
   ];
 
   return (
-    <div className="flex flex-col gap-5 px-[250px] py-10">
+    <div className="flex flex-col gap-5 lg:px-[250px] md:px-[120px] px-[50px] py-10">
       <BlogHeadline />
 
       <div className="flex flex-wrap gap-4">
@@ -105,7 +105,7 @@ export default function blogpage() {
           <Link
             to={`/blog/${blog.id}`}
             key={index}
-            className="bg-white h-[340px] w-[320px] pb-4 shadow-lg rounded-lg"
+            className="bg-white h-[340px] w-[320px] pb-4 shadow-lg rounded-lg mx-auto"
           >
             <img
               src={blog.img}
@@ -120,7 +120,7 @@ export default function blogpage() {
           </Link>
         ))}
 
-        <div className="flex flex-col gap-3 w-[320px] h-[340px] p-4 shadow-lg rounded-lg">
+        <div className="flex flex-col gap-3 w-[320px] h-[340px] p-4 shadow-lg rounded-lg mx-auto">
           {shortNews.map((news, index) => (
             <div key={index} className="flex gap-3">
               <img src={img3} alt="img 3" className="h-[52px] w-auto" />
@@ -141,7 +141,7 @@ export default function blogpage() {
 
         {/* Remaining Rows: 3 Blogs Each */}
         {blogs.slice(2).map((blog, index) => (
-          <Link to={`/blog/${blog.id}`} key={index}>
+          <Link to={`/blog/${blog.id}`} key={index} className="mx-auto">
             <div className="bg-white w-[320px] h-[340px] pb-4 shadow-lg rounded-lg">
               <img
                 src={blog.img}

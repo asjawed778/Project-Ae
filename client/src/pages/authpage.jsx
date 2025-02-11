@@ -1,6 +1,6 @@
 import logo from "../../public/logo.svg";
-import googleImage from "../../public/imgs/g_p.jpeg";
-import appleImage from "../../public/imgs/a_p.png";
+import googleImage from "../../public/imgs/google.svg";
+import appleImage from "../../public/imgs/apple.svg";
 
 import { useState } from "react";
 
@@ -38,9 +38,9 @@ function AuthPage() {
 
   return (
     <>
-      <div className="flex items-center justify-between h-screen py-10 px-20">
+      <div className="flex flex-wrap items-center justify-between h-screen py-10 px-20">
         {/* First Row */}
-        <div className="flex flex-col items-start gap-2">
+        <div className="flex flex-col items-start gap-2 mb-6 mx-auto">
           <img src={logo} alt="logo" className="w-[450px]" />
           <p className="font-bold text-lg text-gray-600 flex flex-col ml-3">
             <span>Transforming Your Abilities</span>
@@ -49,7 +49,7 @@ function AuthPage() {
         </div>
 
         {/* Second Row */}
-        <div className="flex flex-col gap-5 w-[25rem]">
+        <div className="flex flex-col gap-5 w-[25rem] mx-auto">
           <button className="hover:bg-gray-100 flex items-center justify-center px-5 py-3 border border-black rounded-full duration-300 cursor-pointer">
             <img src={googleImage} alt="Google" className="h-5 w-fit" />
             <p>Sign up with Google</p>
@@ -103,6 +103,7 @@ function AuthPage() {
         setSignupModal={setSignupModal}
         setOtpModal={setOtpModal}
         setSignupData={setSignupData}
+        setLoginModal={setLoginModal}
       />
       <OTPModal
         otpModal={otpModal}
@@ -113,6 +114,7 @@ function AuthPage() {
         loginModal={loginModal}
         setLoginModal={setLoginModal}
         setResetModal={setResetModal}
+        setSignupModal={setSignupModal}
       />
       <ResetPasswordModal
         setEmail={setEmail}

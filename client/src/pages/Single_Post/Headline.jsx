@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 export default function Headline({ title }) {
   return (
-    <div className="flex gap-2 items-center">
+    <div className="flex w-full gap-2 items-center">
       <Link to="/">
         <GoHome size={20} />
       </Link>

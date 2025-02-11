@@ -28,7 +28,7 @@ function HomePage() {
 
   return (
     <motion.div
-      className="h-auto flex flex-col items-center w-full font-sans"
+      className="h-auto flex flex-col items-center w-full font-sans overflow-x-hidden lg:overflow-x-auto"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
@@ -103,7 +103,7 @@ function HomePage() {
             <motion.div
               key={index}
               className="bg-gradient-to-r from-[#426BE1] to-[#E69CC1] text-white font-sans flex flex-col items-start justify-center p-8 sm:p-6 h-48 w-80 md:w-56 lg:w-80 rounded-lg shadow-lg"
-              whileHover={{ scale: 1.1 }}
+              whileHover={{ scale: 1.06 }}
               whileTap={{ scale: 0.95 }}
               variants={itemVariants}
             >

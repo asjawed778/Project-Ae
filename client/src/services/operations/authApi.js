@@ -133,7 +133,7 @@ export function loginUser(userLoginData, navigate) {
       }
     }
   };
-} 
+}
 
 export function resetPassword(
   userEmail,
