@@ -11,6 +11,7 @@ const Button = ({
     default:
       "text-white bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] active:bg-[var(--color-primary-active)]",
     inverse: "bg-white text-[var(--color-primary)]",
+    red: "text-white bg-red-600 rounded-full hover:bg-red-900"
   };
 
   return (
