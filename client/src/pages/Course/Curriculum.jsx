@@ -78,7 +78,7 @@ export default function Curriculum({ specificCourse }) {
   return (
     <div
       style={{ backgroundColor: "rgb(244, 246, 252)" }}
-      className="px-6 py-4 rounded-2xl"
+      className="px-6 py-4 rounded-2xl mx-auto"
     >
       <div className="flex flex-col gap-4 w-full">
         {lessonsData?.map((lesson, index) => {

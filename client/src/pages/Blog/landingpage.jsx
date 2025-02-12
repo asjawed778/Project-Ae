@@ -96,7 +96,7 @@ export default function blogpage() {
   ];
 
   return (
-    <div className="flex flex-col gap-5 lg:px-[250px] md:px-[120px] px-[50px] py-10">
+    <div className="flex flex-col gap-5 xl:px-[200px] lg:px-[150px] md:px-[100px] px-[50px] py-10">
       <BlogHeadline />
 
       <div className="flex flex-wrap gap-4">
