@@ -9,6 +9,7 @@ import {
   getAllCategory,
   getCourseByCategory,
 } from "../services/operations/addCourses";
+import CourseSkeleton from "./skeletons/CourseSkeleton";
 
 export default function Carousal() {
   const dispatch = useDispatch();
@@ -36,7 +37,7 @@ export default function Carousal() {
   }, [activeTab]);
 
   return (
-    <div className="p-8 mt-4 w-full ">
+    <div className="p-8 mt-4 w-full">
       {/* Title and Subtitle */}
       <div className=" mb-6 items-center">
         <h2 className="font-sans font-semibold text-2xl text-[var(--color-primary)]">
@@ -80,7 +81,7 @@ export default function Carousal() {
 
       {/* Scrollable Course Cards */}
       {coursesAll ? (
-        <div className="flex items-center gap-5 p-4">
+        <div className="flex items-center flex-wrap md:flex-nowrap gap-5 p-4">
           {coursesAll?.map((course, index) => (
             <Link
               key={index}
@@ -132,7 +133,7 @@ export default function Carousal() {
           ))}
         </div>
       ) : (
-        <div className="text-center text-gray-600">Loading courses...</div>
+        <CourseSkeleton />
       )}
     </div>
   );
