@@ -6,6 +6,11 @@ import Courses from "../../components/Carousal";
 import Membership from "../../components/Membership";
 import { Link } from "react-router-dom";
 
+const gradientBackground = {
+  background:
+    "linear-gradient(to bottom left, #E69CC1, #8C6BED, #426BE1, #4896EC)",
+};
+
 function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -102,13 +107,15 @@ function HomePage() {
           (skill, index) => (
             <motion.div
               key={index}
-              className="bg-gradient-to-r from-[#426BE1] to-[#E69CC1] text-white font-sans flex flex-col items-start justify-center p-8 sm:p-6 h-48 w-80 md:w-56 lg:w-80 rounded-lg shadow-lg"
+              style={gradientBackground}
+              className="text-white font-sans flex flex-col items-start justify-center p-8 sm:p-6 h-48 w-80 md:w-56 lg:w-80 rounded-lg shadow-lg"
               whileHover={{ scale: 1.06 }}
               whileTap={{ scale: 0.95 }}
               variants={itemVariants}
             >
-              <h1 className="font-semibold text-2xl lg:text-3xl">
-                {skill} Skills
+              <h1 className="font-semibold text-2xl lg:text-3xl flex flex-col">
+                {skill}
+                <span>Skills</span>
               </h1>
             </motion.div>
           )

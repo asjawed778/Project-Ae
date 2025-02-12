@@ -8,6 +8,6 @@ export const addCourseEndpoints = {
   GET_COURSE_BY_CATEGORY: (categoryId) =>
     SERVER_URL + `/course/get-category-course/${categoryId}`,
   GET_FULL_COURSE_DETAILS: (courseId) =>
-    SERVER_URL + `/course/get-full_course-details/${courseId}`,
+    SERVER_URL + `/course/get-full-course-details/${courseId}`,
   ADD_CATEGORY: SERVER_URL + `course/add-category`,
 };

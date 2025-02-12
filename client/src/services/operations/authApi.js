@@ -103,6 +103,7 @@ export function logoutUser(navigate) {
 }
 
 export function loginUser(userLoginData, navigate) {
+  console.log("here", userLoginData)
   return async (dispatch) => {
     try {
       const response = await apiConnector("POST", LOGIN_API, userLoginData);
@@ -130,6 +131,9 @@ export function loginUser(userLoginData, navigate) {
       }
       if (error.status === 500) {
         toast.error("Internal Server Error");
+      }
+      if(error.status === 404) {
+        toast.error(error.response.data.message)
       }
     }
   };

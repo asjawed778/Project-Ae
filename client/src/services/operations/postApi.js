@@ -1,8 +1,7 @@
 import { toast } from "react-hot-toast";
 import { postEndpoints } from "../post.api";
-// import { setLoading } from "../../redux/slices/loadingSlice";
 import { apiConnector } from "../api";
-import { setPosts, setError } from "../../store/reducers/postReducer";
+import { setPosts } from "../../store/reducers/postReducer";
 import { setUserPosts } from "../../store/reducers/userPostReducer";
 
 const { GET_ALL_POSTS, GET_USER_ALL_POST, VOTE_POST, DELETE_POST } =
@@ -15,7 +14,6 @@ export function getAllPost() {
     //console.log("get all function called") ;
     const token = getState().auth.token;
     //console.log("token of get all post", token) ;
-    dispatch(setLoading(true));
 
     try {
       if (!token) {
@@ -42,10 +40,6 @@ export function getAllPost() {
       } else {
         toast.error("Something went wrong. Please try again.");
       }
-      //console.log("Error creating post:", error);
-      dispatch(setError(error.message));
-    } finally {
-      dispatch(setLoading(false));
     }
   };
 }
@@ -56,8 +50,6 @@ export function voteOnPost(postId, voteType) {
   return async (dispatch, getState) => {
     console.log(voteType);
     const token = getState().auth.token;
-    dispatch(setLoading(true));
-
     try {
       const response = await apiConnector(
         "POST",
@@ -83,8 +75,6 @@ export function voteOnPost(postId, voteType) {
         toast.error("Failed to vote on reply");
       }
       //console.error("Error in voting on reply:", error);
-    } finally {
-      dispatch(setLoading(false));
     }
   };
 }
@@ -93,10 +83,7 @@ export function voteOnPost(postId, voteType) {
 
 export function getUserPost() {
   return async (dispatch, getState) => {
-    //console.log("get all function called") ;
     const token = getState().auth.token;
-    //console.log("token of get all post", token) ;
-    dispatch(setLoading(true));
 
     try {
       if (!token) {
@@ -123,10 +110,6 @@ export function getUserPost() {
       } else {
         toast.error("Something went wrong. Please try again.");
       }
-      //console.log("Error creating post:", error);
-      dispatch(setError(error.message));
-    } finally {
-      dispatch(setLoading(false));
     }
   };
 }
@@ -136,7 +119,6 @@ export function getUserPost() {
 export function deletePost(postId) {
   return async (dispatch, getState) => {
     const token = getState().auth.token;
-    dispatch(setLoading(true));
 
     try {
       const response = await apiConnector("DELETE", DELETE_POST(postId), null, {
@@ -156,8 +138,6 @@ export function deletePost(postId) {
         toast.error("Failed to delete reply");
       }
       // console.error("Error in deleting reply:", error);
-    } finally {
-      dispatch(setLoading(false));
     }
   };
 }

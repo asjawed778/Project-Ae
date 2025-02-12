@@ -96,7 +96,7 @@ export default function blogpage() {
   ];
 
   return (
-    <div className="flex flex-col gap-5 lg:px-[250px] md:px-[120px] px-[50px] py-10">
+    <div className="flex flex-col gap-5 xl:px-[200px] lg:px-[150px] md:px-[100px] px-[50px] py-10">
       <BlogHeadline />
 
       <div className="flex flex-wrap gap-4">
@@ -141,7 +141,11 @@ export default function blogpage() {
 
         {/* Remaining Rows: 3 Blogs Each */}
         {blogs.slice(2).map((blog, index) => (
-          <Link to={`/blog/${blog.id}`} key={index} className="mx-auto">
+          <Link
+            to={`/blog/${blog.id}`}
+            key={index}
+            className={`${index == blogs.length && "mr-auto"}`}
+          >
             <div className="bg-white w-[320px] h-[340px] pb-4 shadow-lg rounded-lg">
               <img
                 src={blog.img}

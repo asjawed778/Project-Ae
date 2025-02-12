@@ -2,7 +2,7 @@ import { toast } from "react-hot-toast";
 import { apiConnector } from "../api";
 import { addCourseEndpoints } from "../course.api";
 import { setCategories } from "../../store/reducers/adminCategoryReducer";
-import { setCourses } from "../../store/reducers/coursesReducer";
+import { setCourses, setSpecificCourse } from "../../store/reducers/coursesReducer";
 
 const {
   GET_ALL_CATEGORY,
@@ -14,7 +14,6 @@ const {
 } = addCourseEndpoints;
 
 export function addCategory(data) {
-  console.log("add", data)
   return async (dispatch, getState) => {
     try {
       const response = await apiConnector("POST", ADD_CATEGORY, data);
@@ -40,18 +39,15 @@ export function addCategory(data) {
 }
 
 export function getAllCategory() {
-  return async (dispatch, getState=0) => {
-    console.log("hello i am here")
+  return async (dispatch, getState = 0) => {
     try {
       const response = await apiConnector("GET", GET_ALL_CATEGORY);
-      console.log("response data", response.data.categories)
 
       if (!response.data.success) {
         console.log(response.error.message);
         throw new Error(response.data.message);
       }
 
-      //console.log("Success", response.data);
       dispatch(setCategories(response.data.categories));
     } catch (error) {
       if (error.response && error.response.status === 404) {
@@ -64,8 +60,6 @@ export function getAllCategory() {
 
 export function addCourse(payload, resetForm) {
   return async (dispatch, getState) => {
-    console.log("Form", payload);
-
     try {
       const response = await apiConnector("POST", ADD_COURSES, payload);
 
@@ -104,7 +98,6 @@ export function getAllCourses() {
         throw new Error(response.data.message);
       }
 
-      console.log("Success courses", response);
       //dispatch(getAllCategory()) ;
       dispatch(setCourses(response.data));
     } catch (error) {
@@ -116,9 +109,29 @@ export function getAllCourses() {
   };
 }
 
+export function getFullCourseDetails(id) {
+  return async (dispatch, getState) => {
+    try {
+      const response = await apiConnector("GET", GET_FULL_COURSE_DETAILS(id));
+      
+      if (!response.data.success) {
+        console.log(response.error.message);
+        throw new Error(response.data.message);
+      }
+
+      //dispatch(getAllCategory()) ;
+      dispatch(setSpecificCourse(response.data));
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        toast.error("Page not found");
+      }
+      console.log(error.response);
+    }
+  };
+}
+
 export function getCourseByCategory(id) {
   return async (dispatch, getState) => {
-    console.log("id", id);
     try {
       const response = await apiConnector("GET", GET_COURSE_BY_CATEGORY(id));
 
@@ -126,7 +139,6 @@ export function getCourseByCategory(id) {
         console.log(response.error.message);
         throw new Error(response.data.message);
       }
-      console.log(response.data);
       dispatch(setCourses(response.data));
     } catch (error) {
       if (error.response && error.response.status === 404) {
