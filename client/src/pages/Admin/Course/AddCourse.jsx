@@ -145,7 +145,6 @@ function AddCourse() {
     // 1. Change courseContent to string  2. Send as key value pair  3.Parse it on server
     formData.append("courseContent", JSON.stringify(coursecontent));
 
-    console.log("form data:", formData)
     // Dispatch or send the FormData
     dispatch(addCourse(formData, resetForm));
   };
