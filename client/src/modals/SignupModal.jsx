@@ -1,15 +1,19 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { sendSignupOTP } from "../services/operations/authApi";
-import ButtonLoading from "../components/Button/ButtonLoading";
 import logo from "../../public/logo.svg";
 import google from "../../public/imgs/google.svg";
 import apple from "../../public/imgs/apple.svg";
+
+import { toast } from "react-hot-toast";
 import { RxCross2 } from "react-icons/rx";
-import { useForm } from "react-hook-form";
-import validator from "validator";
 import { FiEye } from "react-icons/fi";
 import { FiEyeOff } from "react-icons/fi";
+
+import { useForm } from "react-hook-form";
+import validator from "validator";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+
+import ButtonLoading from "../components/Button/ButtonLoading";
+import { useSendSignupOtpMutation } from "../services/auth.api";
 
 function SignupModal({
   signupModal,
@@ -18,6 +22,9 @@ function SignupModal({
   setSignupData,
   setLoginModal,
 }) {
+  const [sendSignupOtp, { isLoading, error }] = useSendSignupOtpMutation();
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
@@ -25,10 +32,9 @@ function SignupModal({
     watch,
     formState: { errors },
   } = useForm();
-  const dispatch = useDispatch();
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   if (!signupModal) return null;
 
@@ -44,14 +50,16 @@ function SignupModal({
 
   const signupFormSubmitHandler = async (data) => {
     try {
-      setLoading(true);
       setSignupData(data);
-      await dispatch(sendSignupOTP(data, setSignupModal, setOtpModal));
+      await sendSignupOtp(data);
+
+      toast.success("OTP sent successfully");
+      setSignupModal(false);
+      setOtpModal(true);
     } catch (err) {
-      console.log("Sign in error: ", err);
+      console.log("Sign in error: ", error);
     } finally {
       reset();
-      setLoading(false);
     }
   };
   const formValidation = {
@@ -86,11 +94,13 @@ function SignupModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center">
-
-        <div className="relative h-12 w-28">
-          <img src={logo} className="h-full w-full absolute" alt="logo" />
-        </div>
-        <RxCross2 onClick={signupModalCloseHandler}  className="text-lg cursor-pointer"/>
+          <div className="relative h-12 w-28">
+            <img src={logo} className="h-full w-full absolute" alt="logo" />
+          </div>
+          <RxCross2
+            onClick={signupModalCloseHandler}
+            className="text-lg cursor-pointer"
+          />
         </div>
         <div className="p-5 flex flex-col w-[80%] mx-auto">
           <p className="text-neutral-700 text-xs font-semibold">
@@ -183,14 +193,14 @@ function SignupModal({
                 Confirm Password
               </label>
               <div className="relative">
-              <input
-                {...register("confirmPassword", {
-                  required: "Confirm Password is required",
-                  validate: (value) =>
-                  value === watch("password") || "Passwords do not match",
-                })}
-                type={!showConfirmPassword ? "password" : "text"}
-                className="w-full outline-0 border px-2 py-1 rounded focus:border-blue-500"
+                <input
+                  {...register("confirmPassword", {
+                    required: "Confirm Password is required",
+                    validate: (value) =>
+                      value === watch("password") || "Passwords do not match",
+                  })}
+                  type={!showConfirmPassword ? "password" : "text"}
+                  className="w-full outline-0 border px-2 py-1 rounded focus:border-blue-500"
                 />
                 <div
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
@@ -198,7 +208,7 @@ function SignupModal({
                 >
                   {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
                 </div>
-                </div>
+              </div>
               {errors?.confirmPassword && (
                 <p className="text-red-500 text-xs mt-1">
                   {errors?.confirmPassword?.message}
@@ -208,10 +218,18 @@ function SignupModal({
             <div className="flex items-center justify-between mt-3">
               <button
                 type="submit"
-                disabled={loading}
-                className={`flex items-center justify-center gap-2 py-2 h-8 w-full bg-blue-600 text-xs text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 ${loading && "cursor-not-allowed"}`}
+                disabled={isLoading}
+                className={`flex items-center justify-center gap-2 py-2 h-8 w-full bg-blue-600 text-xs text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 ${
+                  isLoading && "cursor-not-allowed"
+                }`}
               >
-                {loading ? <><ButtonLoading /> </> : "Register"}
+                {isLoading ? (
+                  <>
+                    <ButtonLoading />{" "}
+                  </>
+                ) : (
+                  "Register"
+                )}
               </button>
             </div>
           </form>

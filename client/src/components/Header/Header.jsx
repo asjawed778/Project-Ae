@@ -3,19 +3,27 @@ import { CiSearch } from "react-icons/ci";
 
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
+import { toast } from "react-hot-toast";
 import { logout } from "../../store/reducers/authReducer";
 import HamNavbar from "./HamNavbar";
-import { logoutUser } from "../../services/operations/authApi";
+import { useLogoutMutation } from "../../services/auth.api";
 
 export default function Header() {
   const { token } = useSelector((store) => store.auth);
-  const navigate = useNavigate()
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const [logoutUser, { isLoading, error }] = useLogoutMutation();
+
   const handleLogout = async () => {
-    dispatch(logoutUser(navigate));
+    try {
+      await logoutUser();
+      dispatch(logout());
+      toast.success("Logged out successfully");
+      navigate("/auth");
+    } catch (err) {
+      toast.error("Error", error.message);
+    }
   };
 
   return (

@@ -9,50 +9,49 @@ export const apiAuth = createApi({
     sendSignupOtp: builder.mutation({
       query: (data) => ({
         url: "send-signup-otp",
-        method: "GET",
-        // body: data,
+        method: "POST",
+        body: data,
       }),
     }),
     verifySignupOtp: builder.mutation({
       query: (data) => ({
         url: "verify-signup-otp",
         method: "POST",
-        // body: data,
+        body: data,
       }),
     }),
     login: builder.mutation({
       query: (data) => ({
         url: "login",
         method: "POST",
-        // body: data,
+        body: data,
       }),
     }),
     logout: builder.mutation({
-      query: (data) => ({
+      query: () => ({
         url: "logout",
         method: "POST",
-        body: data,
       }),
     }),
     updatePassword: builder.mutation({
       query: (data) => ({
         url: "update-password",
         method: "POST",
-        // body: data,
+        body: data,
       }),
     }),
     sendForgotPasswordOtp: builder.mutation({
       query: (data) => ({
         url: "send-forgotPassword-otp",
         method: "POST",
-        // body: data,
+        body: data,
       }),
     }),
     verifyForgotPasswordOtp: builder.mutation({
       query: (data) => ({
         url: "verify-forgotPassword-otp",
         method: "POST",
-        // body: data
+        body: data,
       }),
     }),
   }),
@@ -60,4 +59,11 @@ export const apiAuth = createApi({
 
 export const {
   // Auth
+  useLogoutMutation,
+  useVerifySignupOtpMutation,
+  useUpdatePasswordMutation,
+  useVerifyForgotPasswordOtpMutation,
+  useSendForgotPasswordOtpMutation,
+  useLoginMutation,
+  useSendSignupOtpMutation,
 } = apiAuth;

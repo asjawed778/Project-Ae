@@ -1,15 +1,21 @@
-import { RxCross1, RxCross2 } from "react-icons/rx";
-import { useDispatch } from "react-redux";
-import { useState } from "react";
 import logo from "../../public/logo.svg";
-import { FiEye } from "react-icons/fi";
-import { FiEyeOff } from "react-icons/fi";
 import google from "../../public/imgs/google.svg";
 import apple from "../../public/imgs/apple.svg";
-import ButtonLoading from "../components/Button/ButtonLoading";
-import { loginUser } from "../services/operations/authApi";
+
+import { RxCross2 } from "react-icons/rx";
+import { FiEye } from "react-icons/fi";
+import { FiEyeOff } from "react-icons/fi";
+
+import Cookies from "js-cookie";
+import { toast } from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import validator from "validator";
+
+import ButtonLoading from "../components/Button/ButtonLoading";
+import { useLoginMutation } from "../services/auth.api";
+import { login as loginReducer } from "../store/reducers/authReducer";
 
 function LoginModal({
   loginModal,
@@ -26,15 +32,28 @@ function LoginModal({
   } = useForm();
   const dispatch = useDispatch();
 
-  const [loading, setLoading] = useState(false);
+  const [login, { isLoading, error }] = useLoginMutation();
+
   const [showPassword, setShowPassword] = useState(false);
   if (!loginModal) return null;
 
-  const loginFormSubmitHandler = async(data) => {
-    setLoading(true)
-    await dispatch(loginUser(data));
-    setLoading(false)
-    reset()
+  const loginFormSubmitHandler = async (data) => {
+    try {
+      const res = await login(data);
+      if (res.data.success) {
+        const token = res.data.token;
+        const user = res.data.user;
+
+        dispatch(loginReducer({ token, user }));
+        Cookies.set("token", token, { expires: 7 }); // Token valid for 7 days
+        toast.success("User Login successfully");
+        navigate("/");
+      }
+    } catch (err) {
+      toast.error("error: ", error);
+    } finally {
+      reset();
+    }
   };
 
   const formValidation = {
@@ -131,7 +150,7 @@ function LoginModal({
                 <input
                   {...formValidation}
                   id="password"
-                  type={!showPassword?  "password" : "text"}
+                  type={!showPassword ? "password" : "text"}
                   className="w-full outline-0 border px-2 py-1 rounded focus:border-blue-500"
                 />
                 <div
@@ -157,16 +176,15 @@ function LoginModal({
               </p>
             </div>
 
-              <button
-                className={`py-2 h-8 w-full flex justify-center items-center rounded-md text-white
+            <button
+              className={`py-2 h-8 w-full flex justify-center items-center rounded-md text-white
                      bg-blue-600 hover:bg-blue-700
-                     disabled:bg-gray-400 ${loading && "cursor-not-allowed"}
+                     disabled:bg-gray-400 ${isLoading && "cursor-not-allowed"}
                 `}
-                disabled={loading}
-              >
-                {loading ? <ButtonLoading /> : <p>Submit</p>}
-              </button>
-            
+              disabled={isLoading}
+            >
+              {isLoading ? <ButtonLoading /> : <p>Submit</p>}
+            </button>
           </form>
 
           <div className="h-10 w-full flex items-center relative">

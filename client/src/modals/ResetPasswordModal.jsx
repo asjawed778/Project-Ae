@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { RxCross1 } from "react-icons/rx";
-import { useDispatch } from "react-redux";
+import { toast } from "react-hot-toast";
 
 import ButtonLoading from "../components/Button/ButtonLoading";
-import { resetPassword } from "../services/operations/authApi";
+import { useSendForgotPasswordOtpMutation } from "../services/auth.api";
 
 function ResetPasswordModal({
   setEmail,
@@ -11,9 +11,8 @@ function ResetPasswordModal({
   setResetModal,
   setUpdatePasswordModal,
 }) {
-  const dispatch = useDispatch();
-
-  const [loading, setLoading] = useState(false);
+  const [sendForgotPasswordOtp, { isLoading }] =
+    useSendForgotPasswordOtpMutation();
   const [userEmail, setUserEmail] = useState({ email: "" });
 
   const isFormValid = userEmail.email.trim() !== "";
@@ -24,12 +23,22 @@ function ResetPasswordModal({
     setUserEmail({ email: e.target.value });
   };
 
-  const resetPasswordSubmitHandler = (e) => {
+  const resetPasswordSubmitHandler = async (e) => {
     e.preventDefault();
 
     const { email } = userEmail;
     setEmail(email);
-    dispatch(resetPassword(userEmail, setResetModal, setUpdatePasswordModal));
+
+    await sendForgotPasswordOtp(userEmail);
+
+    toast.success("OTP sent successfully");
+
+    // to close reset modal
+    setResetModal(false);
+
+    // to invoke otp modal
+    setUpdatePasswordModal(true);
+
     setUserEmail({ email: "" });
   };
 
@@ -74,7 +83,7 @@ function ResetPasswordModal({
             }`}
             disabled={!isFormValid}
           >
-            {loading ? <ButtonLoading /> : <p>Submit</p>}
+            {isLoading ? <ButtonLoading /> : <p>Submit</p>}
           </button>
         </form>
       </div>

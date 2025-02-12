@@ -1,17 +1,20 @@
-import { useEffect, useRef, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 import ButtonLoading from "../components/Button/ButtonLoading";
-import { verifySignupOTP } from "../services/operations/authApi";
+import { useVerifySignupOtpMutation } from "../services/auth.api";
+import { login } from "../store/reducers/authReducer";
 
 function OTPModal({ otpModal, setOtpModal, signupData }) {
+  const [verifySignupOtp, { isLoading, error }] = useVerifySignupOtpMutation();
+
   const otpInputRefs = useRef([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false);
   const [isOtpComplete, setIsOtpComplete] = useState(false);
 
   useEffect(() => {
@@ -58,11 +61,22 @@ function OTPModal({ otpModal, setOtpModal, signupData }) {
     }
   };
 
-  const otpSubmitHandler = (e) => {
+  const otpSubmitHandler = async (e) => {
     e.preventDefault();
     const otpValues = otpInputRefs.current.map((ref) => ref.value).join("");
     const userRegisterData = { ...signupData, otp: otpValues };
-    dispatch(verifySignupOTP(userRegisterData, setOtpModal, navigate));
+    try {
+      const res = await verifySignupOtp(userRegisterData);
+
+      if (res.data.success) {
+        dispatch(login({ token: res.data.token, user: res.data.user }));
+        toast.success("User Registerd successfully");
+        setOtpModal(false);
+        navigate("/");
+      }
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   return (
@@ -113,7 +127,7 @@ function OTPModal({ otpModal, setOtpModal, signupData }) {
           }`}
           disabled={!isOtpComplete}
         >
-          {loading ? <ButtonLoading /> : <p>Submit</p>}
+          {isLoading ? <ButtonLoading /> : <p>Submit</p>}
         </button>
       </form>
     </div>
