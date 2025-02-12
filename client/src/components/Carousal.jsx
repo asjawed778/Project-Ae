@@ -37,7 +37,7 @@ export default function Carousal() {
   }, [activeTab]);
 
   return (
-    <div className="p-8 mt-4 w-full">
+    <div className="p-8 mt-4 w-full mx-auto">
       {/* Title and Subtitle */}
       <div className=" mb-6 items-center">
         <h2 className="font-sans font-semibold text-2xl text-[var(--color-primary)]">

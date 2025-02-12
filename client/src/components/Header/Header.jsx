@@ -1,34 +1,36 @@
 import logo from "../../../public/logo.svg";
 import { CiSearch } from "react-icons/ci";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { logout } from "../../store/reducers/authReducer";
 import HamNavbar from "./HamNavbar";
+import { logoutUser } from "../../services/operations/authApi";
 
 export default function Header() {
   const { token } = useSelector((store) => store.auth);
+  const navigate = useNavigate()
 
   const dispatch = useDispatch();
 
   const handleLogout = async () => {
-    dispatch(logout());
+    dispatch(logoutUser(navigate));
   };
 
   return (
-    <nav className="flex items-center gap-24 h-20 py-4 px-10 sm:px-20 md:px-32">
+    <nav className="flex w-full items-center justify-between gap-4 h-20 py-4 px-10 sm:px-20 md:px-10">
       {/* Logo */}
       <Link to="/">
         <img
           src={logo}
           alt="logo"
-          className="min-w-[200px] w-[200px] h-[45px]"
+          className=" lg:w-[200px] md:w-[170px] min-w-[150px] h-[45px]"
         />
       </Link>
 
       {/* For Bigger Screen */}
-      <div className="hidden font-bold md:flex space-x-24">
+      <div className="hidden  font-bold md:flex space-x-16">
         {/* Second Section */}
         <div className="relative">
           <CiSearch className="absolute left-2 top-3 size-6 text-[var(--color-primary)]" />
