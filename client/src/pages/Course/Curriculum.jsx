@@ -3,6 +3,7 @@ import { FaCheck } from "react-icons/fa";
 import { FaLock } from "react-icons/fa";
 import { ImFilesEmpty } from "react-icons/im";
 import { useState } from "react";
+import Button from "../../components/Button/Button";
 export default function Curriculum({ specificCourse }) {
   // console.log("specific", specificCourse)
   const [expandedLessons, setExpandedLessons] = useState({});
@@ -128,19 +129,15 @@ export default function Curriculum({ specificCourse }) {
               >
                 {lesson.subLessons.map((subLesson, index) => (
                   <div key={index} className="mb-4 ml-6 pr-2">
-                    <div className="flex justify-between">
-                      <div className="font-semibold text-lg">
-                        <div className="flex items-center gap-2">
+                    <div className="flex justify-between gap-5">
+                      <div className="">
+                        <div className="flex items-center gap-2 w-[15rem]">
                           <ImFilesEmpty className="text-xl" />
-                          <span className="font-semibold text-lg">
-                            {subLesson.title}
-                          </span>
+                          <span className="">{subLesson.title}</span>
                         </div>
                       </div>
                       <div className="flex gap-4 text-zinc-600 justify-between w-[40%]">
-                        <span className="text-white bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] active:bg-[var(--color-primary-active)] px-4 py-1 rounded-lg cursor-pointer">
-                          Preview
-                        </span>
+                        <Button className="h-fit">Preview</Button>
                         <span>{subLesson.duration}</span>
                         <span>
                           {subLesson.locked ? (
