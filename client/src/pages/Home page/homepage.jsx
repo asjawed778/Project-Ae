@@ -113,8 +113,9 @@ function HomePage() {
               whileTap={{ scale: 0.95 }}
               variants={itemVariants}
             >
-              <h1 className="font-semibold text-2xl lg:text-3xl">
-                {skill} Skills
+              <h1 className="font-semibold text-2xl lg:text-3xl flex flex-col">
+                {skill}
+                <span>Skills</span>
               </h1>
             </motion.div>
           )

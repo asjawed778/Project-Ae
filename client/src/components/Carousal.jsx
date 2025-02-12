@@ -81,12 +81,12 @@ export default function Carousal() {
 
       {/* Scrollable Course Cards */}
       {coursesAll ? (
-        <div className="flex items-center flex-wrap md:flex-nowrap gap-5 p-4">
+        <div className="flex items-center flex-wrap md:flex-nowrap gap-5 p-4 mx-auto">
           {coursesAll?.map((course, index) => (
             <Link
               key={index}
               to={`/course/${course._id}`}
-              className="bg-white flex flex-col gap-2 w-[296px] pb-3 rounded-lg shadow-md"
+              className="bg-white flex flex-col gap-2 w-[296px] pb-3 rounded-lg shadow-md mx-auto"
             >
               <img
                 src={course.thumbnail}

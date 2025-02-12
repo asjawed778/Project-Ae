@@ -2,7 +2,7 @@ import { toast } from "react-hot-toast";
 import { apiConnector } from "../api";
 import { addCourseEndpoints } from "../course.api";
 import { setCategories } from "../../store/reducers/adminCategoryReducer";
-import { setCourses } from "../../store/reducers/coursesReducer";
+import { setCourses, setSpecificCourse } from "../../store/reducers/coursesReducer";
 
 const {
   GET_ALL_CATEGORY,
@@ -100,6 +100,27 @@ export function getAllCourses() {
 
       //dispatch(getAllCategory()) ;
       dispatch(setCourses(response.data));
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        toast.error("Page not found");
+      }
+      console.log(error.response);
+    }
+  };
+}
+
+export function getFullCourseDetails(id) {
+  return async (dispatch, getState) => {
+    try {
+      const response = await apiConnector("GET", GET_FULL_COURSE_DETAILS(id));
+      
+      if (!response.data.success) {
+        console.log(response.error.message);
+        throw new Error(response.data.message);
+      }
+
+      //dispatch(getAllCategory()) ;
+      dispatch(setSpecificCourse(response.data));
     } catch (error) {
       if (error.response && error.response.status === 404) {
         toast.error("Page not found");
