@@ -16,7 +16,7 @@ export default function Carousal() {
   const dispatch = useDispatch();
 
   const categories = useSelector((state) => state.categories.categories);
-  const coursesAll = useSelector((state) => state.courses.courses.courses);
+  const coursesAll = useSelector((state) => state.courses.courses);
 
   const [activeTab, setActiveTab] = useState(null);
 

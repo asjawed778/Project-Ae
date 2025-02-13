@@ -67,7 +67,7 @@ function App() {
           />
         </Route>
 
-        {/* <Route
+        <Route
           path="/admin"
           element={
             <LazyComponent>
@@ -103,7 +103,7 @@ function App() {
               </LazyComponent>
             }
           />
-        </Route> */}
+        </Route>
 
         <Route
           path="/auth"

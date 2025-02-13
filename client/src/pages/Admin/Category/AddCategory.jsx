@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { addCategory } from "../../../services/operations/addCourses";
 import { useDispatch } from "react-redux";
+import { useAddCategoryMutation } from "../../../services/course.api";
 
 const CourseDetailsForm = () => {
+  const [addCategory, { isLoading, error }] = useAddCategoryMutation();
+
   const { register, handleSubmit, setValue, reset, watch } = useForm();
   const [keyPoints, setKeyPoints] = useState([]);
   const [tags, setTags] = useState([]);
@@ -21,11 +23,16 @@ const CourseDetailsForm = () => {
     }
   };
 
-  const onSubmit = (data) => {
-    const result = addCategory(data)
-    dispatch(result)
-    console.log("Submitted Data:", data);
-    reset()
+  const onSubmit = async (data) => {
+    try {
+      const result = await addCategory(data);
+
+      toast.success("Successfully");
+    } catch (err) {
+      toast.error(error);
+    } finally {
+      reset();
+    }
   };
 
   return (
