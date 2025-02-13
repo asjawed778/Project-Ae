@@ -44,7 +44,7 @@ export default function courseLandingpage() {
               Overview
             </Button>
             <Button
-              onClick={() => {setSection(1); getcourseDetails(id)}}
+              onClick={() => setSection(1)}
               variant={`${section === 0 && "inverse"}`}
               className="rounded-b-none"
             >

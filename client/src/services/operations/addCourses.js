@@ -142,7 +142,8 @@ export function getCourseByCategory(id) {
       dispatch(setCourses(response.data));
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        toast.error("No course found");
+        // toast.error("No course found");
+        console.log("No Course Found")
       } else if (error.response && error.response.status === 500) {
         toast.error("Internal Server Error");
       }

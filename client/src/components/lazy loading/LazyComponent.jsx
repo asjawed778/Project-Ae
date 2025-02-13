@@ -5,7 +5,8 @@ import LoadingPage from "../../pages/loadingpage";
 const LazyComponent = ({ children }) => {
   return (
     <ErrorBoundary>
-      <Suspense fallback={<LoadingPage />}>{children}</Suspense>
+      {/* <Suspense fallback={<LoadingPage />}>{children}</Suspense> */}
+      {children}
     </ErrorBoundary>
   );
 };
