@@ -139,7 +139,7 @@ export default function Curriculum({ specificCourse }) {
                       <div className="flex gap-4 text-zinc-600 justify-evenly items-center w-auto md:w-[40%]">
                         <Button className="h-fit">Preview</Button>
                         <span>{subLesson.duration}</span>
-                        <span>
+                        <span className="w-4">
                           {subLesson.locked ? (
                             <FaLock />
                           ) : subLesson.completed ? (
