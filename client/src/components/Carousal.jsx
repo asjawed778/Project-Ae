@@ -14,6 +14,8 @@ import CourseSkeleton from "./skeletons/CourseSkeleton";
 export default function Carousal() {
   const dispatch = useDispatch();
 
+  const [skeleton, setSkeleton] = useState(false);
+
   // otherwise it is called again and again
   useEffect(() => {
     dispatch(getAllCategory());
@@ -21,6 +23,7 @@ export default function Carousal() {
 
   const categories = useSelector((state) => state.categories.categories);
   const coursesAll = useSelector((state) => state.courses.courses.courses);
+  console.log("all categories:", categories)
 
   const [activeTab, setActiveTab] = useState(null); // Start with null or a default value
 
@@ -30,9 +33,14 @@ export default function Carousal() {
     }
   }, [categories]); // Run this effect whenever categories change
 
+  async function getcourses(){
+    setSkeleton(true)
+    await dispatch(getCourseByCategory(activeTab));
+    setSkeleton(false)
+  }
   useEffect(() => {
     if (activeTab) {
-      dispatch(getCourseByCategory(activeTab));
+      getcourses()
     }
   }, [activeTab]);
 
@@ -54,7 +62,7 @@ export default function Carousal() {
         {categories
           .filter((_, i) => i < 4)
           .map((tab) => (
-            <button
+            tab.courses.length !== 0 && <button
               key={tab._id}
               onClick={() => {
                 setActiveTab(tab._id);
@@ -71,16 +79,16 @@ export default function Carousal() {
       </div>
       <div className="relative w-[80%]">
         <hr className="border-gray-200" />
-        <Link
+        {coursesAll && <Link
           to="/course"
           className="absolute right-0 -top-3 font-bold text-xs text-[var(--color-primary)] bg-white px-5"
         >
-          View More
-        </Link>
+          View More 
+        </Link>}
       </div>
 
       {/* Scrollable Course Cards */}
-      {coursesAll ? (
+      {!skeleton ? (
         <div className="flex items-center flex-wrap md:flex-nowrap gap-5 p-4 mx-auto">
           {coursesAll?.map((course, index) => (
             <Link

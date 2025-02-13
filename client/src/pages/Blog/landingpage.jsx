@@ -105,7 +105,7 @@ export default function blogpage() {
           <Link
             to={`/blog/${blog.id}`}
             key={index}
-            className="bg-white h-[340px] w-[320px] pb-4 shadow-lg rounded-lg mx-auto"
+            className="bg-white h-auto md:h-[340px] w-auto md:w-[320px] pb-4 shadow-lg rounded-lg mx-auto"
           >
             <img
               src={blog.img}
@@ -120,13 +120,13 @@ export default function blogpage() {
           </Link>
         ))}
 
-        <div className="flex flex-col gap-3 w-[320px] h-[340px] p-4 shadow-lg rounded-lg mx-auto">
+        <div className="flex flex-col items-center gap-3 h-auto md:h-[340px] w-[90vw] md:w-[320px] p-10 md:p-4 shadow-lg rounded-lg mx-auto">
           {shortNews.map((news, index) => (
-            <div key={index} className="flex gap-3">
+            <div key={index} className="flex gap-4 md:gap-2 justify-between">
               <img src={img3} alt="img 3" className="h-[52px] w-auto" />
-              <section className="flex flex-col">
-                <p className="tracking-tight font-bold text-sm">
-                  Self Driving car: Everything you n...
+              <section className="flex flex-col flex-1">
+                <p className="tracking-tight font-bold md:text-sm text-md line-clamp-1">
+                  Self Driving car: Everything you need to know
                 </p>
                 <p className="text-xs bg-[var(--color-primary)] text-white w-fit px-2 py-1 rounded-full">
                   Technology
@@ -144,9 +144,9 @@ export default function blogpage() {
           <Link
             to={`/blog/${blog.id}`}
             key={index}
-            className={`${index == blogs.length && "mr-auto"}`}
+            className={`${index == blogs.length && "mr-auto"} mx-auto`}
           >
-            <div className="bg-white w-[320px] h-[340px] pb-4 shadow-lg rounded-lg">
+            <div className="bg-white h-auto md:h-[340px] w-auto md:w-[320px] pb-4 shadow-lg rounded-lg">
               <img
                 src={blog.img}
                 alt="blog img"

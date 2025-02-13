@@ -66,6 +66,7 @@ export function verifySignupOTP(userRegisterData, setOtpModal, navigate) {
       setOtpModal(false);
       navigate("/");
     } catch (error) {
+      toast.error(error.response.data.message)
       console.log("Error in user register: ", error);
       if (error.status === 409) {
         toast.error("User Already Registered, Please login");
@@ -94,7 +95,7 @@ export function logoutUser(navigate) {
       navigate("/auth");
     } catch (error) {
       // console.log("Error in logging out: ", error);
-      toast.error("Error", error);
+      toast.error(error.response.data.message)
       return;
     } finally {
       toast.dismiss(load);
@@ -125,16 +126,17 @@ export function loginUser(userLoginData, navigate) {
       navigate("/");
     } catch (error) {
       console.log("Error in user login: ", error);
+      toast.error(error.response.data.message)
+      // if (error.status === 400) {
+      //   toast.error("Please Enter all details");
+      // }
 
-      if (error.status === 400) {
-        toast.error("Please Enter all details");
-      }
-      if (error.status === 500) {
-        toast.error("Internal Server Error");
-      }
-      if(error.status === 404) {
-        toast.error(error.response.data.message)
-      }
+      // if (error.status === 500) {
+      //   toast.error("Internal Server Error");
+      // }
+      // if(error.status === 404) {
+      //   toast.error(error.response.data.message)
+      // }
     }
   };
 }
@@ -163,6 +165,7 @@ export function resetPassword(
       // to invoke otp modal
       setUpdatePasswordModal(true);
     } catch (error) {
+      toast.error(error.response.data.message)
       if (error.status === 500) {
         toast.error("Internal Server Error");
       }
@@ -192,6 +195,7 @@ export function updatePassword(
 
       setUpdatePassswordModal(false);
     } catch (error) {
+      toast.error(error.response.data.message)
       if (error.status === 400) {
         toast.error("Please Enter all details");
       }
