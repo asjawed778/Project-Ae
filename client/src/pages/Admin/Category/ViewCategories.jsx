@@ -1,36 +1,34 @@
 import { useEffect, useState } from "react";
-import { getAllCategory } from "../../../services/operations/addCourses";
+
+// import { getAllCategory } from "../../../services/operations/addCourses";
 import { useDispatch, useSelector } from "react-redux";
+import { setCategories } from "../../../store/reducers/adminCategoryReducer";
+import { useGetAllCategoryQuery } from "../../../services/course.api";
 
 const ViewCategories = () => {
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
+  const { data: allCategories, isLoading, error } = useGetAllCategoryQuery();
   const dispatch = useDispatch();
 
   const categories = useSelector((state) => state.categories.categories);
 
-  useEffect(() => {
-    setLoading(true);
-    const result = getAllCategory();
-    result(dispatch);
-    setLoading(false);
 
-    // Replace with your API call
-    // fetch("/api/categories")
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     setCategories(data);
-    //     setLoading(false);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error fetching categories:", error);
-    //     setLoading(false);
-    //   });
-  }, []);
+  useEffect(() => {
+    if (allCategories?.success) {
+      dispatch(setCategories(allCategories?.categories || []));
+    }
+  }, [allCategories]);
+  // useEffect(() => {
+  //   setLoading(true);
+  //   const result = getAllCategory();
+  //   result(dispatch);
+  //   setLoading(false);
+  // }, []);
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <h2 className="text-2xl font-bold mb-6 text-center">Available Categories</h2>
-      {loading ? (
+      {isLoading ? (
         <p className="text-gray-600 text-center">Loading...</p>
       ) : categories.length === 0 ? (
         <p className="text-gray-600 text-center">No categories found.</p>

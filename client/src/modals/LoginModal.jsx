@@ -1,15 +1,25 @@
-import { RxCross1, RxCross2 } from "react-icons/rx";
-import { useDispatch } from "react-redux";
-import { useState } from "react";
 import logo from "../../public/logo.svg";
-import { FiEye } from "react-icons/fi";
-import { FiEyeOff } from "react-icons/fi";
 import google from "../../public/imgs/google.svg";
 import apple from "../../public/imgs/apple.svg";
-import ButtonLoading from "../components/Button/ButtonLoading";
-import { loginUser } from "../services/operations/authApi";
+
+import { RxCross1, RxCross2 } from "react-icons/rx";
+import { FiEye } from "react-icons/fi";
+import { FiEyeOff } from "react-icons/fi";
+
+import Cookies from "js-cookie";
+import { toast } from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import validator from "validator";
+
+
+import ButtonLoading from "../components/Button/ButtonLoading";
+import { useLoginMutation } from "../services/auth.api";
+import { login as loginReducer } from "../store/reducers/authReducer";
+
+
+// import { loginUser } from "../services/operations/authApi";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signinSchema } from "../utils/formValidationSchema";
 import { useNavigate } from "react-router-dom";
@@ -38,10 +48,11 @@ function LoginModal({
     resolver: yupResolver(signinSchema)
   });
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false);
+  const [login, {isLoading, error}] = useLoginMutation();
+
+  // const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   if (!loginModal) return null;
 
@@ -49,21 +60,46 @@ function LoginModal({
    * Handles form submission for user login.
    * @param {Object} data - Form data containing user credentials.
    * @returns {Promise<void>}
-   */
-  const loginFormSubmitHandler = async(data) => {
-    try{
-      setLoading(true)
-      const result = await dispatch(loginUser(data, navigate));
-      if(result) throw new Error()
-      reset()
-    }catch(err)
-    {
-      console.log("Error at login modal:", err)
-    }
-    finally{
-      setLoading(false)
+   */ 
+
+   const loginFormSubmitHandler = async (data) => {
+    try {
+      const res = await login(data);
+      if(res?.error)
+      {
+        throw new Error(JSON.stringify(res.error))
+      }
+      if (res?.data?.success) {
+        const token = res.data.token;
+        const user = res.data.user;
+
+        dispatch(loginReducer({ token, user }));
+        Cookies.set("token", token, { expires: 7 }); // Token valid for 7 days
+        toast.success("User Login successfully");
+        navigate("/");
+        reset();
+      }
+    } catch (err) {
+      const error = JSON.parse(err?.message)
+      toast.error(error.data.message)
     }
   };
+
+
+  // const loginFormSubmitHandler = async(data) => {
+  //   try{
+  //     setLoading(true)
+  //     const result = await dispatch(loginUser(data, navigate));
+  //     if(result) throw new Error()
+  //     reset()
+  //   }catch(err)
+  //   {
+  //     console.log("Error at login modal:", err)
+  //   }
+  //   finally{
+  //     setLoading(false)
+  //   }
+  // };
 
   return (
     <div
@@ -165,11 +201,11 @@ function LoginModal({
               <button
                 className={`py-2 h-8 w-full flex justify-center items-center rounded-md text-white cursor-pointer
                      bg-blue-600 hover:bg-blue-700
-                     disabled:bg-gray-400 ${loading && "cursor-not-allowed"}
+                     disabled:bg-gray-400 ${isLoading && "cursor-not-allowed"}
                 `}
-                disabled={loading}
+                disabled={isLoading}
               >
-                {loading ? <ButtonLoading /> : <p>Submit</p>}
+                {isLoading ? <ButtonLoading /> : <p>Submit</p>}
               </button>
             
           </form>

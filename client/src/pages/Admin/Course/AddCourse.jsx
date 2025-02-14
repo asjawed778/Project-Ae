@@ -2,12 +2,29 @@ import React, { useState, useEffect } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useDispatch, useSelector } from "react-redux";
+import { setCategories } from "../../../store/reducers/adminCategoryReducer";
+
+// import {
+//   addCourse,
+//   getAllCategory,
+// } from "../../../services/operations/addCourses";
+
 import {
-  addCourse,
-  getAllCategory,
-} from "../../../services/operations/addCourses";
+  useAddCourseMutation,
+  useGetAllCategoryQuery,
+} from "../../../services/course.api";
+import { toast } from "react-hot-toast";
+
 
 function AddCourse() {
+  const {
+    data: allCotegories,
+    isLoading: allCategoriesLoader,
+    error: allCategoriesError,
+  } = useGetAllCategoryQuery();
+  const [addCourse, { isLoading: addCourseLoader, error: addCourseError }] =
+    useAddCourseMutation();
+
   const dispatch = useDispatch();
   const categories = useSelector((state) => state.categories.categories);
 
@@ -28,10 +45,19 @@ function AddCourse() {
   const [coursecontent, setCourseContent] = useState([]);
   const [savedContent, setSavedContent] = useState([]);
 
+
   // Fetch categories on component mount
   useEffect(() => {
-    dispatch(getAllCategory());
-  }, [dispatch]);
+    if (allCotegories.success) {
+      dispatch(setCategories(allCotegories.categories));
+    }
+  }, [allCotegories]);
+  // // Fetch categories on component mount
+  // useEffect(() => {
+  //   dispatch(getAllCategory());
+  // }, [dispatch]);
+
+
 
   // Handle selecting a category
   const handleSelectCategory = (e) => {
@@ -146,7 +172,16 @@ function AddCourse() {
     formData.append("courseContent", JSON.stringify(coursecontent));
 
     // Dispatch or send the FormData
-    dispatch(addCourse(formData, resetForm));
+    try {
+      await addCourse(formData);
+      toast.success("course Added Successfully");
+    } catch (error) {
+      toast.error(addCourseError);
+    } finally {
+      resetForm();
+    }
+    // dispatch(addCourse(formData, resetForm));
+
   };
 
   // Reset form fields

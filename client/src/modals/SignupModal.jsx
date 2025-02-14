@@ -1,15 +1,22 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { sendSignupOTP } from "../services/operations/authApi";
-import ButtonLoading from "../components/Button/ButtonLoading";
 import logo from "../../public/logo.svg";
 import google from "../../public/imgs/google.svg";
 import apple from "../../public/imgs/apple.svg";
+
+import { toast } from "react-hot-toast";
 import { RxCross2 } from "react-icons/rx";
-import { useForm } from "react-hook-form";
-import validator from "validator";
 import { FiEye } from "react-icons/fi";
 import { FiEyeOff } from "react-icons/fi";
+
+import { useForm } from "react-hook-form";
+import validator from "validator";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+
+import ButtonLoading from "../components/Button/ButtonLoading";
+import { useSendSignupOtpMutation } from "../services/auth.api";
+// import { sendSignupOTP } from "../services/operations/authApi";
+
+
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signupSchema } from "../utils/formValidationSchema";
 
@@ -42,10 +49,14 @@ function SignupModal({
   } = useForm({
     resolver: yupResolver(signupSchema)
   });
+
+  const [sendSignupOtp, { isLoading, error }] = useSendSignupOtpMutation();
   const dispatch = useDispatch();
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+
+  // const [loading, setLoading] = useState(false);
 
   if (!signupModal) return null;
 
@@ -70,43 +81,46 @@ function SignupModal({
    * Handles the signup form submission.
    * @param {Object} data - Form data containing user credentials
    */
+
   const signupFormSubmitHandler = async (data) => {
     try {
-      setLoading(true);
       setSignupData(data);
-      const result = await dispatch(sendSignupOTP(data, setSignupModal, setOtpModal));
-      if (result)
+      const result = await sendSignupOtp(data);
+      if(result?.error)
       {
-        throw new Error(result)
+        throw new Error(JSON.stringify(result.error))
       }
+      toast.success("OTP sent successfully");
+      setSignupModal(false);
+      setOtpModal(true);
       reset();
     } catch (err) {
-      console.log("Sign in error: ", err);
-    } finally {
-      setLoading(false);
+      const error = JSON.parse(err.message)
+      if(error.status === 409)
+      {
+        toast.error(error.data.message)
+      }
     }
   };
-  const formValidation = {
-    ...register("password", {
-      required: "Password is required",
-      minLength: {
-        value: 8,
-        message: "Password must be at least 8 characters",
-      },
-      maxLength: {
-        value: 100,
-        message: "Password must not exceed 100 characters",
-      },
-      validate: {
-        hasUppercase: (value) =>
-          /[A-Z]/.test(value) || "Password must have an uppercase letter",
-        hasLowercase: (value) =>
-          /[a-z]/.test(value) || "Password must have a lowercase letter",
-        noSpaces: (value) =>
-          !/\s/.test(value) || "Password must not contain spaces",
-      },
-    }),
-  };
+
+
+  // const signupFormSubmitHandler = async (data) => {
+  //   try {
+  //     setLoading(true);
+  //     setSignupData(data);
+  //     const result = await dispatch(sendSignupOTP(data, setSignupModal, setOtpModal));
+  //     if (result)
+  //     {
+  //       throw new Error(result)
+  //     }
+  //     reset();
+  //   } catch (err) {
+  //     console.log("Sign in error: ", err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  
 
   return (
     <div
@@ -229,10 +243,12 @@ function SignupModal({
             <div className="flex items-center justify-between mt-3">
               <button
                 type="submit"
-                disabled={loading}
-                className={`flex items-center justify-center gap-2 py-2 h-8 w-full bg-blue-600 text-xs text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 ${loading && "cursor-not-allowed"} cursor-pointer`}
+                disabled={isLoading}
+                // disabled={loading}
+                className={`flex items-center justify-center gap-2 py-2 h-8 w-full bg-blue-600 text-xs text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 ${isLoading && "cursor-not-allowed"} cursor-pointer`}
               >
-                {loading ? <><ButtonLoading /> </> : "Register"}
+                {/* {loading ? <><ButtonLoading /> </> : "Register"} */}
+                {isLoading ? <><ButtonLoading /> </> : "Register"}
               </button>
             </div>
           </form>

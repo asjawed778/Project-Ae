@@ -4,28 +4,46 @@ import clock from "../../public/imgs/slider/language2.png";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
-import {
-  getAllCategory,
-  getCourseByCategory,
-} from "../services/operations/addCourses";
+import { setCourses } from "../store/reducers/coursesReducer";
+import { setCategories } from "../store/reducers/adminCategoryReducer";
 import CourseSkeleton from "./skeletons/CourseSkeleton";
+import {
+  useGetAllCategoryQuery,
+  useGetCategoryCourseQuery,
+} from "../services/course.api";
+
+
+// import {
+//   getAllCategory,
+//   getCourseByCategory,
+// } from "../services/operations/addCourses";
 
 export default function Carousal() {
   const dispatch = useDispatch();
 
+
   const [skeleton, setSkeleton] = useState(false);
 
   // otherwise it is called again and again
-  useEffect(() => {
-    dispatch(getAllCategory());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getAllCategory());
+  // }, []);
 
   const categories = useSelector((state) => state.categories.categories);
-  const coursesAll = useSelector((state) => state.courses.courses.courses);
-  console.log("all categories:", categories)
+  const coursesAll = useSelector((state) => state.courses.courses);
 
   const [activeTab, setActiveTab] = useState(null); // Start with null or a default value
+
+  const { data: allCategories } = useGetAllCategoryQuery();
+  const { data: categoryCourse } = useGetCategoryCourseQuery(activeTab, {
+    skip: !activeTab,
+  });
+
+  useEffect(() => {
+    if (allCategories?.success) {
+      dispatch(setCategories(allCategories.categories || []));
+    }
+  }, [allCategories, dispatch]);
 
   useEffect(() => {
     if (categories.length > 0 && !activeTab) {
@@ -33,16 +51,26 @@ export default function Carousal() {
     }
   }, [categories]); // Run this effect whenever categories change
 
-  async function getcourses(){
-    setSkeleton(true)
-    await dispatch(getCourseByCategory(activeTab));
-    setSkeleton(false)
-  }
+
   useEffect(() => {
-    if (activeTab) {
-      getcourses()
+    if (activeTab && categoryCourse?.success) {
+      setSkeleton(true)
+      dispatch(setCourses(categoryCourse.courses));
+      setSkeleton(false)
     }
-  }, [activeTab]);
+  }, [activeTab, categoryCourse, dispatch]);
+
+
+  // async function getcourses(){
+  //   setSkeleton(true)
+  //   await dispatch(getCourseByCategory(activeTab));
+  //   setSkeleton(false)
+  // }
+  // useEffect(() => {
+  //   if (activeTab) {
+  //     getcourses()
+  //   }
+  // }, [activeTab]);
 
   return (
     <div className="p-8 mt-4 w-full mx-auto">
