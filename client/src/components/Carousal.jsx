@@ -21,9 +21,6 @@ import {
 export default function Carousal() {
   const dispatch = useDispatch();
 
-
-  const [skeleton, setSkeleton] = useState(false);
-
   // otherwise it is called again and again
   // useEffect(() => {
   //   dispatch(getAllCategory());
@@ -35,7 +32,7 @@ export default function Carousal() {
   const [activeTab, setActiveTab] = useState(null); // Start with null or a default value
 
   const { data: allCategories } = useGetAllCategoryQuery();
-  const { data: categoryCourse } = useGetCategoryCourseQuery(activeTab, {
+  const  {data: categoryCourse, isLoading } = useGetCategoryCourseQuery(activeTab, {
     skip: !activeTab,
   });
 
@@ -54,9 +51,7 @@ export default function Carousal() {
 
   useEffect(() => {
     if (activeTab && categoryCourse?.success) {
-      setSkeleton(true)
       dispatch(setCourses(categoryCourse.courses));
-      setSkeleton(false)
     }
   }, [activeTab, categoryCourse, dispatch]);
 
@@ -107,7 +102,7 @@ export default function Carousal() {
       </div>
       <div className="relative w-[80%]">
         <hr className="border-gray-200" />
-        {coursesAll && <Link
+        {coursesAll.length !== 0 && <Link
           to="/course"
           className="absolute right-0 -top-3 font-bold text-xs text-[var(--color-primary)] bg-white px-5"
         >
@@ -116,7 +111,7 @@ export default function Carousal() {
       </div>
 
       {/* Scrollable Course Cards */}
-      {!skeleton ? (
+      {!isLoading ? (
         <div className="flex items-center flex-wrap md:flex-nowrap gap-5 p-4 mx-auto">
           {coursesAll?.map((course, index) => (
             <Link

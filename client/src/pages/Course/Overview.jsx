@@ -13,7 +13,7 @@ export default function Overview({ specificCourse }) {
         <p dangerouslySetInnerHTML={{ __html: specificCourse?.courseDescription }} />
         <p className="font-bold text-blue-500 pt-3.5">Course Highlights</p>
         <ul className="list-disc ml-8">
-          {specificCourse?.keyPoints.map((highlight, index) => <li className="text-sm mt-2 font-semibold" key={index}>{highlight}</li> )}
+          {specificCourse?.keyPoints?.map((highlight, index) => <li className="text-sm mt-2 font-semibold" key={index}>{highlight}</li> )}
         </ul>
       </section>
     </div>

@@ -8,7 +8,6 @@ import Button from "../../components/Button/Button";
 import coder from "../../../public/imgs/slider/coder.jpg";
 
 export default function CourseHeadline({ specificCourse }) {
-  console.log("inside", specificCourse)
   return (
     <div className="bg-[#FFF7ED] flex flex-col gap-5 px-10 md:px-20  lg:px-[250px] pt-5 pb-16">
       <div className="flex gap-3 items-center">
