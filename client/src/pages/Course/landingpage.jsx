@@ -7,7 +7,6 @@ import CourseHeadline from "./CourseHeadline";
 import Overview from "./Overview";
 import Curriculum from "./Curriculum";
 import { useEffect, useState } from "react";
-// import { getFullCourseDetails } from "../../services/operations/addCourses";
 import { useGetFullCourseDetailsQuery } from "../../services/course.api";
 import { setSpecificCourse } from "../../store/reducers/coursesReducer";
 
@@ -18,9 +17,6 @@ export default function courseLandingpage() {
   const { id } = useParams();
   const {data:courseDetails, isLoading} = useGetFullCourseDetailsQuery(id)
 
-  // async function getcourseDetails(id){
-  //   await dispatch(getFullCourseDetails(id))
-  // }
 
   useEffect(() => {
     window.scrollTo(0, 0)
