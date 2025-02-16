@@ -2,9 +2,26 @@ import { RxCross2 } from "react-icons/rx";
 
 import { toast } from "react-hot-toast";
 import { useEffect, useRef, useState } from "react";
+// import { useDispatch } from "react-redux";
+
 import ButtonLoading from "../components/Button/ButtonLoading";
 import { useUpdatePasswordMutation } from "../services/auth.api";
 
+// import { updatePassword } from "../services/operations/authApi";
+
+/**
+ * UpdatePasswordModal Component
+ *
+ * This component renders a modal for updating the password using an OTP verification system.
+ * Users enter a six-digit OTP sent to their email and then update their password.
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {string} props.email - The email of the user
+ * @param {boolean} props.updatePasswordModal - State to control modal visibility
+ * @param {Function} props.setUpdatePasswordModal - Function to toggle modal visibility
+ * @param {Function} props.setLoginModal - Function to toggle the login modal
+ */
 function UpdatePasswordModal({
   email,
   updatePasswordModal,
@@ -13,9 +30,12 @@ function UpdatePasswordModal({
   const modalRef = useRef(null);
   const otpInputRefs = useRef([]);
 
+  // const dispatch = useDispatch();
+
   const [updatePassword, { isLoading, error }] = useUpdatePasswordMutation();
 
   const [isOtpComplete, setIsOtpComplete] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState({
     email: email,
     otp: "",
@@ -51,10 +71,18 @@ function UpdatePasswordModal({
 
   if (!updatePasswordModal) return null;
 
+  /**
+   * Closes the modal
+   */
   const closeModal = () => {
     setUpdatePasswordModal(false);
   };
 
+  /**
+   * Handles OTP input changes and auto-focuses next field
+   * @param {Object} e - Event object
+   * @param {number} index - OTP input index
+   */
   const handleInputChange = (e, index) => {
     const { value } = e.target;
     if (value.length > 1) {
@@ -69,6 +97,11 @@ function UpdatePasswordModal({
     setIsOtpComplete(otpValues.length === 6);
   };
 
+  /**
+   * Handles backspace key navigation for OTP inputs
+   * @param {Object} e - Event object
+   * @param {number} index - OTP input index
+   */
   const handleKeyDown = (e, index) => {
     if (
       e.key === "Backspace" &&
@@ -79,9 +112,18 @@ function UpdatePasswordModal({
     }
   };
 
+  /**
+   * Handles form input changes
+   * @param {Object} e - Event object
+   */
   const loginFormChangeHandler = (e) => {
     setUserData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
+
+  /**
+   * Handles OTP submission and dispatches the updatePassword action
+   * @param {Object} e - Event object
+   */
 
   const otpSubmitHandler = async (e) => {
     e.preventDefault();
@@ -96,6 +138,15 @@ function UpdatePasswordModal({
       toast.error(error);
     }
   };
+
+  // const otpSubmitHandler = (e) => {
+  //   e.preventDefault();
+  //   const otpValues = otpInputRefs.current.map((ref) => ref.value).join("");
+  //   const userRegisterData = { ...userData, otp: otpValues };
+  //   dispatch(
+  //     updatePassword(userRegisterData, setUpdatePasswordModal, setLoginModal)
+  //   );
+  // };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center backdrop-blur-lg z-50">
@@ -155,8 +206,10 @@ function UpdatePasswordModal({
               ? "bg-gray-500 cursor-not-allowed"
               : "bg-blue-600 hover:bg-blue-700"
           }`}
+          // disabled={!isOtpComplete || loading}
           disabled={!isOtpComplete || isLoading}
         >
+          {/* {loading ? <ButtonLoading /> : "Submit"} */}
           {isLoading ? <ButtonLoading /> : "Submit"}
         </button>
       </form>

@@ -27,7 +27,7 @@ export default function Membership() {
       <img
         src={girl1}
         alt="girl"
-        className="absolute md:-right-28 -right-24 bottom-0 md:w-96 w-72 md:h-fit h-50 overflow-x-hidden"
+        className="absolute md:-right-28 -right-20 bottom-0 md:w-96 w-72 md:h-fit h-52 overflow-x-hidden"
       />
     </div>
   );

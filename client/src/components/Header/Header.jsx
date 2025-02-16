@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import { logout } from "../../store/reducers/authReducer";
 import HamNavbar from "./HamNavbar";
 import { useLogoutMutation } from "../../services/auth.api";
+// import { logoutUser } from "../../services/operations/authApi";
 
 export default function Header() {
   const { token } = useSelector((store) => store.auth);
@@ -25,6 +26,9 @@ export default function Header() {
       toast.error("Error", error.message);
     }
   };
+  // const handleLogout = async () => {
+  //   dispatch(logoutUser(navigate));
+  // };
 
   return (
     <nav className="flex w-full items-center justify-between gap-4 h-20 py-4 px-10 sm:px-20 md:px-10">

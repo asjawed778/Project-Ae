@@ -3,6 +3,12 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useDispatch, useSelector } from "react-redux";
 import { setCategories } from "../../../store/reducers/adminCategoryReducer";
+
+// import {
+//   addCourse,
+//   getAllCategory,
+// } from "../../../services/operations/addCourses";
+
 import {
   useAddCourseMutation,
   useGetAllCategoryQuery,
@@ -43,6 +49,10 @@ function AddCourse() {
       dispatch(setCategories(allCotegories.categories));
     }
   }, [allCotegories]);
+  // // Fetch categories on component mount
+  // useEffect(() => {
+  //   dispatch(getAllCategory());
+  // }, [dispatch]);
 
   // Handle selecting a category
   const handleSelectCategory = (e) => {
@@ -165,6 +175,7 @@ function AddCourse() {
     } finally {
       resetForm();
     }
+    // dispatch(addCourse(formData, resetForm));
   };
 
   // Reset form fields

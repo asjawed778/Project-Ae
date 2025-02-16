@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useAddCategoryMutation } from "../../../services/course.api";
+// import { addCategory } from "../../../services/operations/addCourses";
 
 const CourseDetailsForm = () => {
   const [addCategory, { isLoading, error }] = useAddCategoryMutation();
@@ -34,6 +35,12 @@ const CourseDetailsForm = () => {
       reset();
     }
   };
+  // const onSubmit = (data) => {
+  //   const result = addCategory(data)
+  //   dispatch(result)
+  //   console.log("Submitted Data:", data);
+  //   reset()
+  // };
 
   return (
     <form

@@ -1,28 +1,50 @@
 import { useState } from "react";
 import { RxCross1 } from "react-icons/rx";
 import { toast } from "react-hot-toast";
+// import { useDispatch } from "react-redux";
 
 import ButtonLoading from "../components/Button/ButtonLoading";
 import { useSendForgotPasswordOtpMutation } from "../services/auth.api";
+// import { resetPassword } from "../services/operations/authApi";
 
+/**
+ * ResetPasswordModal Component - Handles resetting the password by sending a reset email.
+ *
+ * @param {Object} props - Component properties.
+ * @param {Function} props.setEmail - Function to update the user's email state.
+ * @param {boolean} props.resetModal - State to control the visibility of the modal.
+ * @param {Function} props.setResetModal - Function to update modal visibility state.
+ * @param {Function} props.setUpdatePasswordModal - Function to toggle the update password modal.
+ */
 function ResetPasswordModal({
   setEmail,
   resetModal,
   setResetModal,
   setUpdatePasswordModal,
 }) {
+  // const dispatch = useDispatch();
   const [sendForgotPasswordOtp, { isLoading }] =
     useSendForgotPasswordOtpMutation();
+
+  // const [loading, setLoading] = useState(false);
   const [userEmail, setUserEmail] = useState({ email: "" });
 
   const isFormValid = userEmail.email.trim() !== "";
 
   if (!resetModal) return null;
 
+  /**
+   * Handles email input changes.
+   * @param {Event} e - Input event.
+   */
   const resetPasswordChangeHandler = (e) => {
     setUserEmail({ email: e.target.value });
   };
 
+  /**
+   * Handles the form submission to request a password reset.
+   * @param {Event} e - Form submission event.
+   */
   const resetPasswordSubmitHandler = async (e) => {
     e.preventDefault();
 
@@ -41,6 +63,15 @@ function ResetPasswordModal({
 
     setUserEmail({ email: "" });
   };
+
+  // const resetPasswordSubmitHandler = (e) => {
+  //   e.preventDefault();
+
+  //   const { email } = userEmail;
+  //   setEmail(email);
+  //   dispatch(resetPassword(userEmail, setResetModal, setUpdatePasswordModal));
+  //   setUserEmail({ email: "" });
+  // };
 
   return (
     <div

@@ -79,7 +79,7 @@ export default function Curriculum({ specificCourse }) {
   return (
     <div
       style={{ backgroundColor: "rgb(244, 246, 252)" }}
-      className="px-6 py-4 rounded-2xl"
+      className="px-6 py-4 rounded-2xl mx-auto text-xs md:text-sm lg:text-lg"
     >
       <div className="flex flex-col gap-4 w-full">
         {lessonsData?.map((lesson, index) => {
@@ -87,7 +87,7 @@ export default function Curriculum({ specificCourse }) {
           const hasSubLessons = lesson.subLessons.length > 0;
 
           return (
-            <div key={index} className="bg-white px-4 py-4 rounded-lg">
+            <div key={index} className="bg-white p-2 md:p-4 rounded-lg">
               <div
                 className="flex justify-between cursor-pointer px-1 py-1"
                 onClick={() => toggleLesson(index, hasSubLessons)}
@@ -101,18 +101,18 @@ export default function Curriculum({ specificCourse }) {
                         <RiArrowDropDownLine className="text-2xl" />
                       )
                     ) : (
-                      <span className="w-6" />
+                      <span className="md:w-6 w-0" />
                     )}
                     <span
                       className={`${
                         isExpanded && "text-orange-500"
-                      } font-semibold text-lg`}
+                      } font-semibold md:text-lg text-sm`}
                     >
                       {lesson.title}
                     </span>
                   </div>
                 </div>
-                <div className="flex gap-4 text-zinc-600">
+                <div className="flex items-center gap-4 text-zinc-600">
                   <span>{lesson.totalLessons} Lessions</span>
                   <span>{lesson.totalDuration}</span>
                 </div>
@@ -129,17 +129,17 @@ export default function Curriculum({ specificCourse }) {
               >
                 {lesson.subLessons.map((subLesson, index) => (
                   <div key={index} className="mb-4 ml-6 pr-2">
-                    <div className="flex justify-between gap-5">
-                      <div className="">
+                    <div className="flex flex-col md:flex-row justify-between gap-5">
+                      <div className="flex-1">
                         <div className="flex items-center gap-2 w-[15rem]">
                           <ImFilesEmpty className="text-xl" />
                           <span className="">{subLesson.title}</span>
                         </div>
                       </div>
-                      <div className="flex gap-4 text-zinc-600 justify-between w-[40%]">
+                      <div className="flex gap-4 text-zinc-600 justify-evenly items-center w-auto md:w-[40%]">
                         <Button className="h-fit">Preview</Button>
                         <span>{subLesson.duration}</span>
-                        <span>
+                        <span className="w-4">
                           {subLesson.locked ? (
                             <FaLock />
                           ) : subLesson.completed ? (

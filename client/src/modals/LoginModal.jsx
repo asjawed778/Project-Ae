@@ -2,7 +2,7 @@ import logo from "../../public/logo.svg";
 import google from "../../public/imgs/google.svg";
 import apple from "../../public/imgs/apple.svg";
 
-import { RxCross2 } from "react-icons/rx";
+import { RxCross1, RxCross2 } from "react-icons/rx";
 import { FiEye } from "react-icons/fi";
 import { FiEyeOff } from "react-icons/fi";
 
@@ -17,6 +17,19 @@ import ButtonLoading from "../components/Button/ButtonLoading";
 import { useLoginMutation } from "../services/auth.api";
 import { login as loginReducer } from "../store/reducers/authReducer";
 
+// import { loginUser } from "../services/operations/authApi";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { signinSchema } from "../utils/formValidationSchema";
+import { useNavigate } from "react-router-dom";
+
+/**
+ * LoginModal component for user authentication.
+ * @param {Object} props - Component properties.
+ * @param {boolean} props.loginModal - Controls the visibility of the login modal.
+ * @param {Function} props.setLoginModal - Function to toggle login modal visibility.
+ * @param {Function} props.setResetModal - Function to toggle reset password modal.
+ * @param {Function} props.setSignupModal - Function to toggle signup modal.
+ */
 function LoginModal({
   loginModal,
   setLoginModal,
@@ -29,18 +42,31 @@ function LoginModal({
     reset,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    resolver: yupResolver(signinSchema),
+  });
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [login, { isLoading, error }] = useLoginMutation();
 
+  // const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   if (!loginModal) return null;
+
+  /**
+   * Handles form submission for user login.
+   * @param {Object} data - Form data containing user credentials.
+   * @returns {Promise<void>}
+   */
 
   const loginFormSubmitHandler = async (data) => {
     try {
       const res = await login(data);
-      if (res.data.success) {
+      if (res?.error) {
+        throw new Error(JSON.stringify(res.error));
+      }
+      if (res?.data?.success) {
         const token = res.data.token;
         const user = res.data.user;
 
@@ -48,35 +74,28 @@ function LoginModal({
         Cookies.set("token", token, { expires: 7 }); // Token valid for 7 days
         toast.success("User Login successfully");
         navigate("/");
+        reset();
       }
     } catch (err) {
-      toast.error("error: ", error);
-    } finally {
-      reset();
+      const error = JSON.parse(err?.message);
+      toast.error(error.data.message);
     }
   };
 
-  const formValidation = {
-    ...register("password", {
-      required: "Password is required",
-      minLength: {
-        value: 8,
-        message: "Password must be at least 8 characters",
-      },
-      maxLength: {
-        value: 100,
-        message: "Password must not exceed 100 characters",
-      },
-      validate: {
-        hasUppercase: (value) =>
-          /[A-Z]/.test(value) || "Password must have an uppercase letter",
-        hasLowercase: (value) =>
-          /[a-z]/.test(value) || "Password must have a lowercase letter",
-        noSpaces: (value) =>
-          !/\s/.test(value) || "Password must not contain spaces",
-      },
-    }),
-  };
+  // const loginFormSubmitHandler = async(data) => {
+  //   try{
+  //     setLoading(true)
+  //     const result = await dispatch(loginUser(data, navigate));
+  //     if(result) throw new Error()
+  //     reset()
+  //   }catch(err)
+  //   {
+  //     console.log("Error at login modal:", err)
+  //   }
+  //   finally{
+  //     setLoading(false)
+  //   }
+  // };
 
   return (
     <div
@@ -125,7 +144,6 @@ function LoginModal({
               </label>
               <input
                 {...register("identifier", {
-                  required: "Email is required",
                   validate: (value) =>
                     validator.isEmail(value) || "Invalid email address",
                 })}
@@ -148,14 +166,14 @@ function LoginModal({
               </div>
               <div className="relative">
                 <input
-                  {...formValidation}
+                  {...register("password")}
                   id="password"
                   type={!showPassword ? "password" : "text"}
                   className="w-full outline-0 border px-2 py-1 rounded focus:border-blue-500"
                 />
                 <div
                   onClick={() => setShowPassword(!showPassword)}
-                  className="text-sm absolute right-2 top-1/2 -translate-y-1/2"
+                  className="text-sm absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
                 >
                   {showPassword ? <FiEyeOff /> : <FiEye />}
                 </div>
@@ -177,7 +195,7 @@ function LoginModal({
             </div>
 
             <button
-              className={`py-2 h-8 w-full flex justify-center items-center rounded-md text-white
+              className={`py-2 h-8 w-full flex justify-center items-center rounded-md text-white cursor-pointer
                      bg-blue-600 hover:bg-blue-700
                      disabled:bg-gray-400 ${isLoading && "cursor-not-allowed"}
                 `}

@@ -12,8 +12,18 @@ import {
   useGetCategoryCourseQuery,
 } from "../services/course.api";
 
+// import {
+//   getAllCategory,
+//   getCourseByCategory,
+// } from "../services/operations/addCourses";
+
 export default function Carousal() {
   const dispatch = useDispatch();
+
+  // otherwise it is called again and again
+  // useEffect(() => {
+  //   dispatch(getAllCategory());
+  // }, []);
 
   const categories = useSelector((state) => state.categories.categories);
   const coursesAll = useSelector((state) => state.courses.courses);
@@ -43,6 +53,17 @@ export default function Carousal() {
     }
   }, [activeTab, categoryCourse, dispatch]);
 
+  // async function getcourses(){
+  //   setSkeleton(true)
+  //   await dispatch(getCourseByCategory(activeTab));
+  //   setSkeleton(false)
+  // }
+  // useEffect(() => {
+  //   if (activeTab) {
+  //     getcourses()
+  //   }
+  // }, [activeTab]);
+
   return (
     <div className="p-8 mt-4 w-full mx-auto">
       <div className="mb-6 items-center">
@@ -56,40 +77,49 @@ export default function Carousal() {
       </div>
 
       {/* Tab Menu */}
-      <div className="flex w-auto gap-4 space-x-1 overflow-x-auto carousel scroll-snap-x scroll-smooth">
-        {categories.slice(0, 4).map((tab) => (
-          <button
-            key={tab._id}
-            onClick={() => setActiveTab(tab._id)}
-            className={`flex justify-center items-center w-fit px-0 py-2 border-b-2 cursor-pointer ${
-              activeTab === tab._id
-                ? " border-[var(--color-primary)] text-[var(--color-primary)]"
-                : " border-transparent text-gray-600 carousel-item"
-            }`}
-          >
-            {tab.categoryName}
-          </button>
-        ))}
+      <div className="flex w-auto gap-4 space-x-1 overflow-x-auto carousel  scroll-snap-x scroll-smooth ">
+        {categories
+          .filter((_, i) => i < 4)
+          .map(
+            (tab) =>
+              tab.courses.length !== 0 && (
+                <button
+                  key={tab._id}
+                  onClick={() => {
+                    setActiveTab(tab._id);
+                  }}
+                  className={`flex justify-center items-center w-fit px-0 py-2 border-b-2 cursor-pointer ${
+                    activeTab === tab._id
+                      ? " border-[var(--color-primary)] text-[var(--color-primary)]"
+                      : " border-transparent text-gray-600 carousel-item"
+                  }`}
+                >
+                  {tab.categoryName}
+                </button>
+              )
+          )}
       </div>
 
       <div className="relative w-[80%]">
         <hr className="border-gray-200" />
-        <Link
-          to="/course"
-          className="absolute right-0 -top-3 font-bold text-xs text-[var(--color-primary)] bg-white px-5"
-        >
-          View More
-        </Link>
+        {coursesAll.length !== 0 && (
+          <Link
+            to="/course"
+            className="absolute right-0 -top-3 font-bold text-xs text-[var(--color-primary)] bg-white px-5"
+          >
+            View More
+          </Link>
+        )}
       </div>
 
       {/* Scrollable Course Cards */}
-      {Array.isArray(coursesAll) && coursesAll.length > 0 ? (
-        <div className="flex items-center flex-wrap md:flex-nowrap gap-5 p-4">
-          {coursesAll.map((course) => (
+      {!isLoading ? (
+        <div className="flex items-center flex-wrap md:flex-nowrap gap-5 p-4 mx-auto">
+          {coursesAll?.map((course, index) => (
             <Link
               key={course._id}
               to={`/course/${course._id}`}
-              className="bg-white flex flex-col gap-2 w-[296px] pb-3 rounded-lg shadow-md"
+              className="bg-white flex flex-col gap-2 w-[296px] pb-3 rounded-lg shadow-md mx-auto md:mx-0"
             >
               <img
                 src={course.thumbnail}
