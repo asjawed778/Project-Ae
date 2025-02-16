@@ -94,7 +94,7 @@ export default function Carousal() {
             <Link
               key={index}
               to={`/course/${course._id}`}
-              className="bg-white flex flex-col gap-2 w-[296px] pb-3 rounded-lg shadow-md mx-auto md:mx-0"
+              className="bg-white flex flex-col gap-2 w-[296px] pb-3 rounded-lg shadow-md mx-auto"
             >
               <img
                 src={course.thumbnail}

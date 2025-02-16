@@ -68,7 +68,7 @@ function AuthPage() {
           </div>
 
           <button
-            className="text-white bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] active:bg-[var(--color-primary-active)] px-5 py-3 rounded-full duration-300 cursor-pointer"
+            className="text-white bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] active:bg-[var(--color-primary-active)] px-5 py-3 rounded-full duration-300"
             onClick={createAccountHandler}
           >
             Create account
@@ -90,7 +90,7 @@ function AuthPage() {
           </p>
 
           <button
-            className="text-[var(--color-primary)] hover:text-white hover:bg-[var(--color-primary)] active:bg-[var(--color-primary-active)] border border-[var(--color-primary)] px-5 py-3 rounded-full duration-300 cursor-pointer"
+            className="text-[var(--color-primary)] hover:text-white hover:bg-[var(--color-primary)] active:bg-[var(--color-primary-active)] border border-[var(--color-primary)] px-5 py-3 rounded-full duration-300"
             onClick={loginAccountHandler}
           >
             SignIn
