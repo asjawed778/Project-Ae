@@ -100,23 +100,6 @@ function SignupModal({
     }
   };
 
-  // const signupFormSubmitHandler = async (data) => {
-  //   try {
-  //     setLoading(true);
-  //     setSignupData(data);
-  //     const result = await dispatch(sendSignupOTP(data, setSignupModal, setOtpModal));
-  //     if (result)
-  //     {
-  //       throw new Error(result)
-  //     }
-  //     reset();
-  //   } catch (err) {
-  //     console.log("Sign in error: ", err);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   return (
     <div
       className="fixed inset-0 backdrop-blur-lg z-50 flex items-center justify-center"

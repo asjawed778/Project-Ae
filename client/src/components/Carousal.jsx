@@ -12,11 +12,6 @@ import {
   useGetCategoryCourseQuery,
 } from "../services/course.api";
 
-// import {
-//   getAllCategory,
-//   getCourseByCategory,
-// } from "../services/operations/addCourses";
-
 export default function Carousal() {
   const dispatch = useDispatch();
 
@@ -30,10 +25,12 @@ export default function Carousal() {
 
   const [activeTab, setActiveTab] = useState(null);
 
-  const { data: allCategories } = useGetAllCategoryQuery();
-  const { data: categoryCourse } = useGetCategoryCourseQuery(activeTab, {
-    skip: !activeTab,
-  });
+  const { data: allCategories, isLoading: allCategoriesLoader } =
+    useGetAllCategoryQuery();
+  const { data: categoryCourse, isLoading: categoriesCourseLoader } =
+    useGetCategoryCourseQuery(activeTab, {
+      skip: !activeTab,
+    });
 
   useEffect(() => {
     if (allCategories?.success) {
@@ -52,17 +49,6 @@ export default function Carousal() {
       dispatch(setCourses(categoryCourse.courses));
     }
   }, [activeTab, categoryCourse, dispatch]);
-
-  // async function getcourses(){
-  //   setSkeleton(true)
-  //   await dispatch(getCourseByCategory(activeTab));
-  //   setSkeleton(false)
-  // }
-  // useEffect(() => {
-  //   if (activeTab) {
-  //     getcourses()
-  //   }
-  // }, [activeTab]);
 
   return (
     <div className="p-8 mt-4 w-full mx-auto">
@@ -113,7 +99,7 @@ export default function Carousal() {
       </div>
 
       {/* Scrollable Course Cards */}
-      {!isLoading ? (
+      {!(allCategoriesLoader || categoriesCourseLoader) ? (
         <div className="flex items-center flex-wrap md:flex-nowrap gap-5 p-4 mx-auto">
           {coursesAll?.map((course, index) => (
             <Link

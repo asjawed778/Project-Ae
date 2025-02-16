@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import ErrorBoundary from "./ErrorBoundary";
-import LoadingPage from "../../pages/loadingpage";
 
 const LoadingBar = () => {
   return (

@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PublicRoute from "./components/auth/PublicRoute";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import BasicLayout from "./layouts/Basic";
-import LazyComponent from "./components/lazy loading/LazyComponent";
+import LazyComponent from "./components/LazyComponent";
 import PageNotFound from "./pages/pagenotfound";
 import AdminLayout from "./layouts/AdminLayout";
 const ViewCategories = lazy(() =>
@@ -19,7 +19,7 @@ const AdminPage = lazy(() => import("./pages/Admin/adminpage"));
 const CourseLandingPage = lazy(() => import("./pages/Course/landingpage"));
 const UserPostPage = lazy(() => import("./pages/Post/userpostpage"));
 const SinglePost = lazy(() => import("./pages/Single_Post/landingpage"));
-const AddCourse = lazy(() => import("./pages/Admin/Course/index"))
+const AddCourse = lazy(() => import("./pages/Admin/Course/index"));
 
 function App() {
   return (
