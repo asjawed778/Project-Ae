@@ -19,6 +19,7 @@ const AdminPage = lazy(() => import("./pages/Admin/adminpage"));
 const CourseLandingPage = lazy(() => import("./pages/Course/landingpage"));
 const UserPostPage = lazy(() => import("./pages/Post/userpostpage"));
 const SinglePost = lazy(() => import("./pages/Single_Post/landingpage"));
+const AddCourse = lazy(() => import("./pages/Admin/Course/index"))
 
 function App() {
   return (
@@ -100,6 +101,14 @@ function App() {
             element={
               <LazyComponent>
                 <AddCategory />
+              </LazyComponent>
+            }
+          />
+          <Route
+            path="add-course"
+            element={
+              <LazyComponent>
+                <AddCourse />
               </LazyComponent>
             }
           />

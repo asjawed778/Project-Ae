@@ -6,7 +6,7 @@ const sections = [
   {
     name: "courses",
     links: [
-      { url: "/admin", label: "Add Course" },
+      { url: "/admin/add-course", label: "Add Course" },
       { url: "/admin", label: "Manage Courses" },
       { url: "/admin", label: "View Courses" },
     ],
