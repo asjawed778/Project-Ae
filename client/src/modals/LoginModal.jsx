@@ -10,9 +10,6 @@ import ButtonLoading from "../components/Button/ButtonLoading";
 import { loginUser } from "../services/operations/authApi";
 import { useForm } from "react-hook-form";
 import validator from "validator";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { signinSchema } from "../utils/formValidationSchema";
-import { useNavigate } from "react-router-dom";
 
 /**
  * LoginModal component for user authentication.
@@ -34,12 +31,8 @@ function LoginModal({
     reset,
     watch,
     formState: { errors },
-  } = useForm({
-    resolver: yupResolver(signinSchema)
-  });
+  } = useForm();
   const dispatch = useDispatch();
-
-  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -51,18 +44,32 @@ function LoginModal({
    * @returns {Promise<void>}
    */
   const loginFormSubmitHandler = async(data) => {
-    try{
-      setLoading(true)
-      const result = await dispatch(loginUser(data, navigate));
-      if(result) throw new Error()
-      reset()
-    }catch(err)
-    {
-      console.log("Error at login modal:", err)
-    }
-    finally{
-      setLoading(false)
-    }
+    setLoading(true)
+    await dispatch(loginUser(data));
+    setLoading(false)
+    reset()
+  };
+
+  const formValidation = {
+    ...register("password", {
+      required: "Password is required",
+      minLength: {
+        value: 8,
+        message: "Password must be at least 8 characters",
+      },
+      maxLength: {
+        value: 100,
+        message: "Password must not exceed 100 characters",
+      },
+      validate: {
+        hasUppercase: (value) =>
+          /[A-Z]/.test(value) || "Password must have an uppercase letter",
+        hasLowercase: (value) =>
+          /[a-z]/.test(value) || "Password must have a lowercase letter",
+        noSpaces: (value) =>
+          !/\s/.test(value) || "Password must not contain spaces",
+      },
+    }),
   };
 
   return (
@@ -112,6 +119,7 @@ function LoginModal({
               </label>
               <input
                 {...register("identifier", {
+                  required: "Email is required",
                   validate: (value) =>
                     validator.isEmail(value) || "Invalid email address",
                 })}
@@ -134,14 +142,14 @@ function LoginModal({
               </div>
               <div className="relative">
                 <input
-                  {...register("password")}
+                  {...formValidation}
                   id="password"
                   type={!showPassword?  "password" : "text"}
                   className="w-full outline-0 border px-2 py-1 rounded focus:border-blue-500"
                 />
                 <div
                   onClick={() => setShowPassword(!showPassword)}
-                  className="text-sm absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+                  className="text-sm absolute right-2 top-1/2 -translate-y-1/2"
                 >
                   {showPassword ? <FiEyeOff /> : <FiEye />}
                 </div>
@@ -163,7 +171,7 @@ function LoginModal({
             </div>
 
               <button
-                className={`py-2 h-8 w-full flex justify-center items-center rounded-md text-white cursor-pointer
+                className={`py-2 h-8 w-full flex justify-center items-center rounded-md text-white
                      bg-blue-600 hover:bg-blue-700
                      disabled:bg-gray-400 ${loading && "cursor-not-allowed"}
                 `}
