@@ -10,6 +10,8 @@ import { useForm } from "react-hook-form";
 import validator from "validator";
 import { FiEye } from "react-icons/fi";
 import { FiEyeOff } from "react-icons/fi";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { signupSchema } from "../utils/formValidationSchema";
 
 /**
  * SignupModal Component
@@ -37,7 +39,9 @@ function SignupModal({
     reset,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    resolver: yupResolver(signupSchema)
+  });
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -70,11 +74,15 @@ function SignupModal({
     try {
       setLoading(true);
       setSignupData(data);
-      await dispatch(sendSignupOTP(data, setSignupModal, setOtpModal));
+      const result = await dispatch(sendSignupOTP(data, setSignupModal, setOtpModal));
+      if (result)
+      {
+        throw new Error(result)
+      }
+      reset();
     } catch (err) {
       console.log("Sign in error: ", err);
     } finally {
-      reset();
       setLoading(false);
     }
   };
@@ -136,13 +144,7 @@ function SignupModal({
                 </label>
               </div>
               <input
-                {...register("name", {
-                  required: "name is required",
-                  maxLength: {
-                    value: 50,
-                    message: "Name must not exceed 50 characters",
-                  },
-                })}
+                {...register("name")}
                 id="name"
                 type="text"
                 className="w-full outline-0 border px-2 py-1 rounded focus:border-blue-500"
@@ -159,7 +161,6 @@ function SignupModal({
               </label>
               <input
                 {...register("email", {
-                  required: "Email is required",
                   validate: (value) =>
                     validator.isEmail(value) || "Invalid email address",
                 })}
@@ -181,7 +182,7 @@ function SignupModal({
               </div>
               <div className="relative">
                 <input
-                  {...formValidation}
+                  {...register("password")}
                   id="password"
                   type={!showPassword ? "password" : "text"}
                   className="w-full outline-0 border px-2 py-1 rounded focus:border-blue-500"
@@ -208,17 +209,13 @@ function SignupModal({
               </label>
               <div className="relative">
               <input
-                {...register("confirmPassword", {
-                  required: "Confirm Password is required",
-                  validate: (value) =>
-                  value === watch("password") || "Passwords do not match",
-                })}
+                {...register("confirmPassword")}
                 type={!showConfirmPassword ? "password" : "text"}
                 className="w-full outline-0 border px-2 py-1 rounded focus:border-blue-500"
                 />
                 <div
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="text-sm absolute right-2 top-1/2 -translate-y-1/2"
+                  className="text-sm absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
                 >
                   {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
                 </div>
@@ -233,7 +230,7 @@ function SignupModal({
               <button
                 type="submit"
                 disabled={loading}
-                className={`flex items-center justify-center gap-2 py-2 h-8 w-full bg-blue-600 text-xs text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 ${loading && "cursor-not-allowed"}`}
+                className={`flex items-center justify-center gap-2 py-2 h-8 w-full bg-blue-600 text-xs text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 ${loading && "cursor-not-allowed"} cursor-pointer`}
               >
                 {loading ? <><ButtonLoading /> </> : "Register"}
               </button>
@@ -248,14 +245,14 @@ function SignupModal({
           </div>
 
           <div className="flex items-center justify-center gap-3">
-            <div className="flex justify-center items-center border h-9 w-16 relative border-neutral-300 hover:bg-neutral-100 rounded-lg">
+            <div className="flex justify-center items-center border h-9 w-16 relative border-neutral-300 hover:bg-neutral-100 rounded-lg cursor-pointer">
               <img
                 src={apple}
                 className="h-[60%] w-[70%] absolute"
                 alt="apple-logo"
               />
             </div>
-            <div className="flex justify-center items-center border h-9 w-16 relative border-neutral-300 hover:bg-neutral-100 rounded-lg">
+            <div className="flex justify-center items-center border h-9 w-16 relative border-neutral-300 hover:bg-neutral-100 rounded-lg cursor-pointer">
               <img
                 src={google}
                 className="h-[60%] w-[70%] absolute"

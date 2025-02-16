@@ -42,7 +42,7 @@ export function sendSignupOTP(signupFormData, setSignupModal, setOtpModal) {
       if (error.status === 500) {
         toast.error("Internal Server Error");
       }
-      console.log("Error in Sending OTP........", error);
+      return new Error(error)
     }
   };
 }
@@ -125,18 +125,21 @@ export function loginUser(userLoginData, navigate) {
       toast.success("User Login successfully");
       navigate("/");
     } catch (error) {
-      console.log("Error in user login: ", error);
-      toast.error(error.response.data.message)
-      // if (error.status === 400) {
-      //   toast.error("Please Enter all details");
-      // }
+      console.log("Error in user login: ", error);      
+      if (error.status === 400) {
+        toast.error("Please Enter all details");
+      }
 
-      // if (error.status === 500) {
-      //   toast.error("Internal Server Error");
-      // }
-      // if(error.status === 404) {
-      //   toast.error(error.response.data.message)
-      // }
+      if (error.status === 500) {
+        toast.error("Internal Server Error");
+      }
+      if(error.status === 404) {
+        toast.error(error.response.data.message)
+      }
+      if(error.status === 401) {
+        toast.error(error.response.data.message)
+      }
+      return new Error(error)
     }
   };
 }

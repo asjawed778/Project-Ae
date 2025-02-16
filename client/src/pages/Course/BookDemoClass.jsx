@@ -2,7 +2,7 @@ import Button from "../../components/Button/Button";
 
 export default function BookDemoClass() {
   return (
-    <div className="bg-white flex flex-col gap-5 p-5 h-[460px] w-[70vw] lg:w-[351.15px] drop-shadow-2xl shadow-xl rounded-xl mx-auto">
+    <div className="bg-white flex flex-col gap-5 p-5 h-[460px] w-[70vw] lg:w-[351.15px] drop-shadow-2xl shadow-xl rounded-xl mx-auto md:mx-0">
       <h1 className="font-bold text-lg text-[var(--color-primary)]">
         Book Your Free Demo Class
       </h1>
