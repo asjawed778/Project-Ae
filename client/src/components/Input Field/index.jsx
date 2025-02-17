@@ -6,6 +6,7 @@ import { forwardRef, useState } from "react";
 import Basic from "./Basic";
 import Pdf from "./Pdf";
 import Image from "./Image";
+import Video from "./Video";
 
 const InputField = forwardRef(
   (
@@ -68,6 +69,8 @@ const InputField = forwardRef(
             ref={ref} // Attach ref for React Hook Form
             {...rest}
           />
+        ) : type === "video" ? (
+          <Video id={id} ref={ref} {...rest} />
         ) : (
           <Basic
             id={id}
