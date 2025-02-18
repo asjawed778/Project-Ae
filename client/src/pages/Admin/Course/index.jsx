@@ -2,9 +2,10 @@ import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import Button from "../../../components/Button/Button";
 import CourseDetails from "../../../components/Add Course/CourseDetails";
+import CourseFirstStep from "../../../components/Add Course/CourseFirstStep";
 
 const AddCourse = () => {
-  const [currentStep, setCurrentStep] = useState(2);
+  const [currentStep, setCurrentStep] = useState(1);
   //   const [fileName, setFileName] = useState("");
   const {
     register,
@@ -75,10 +76,10 @@ const AddCourse = () => {
         </div>
       </div>
 
-      <div className="bg-[#FBFBFB] rounded-lg p-2 w-full h-[60vh] flex justify-center items-center">
-        {currentStep === 1 && <div>Personal Details</div>}
+      <div className="bg-[#FBFBFB] rounded-lg p-2 w-full">
+        {currentStep === 1 && <div><CourseFirstStep /></div>}
         {currentStep === 2 && <CourseDetails />}
-        {currentStep === 3 && <div>Pricing</div>}
+        {currentStep === 3 && <div className="h-[65vh] flex justify-center items-center">Pricing</div>}
       </div>
 
       <div
