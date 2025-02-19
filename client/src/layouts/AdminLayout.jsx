@@ -8,12 +8,12 @@ export default function AdminLayout() {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <div className="flex flex-col min-h-screen w-full">
+    <div className="flex flex-col min-h-screen w-full custom-scrollbar">
       <Header />
       <ErrorBoundary>
         <main className="flex-grow flex">
           {/* Left Component Admin Sidebar */}
-          <div className={`h-auto ${!isOpen ? "items-start" : ""}`}>
+          <div className={`h-[calc(100vh-5rem)] ${!isOpen ? "items-start" : ""}`}>
             <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
           </div>
 

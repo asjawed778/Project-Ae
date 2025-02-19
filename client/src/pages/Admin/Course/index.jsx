@@ -48,7 +48,7 @@ const AddCourse = () => {
   };
 
   return (
-    <div className="p-4 w-full flex flex-col gap-6">
+    <div className="p-4 w-full flex flex-col gap-6 h-[calc(100vh-5rem)] overflow-y-auto">
       <div className="bg-[#FBFBFB] rounded-lg text-md flex justify-between items-center pr-3">
         <div
           className={`${
@@ -56,7 +56,7 @@ const AddCourse = () => {
             "cursor-pointer bg-[var(--color-primary)] text-white rounded-lg"
           } px-4 py-1`}
         >
-          Personal Details
+          Course Details
         </div>
         <div
           className={`${
@@ -64,11 +64,19 @@ const AddCourse = () => {
             "cursor-pointer bg-[var(--color-primary)] text-white rounded-lg"
           } px-4 py-1`}
         >
-          Course Details
+          Additional Details
         </div>
         <div
           className={`${
             currentStep == 3 &&
+            "cursor-pointer bg-[var(--color-primary)] text-white rounded-lg"
+          } px-4 py-1`}
+        >
+          Course Content
+        </div>
+        <div
+          className={`${
+            currentStep == 4 &&
             "cursor-pointer bg-[var(--color-primary)] text-white rounded-lg"
           } px-4 py-1`}
         >
@@ -79,20 +87,21 @@ const AddCourse = () => {
       <div className="bg-[#FBFBFB] rounded-lg p-2 w-full">
         {currentStep === 1 && <div><CourseFirstStep /></div>}
         {currentStep === 2 && <CourseDetails />}
-        {currentStep === 3 && <div className="h-[65vh] flex justify-center items-center">Pricing</div>}
+        {currentStep === 3 && <div className="h-[65vh] flex justify-center items-center">Course Content</div>}
+        {currentStep === 4 && <div className="h-[65vh] flex justify-center items-center">Pricing</div>}
       </div>
 
       <div
         className={`flex ${
           currentStep === 1
             ? "justify-end"
-            : currentStep === 3
+            : currentStep === 4
             ? "justify-start"
             : "justify-between"
         } items-center gap-4 text-white`}
       >
         {currentStep > 1 && <Button onClick={handlePrev}>Prev</Button>}
-        {currentStep < 3 && <Button onClick={handleNext}>Save and Next</Button>}
+        {currentStep < 4 && <Button onClick={handleNext}>Save and Next</Button>}
       </div>
     </div>
   );
