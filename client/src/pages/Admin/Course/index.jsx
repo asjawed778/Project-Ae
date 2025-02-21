@@ -48,7 +48,7 @@ const AddCourse = () => {
   };
 
   return (
-    <div className="p-4 w-full flex flex-col gap-6 h-[calc(100vh-5rem)] overflow-y-auto">
+    <div className="p-4 w-full flex flex-col gap-6">
       <div className="bg-[#FBFBFB] rounded-lg text-md flex justify-between items-center pr-3">
         <div
           className={`${

@@ -7,6 +7,8 @@
   --color-secondary: #0b7077;
   --color-secondary-hover: #0d858d;
   --color-secondary-active: #095a5f;
+  --color-sidebar-background: #261E67;
+  --color-hover-sidebar-background: #261E7E;
 }
 
 input[type="number"]::-webkit-outer-spin-button,

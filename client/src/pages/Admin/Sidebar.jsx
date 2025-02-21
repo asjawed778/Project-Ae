@@ -1,108 +1,141 @@
 import { Link } from "react-router-dom";
 import HambergIcon from "../../../public/imgs/slider/menu.png";
 import { useState } from "react";
+import { FiHome } from "react-icons/fi";
+import { HiOutlineDesktopComputer } from "react-icons/hi";
+import { MdOutlineDashboard } from "react-icons/md";
+import { FiUpload } from "react-icons/fi";
+import { BsFillPersonCheckFill } from "react-icons/bs";
+import { FaEye } from "react-icons/fa";
+import { IoIosArrowForward } from "react-icons/io";
+import { IoMdArrowForward } from "react-icons/io";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { RxCross2 } from "react-icons/rx";
 
 const sections = [
   {
     name: "courses",
+    icon: <HiOutlineDesktopComputer />,
     links: [
-      { url: "/admin/add-course", label: "Add Course" },
-      { url: "/admin", label: "Manage Courses" },
-      { url: "/admin", label: "View Courses" },
+      { url: "/admin/add-course", label: "Add Course", icon: <FiUpload /> },
+      { url: "/admin/manage-course", label: "Manage Courses", icon: <BsFillPersonCheckFill /> },
+      { url: "/admin/view-course", label: "View Courses", icon: <FaEye /> },
     ],
   },
   {
     name: "category",
+    icon: <MdOutlineDashboard />,
     links: [
-      { url: "/admin/add-category", label: "Add Category" },
-      { url: "/admin/manage-categories", label: "Manage Categories" },
-      { url: "/admin/view-categories", label: "View Categories" },
+      { url: "/admin/add-category", label: "Add Category", icon: <FiUpload /> },
+      { url: "/admin/manage-categories", label: "Manage Categories", icon: <BsFillPersonCheckFill /> },
+      { url: "/admin/view-categories", label: "View Categories", icon: <FaEye /> },
     ],
   },
 ];
 
-export default function Sidebar({ isOpen = false, setIsOpen }) {
+
+
+export default function Sidebar({ isOpen, setIsOpen, location }) {
   const [drawer, setDrawer] = useState({});
 
   const toggleDropdown = (section) => {
     setDrawer((prev) => ({ ...prev, [section]: !prev[section] }));
   };
 
-  if (!isOpen) {
-    return (
-      <button
-        className={`lg:hidden fixed top-2 left-4 ml-3 z-20 p-2 rounded ${
-          isOpen ? "bg-gray-800 text-white" : "bg-white text-black"
-        }`}
-        onClick={() => setIsOpen && setIsOpen(!isOpen)}
-      >
-        <img src={HambergIcon} alt="Menu" className="w-[25px] h-4" />
-      </button>
-    );
-  }
-
   return (
-    <div
-      className={`fixed z-50 inset-y-0 left-0 bg-gray-800 text-white w-64 max-h-full p-4 transition-transform duration-300 ease-in-out 
+    <>
+      {/* Hamburger Menu Button (Only Visible on Small Screens) */}
+      {!isOpen && (
+        <button
+          className="lg:hidden fixed top-14 left-0 z-20 rounded bg-white text-black"
+          onClick={() => setIsOpen(true)}
+        >
+          <div className="w-7 h-6 bg-blue-500 hover:bg-[var(--color-primary)] rounded-r-md text-white flex justify-center items-center cursor-pointer">
+            <GiHamburgerMenu />
+          </div>
+        </button>
+      )}
+
+      {/* Sidebar */}
+      <div
+        className={`fixed z-50 inset-y-0 left-0 bg-[var(--color-sidebar-background)] text-white w-64 max-h-full p-4 transition-transform duration-300 ease-in-out 
       ${
         isOpen ? "translate-x-0" : "-translate-x-full"
       } lg:translate-x-0 lg:static lg:w-80 lg:h-screen`}
-    >
-      <p
-        className="lg:hidden ml-auto text-2xl font-thin text-white cursor-pointer"
-        onClick={() => setIsOpen && setIsOpen(!isOpen)}
       >
-        X
-      </p>
+        {/* Close Button this will be only visible on small screen */}
+        <p
+          className="lg:hidden flex justify-end ml-auto text-2xl font-thin text-white"
+          onClick={() => setIsOpen(false)}
+        >
+          <RxCross2 className="hover:bg-hover-sidebar-background cursor-pointer" />
+        </p>
 
-      <h2 className="text-2xl mb-6">Dashboard</h2>
-
-      {sections.map(({ name, links }, index) => (
-        <div key={index}>
-          <div
-            onClick={() => toggleDropdown(name)}
-            className="flex items-center justify-between px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-md cursor-pointer"
-          >
-            <span className="text-[20px] capitalize">{name}</span>
-            <svg
-              className={`w-4 h-4 text-gray-400 transform transition-transform ${
-                drawer[name] ? "rotate-180" : ""
-              }`}
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
+        <Link to="/admin">
+          <div className="flex gap-4 items-center text-3xl p-2 hover:bg-[var(--color-hover-sidebar-background)]">
+            <FiHome />
+            <h2 className="text-lg">Dashboard</h2>
           </div>
+        </Link>
 
-          {drawer[name] && (
-            <div className="mt-2 w-48 text-white rounded-md">
-              {links.map(({ url, label }, index) => (
-                <Link
-                  key={index}
-                  to={url}
-                  className={`block px-8 py-2 text-sm hover:bg-gray-700 ${
-                    index === 0
-                      ? "rounded-t-md"
-                      : index === links.length - 1
-                      ? "rounded-b-md"
-                      : ""
-                  }`}
-                >
-                  {label}
-                </Link>
-              ))}
+        {sections.map(({ icon, name, links }, index) => (
+          <div key={index}>
+            <div
+              onClick={() => toggleDropdown(name)}
+              className="flex items-center justify-between py-2 hover:bg-[var(--color-hover-sidebar-background)] rounded-md cursor-pointer"
+            >
+              <div className="flex items-center gap-4 text-3xl px-2">
+                {icon}
+                <span className="capitalize text-lg">{name}</span>
+              </div>
+              <svg
+                className={`w-4 h-4 mr-2 text-gray-400 transform transition-transform ${
+                  drawer[name] ? "rotate-180" : ""
+                }`}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
             </div>
-          )}
-        </div>
-      ))}
-    </div>
+
+            {drawer[name] && (
+              <div className="mt-2 text-white rounded-md">
+                {links.map(({ url, label, icon }, index) => (
+                  <Link
+                    key={index}
+                    to={url}
+                    className={`block px-8 py-2 text-sm hover:bg-[var(--color-hover-sidebar-background)] ${
+                      index === 0
+                        ? "rounded-t-md"
+                        : index === links.length - 1
+                        ? "rounded-b-md"
+                        : ""
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      {location.pathname === url ? (
+                        <IoMdArrowForward className="mr-2 text-xl" />
+                      ) : (
+                        <IoIosArrowForward className="mr-2" />
+                      )}
+                      {icon}
+                      <span className="capitalize">{label}</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </>
   );
 }
