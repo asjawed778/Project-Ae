@@ -118,11 +118,11 @@ export default function AdditionalDetails() {
               keypoints.map((field, index) => (
                 <div key={index} className="flex gap-2">
                   <input
-                    value={field.value}
+                    {...register(`keypoints.${index}.value`)}
                     className="w-full px-4 py-2 border border-gray-300 rounded-md outline-none"
                   />
 
-                  <Button>
+                  <Button onClick={() => keypointRemove(index)}>
                     <RiDeleteBin6Line size={20} />
                   </Button>
                 </div>
@@ -154,34 +154,28 @@ export default function AdditionalDetails() {
 
           {/* Tags */}
           <div className="flex flex-col gap-5">
-            <div className="flex items-end gap-2">
-              <InputField
-                id="tags"
-                type="text"
-                placeholder={"Enter Tags"}
-                {...register(`newTag`)}
-                labelClassName="relative flex"
-                parentClassName="w-full"
-              >
-                <p>Tags</p>
-                <img
-                  src={required}
-                  alt="required"
-                  className="size-2 absolute top-1 -right-3"
-                />
-              </InputField>
-              <Button
-                onClick={() => {
-                  const newTag = document.getElementById("tags");
-                  if (newTag && newTag.value.trim()) {
-                    tagAppend({ value: newTag.value });
-                    newTag.value = ""; // Clear input after adding
-                  }
-                }}
-              >
-                add
-              </Button>
-            </div>
+            <InputField
+              id="tags"
+              type="text"
+              placeholder={"Enter Tags"}
+              onClick={() => {
+                const newTag = document.getElementById("tags");
+                if (newTag && newTag.value.trim()) {
+                  tagAppend({ value: newTag.value });
+                  newTag.value = ""; // Clear input after adding
+                }
+              }}
+              {...register(`newTag`)}
+              labelClassName="relative flex"
+              parentClassName="w-full"
+            >
+              <p>Tags</p>
+              <img
+                src={required}
+                alt="required"
+                className="size-2 absolute top-1 -right-3"
+              />
+            </InputField>
 
             {/* Show Tags */}
             <div className="min-h-[7rem] flex flex-wrap gap-5 w-full px-3 py-1 border border-gray-300 rounded-md">
@@ -200,7 +194,7 @@ export default function AdditionalDetails() {
           {/* 2-Column Section */}
           <div className="flex flex-wrap sm:flex-nowrap justify-center gap-5">
             {/* First Column */}
-            <div className="flex flex-col gap-5 w-full">
+            <div className="flex-1 flex flex-col gap-5 w-full">
               <InputField
                 id="duraion"
                 placeholder="eg. 30m:02s"
@@ -232,6 +226,7 @@ export default function AdditionalDetails() {
             <InputField
               type="video"
               id="trailer-video"
+              parentClassName="flex-1"
               labelClassName="relative flex"
             >
               <p>Trailer Video</p>

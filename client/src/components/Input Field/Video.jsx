@@ -3,7 +3,7 @@ import Button from "../Button/Button";
 
 import { forwardRef, useState } from "react";
 
-const Video = forwardRef(({ id, ...rest }, ref) => {
+const Video = forwardRef(({ id, required = false, ...rest }, ref) => {
   const [videoSrc, setVideoSrc] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -40,7 +40,7 @@ const Video = forwardRef(({ id, ...rest }, ref) => {
     );
   else
     return (
-      <div className="flex flex-col">
+      <div className="flex flex-col w-fit">
         <label
           htmlFor={id}
           className="text-gray-500 flex flex-col items-center justify-center w-[20rem] py-2 h-fit border-2 border-dashed border-gray-300 cursor-pointer"
@@ -52,6 +52,7 @@ const Video = forwardRef(({ id, ...rest }, ref) => {
           id={id}
           type="file"
           accept="video/*"
+          required={required}
           ref={ref}
           {...rest}
           onChange={handleVideoChange}

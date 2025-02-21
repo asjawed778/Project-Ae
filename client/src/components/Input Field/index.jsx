@@ -24,6 +24,7 @@ const InputField = forwardRef(
       removeImage = () => {},
       removePdf = () => {},
       onChange = () => {},
+      onClick = () => {},
       ...rest
     },
     ref
@@ -71,7 +72,7 @@ const InputField = forwardRef(
             {...rest}
           />
         ) : type === "video" ? (
-          <Video id={id} ref={ref} {...rest} />
+          <Video id={id} ref={ref} required={required} {...rest} />
         ) : (
           <Basic
             id={id}
@@ -81,6 +82,7 @@ const InputField = forwardRef(
             className={className}
             variantClasses={variantClasses}
             onChange={onChange}
+            onClick={onClick}
             ref={ref} // Attach ref for React Hook Form
             {...rest}
           />
