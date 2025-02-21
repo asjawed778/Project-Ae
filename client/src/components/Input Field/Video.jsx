@@ -1,5 +1,7 @@
-import { forwardRef, useState } from "react";
+import { MdOutlineNoteAdd } from "react-icons/md";
 import Button from "../Button/Button";
+
+import { forwardRef, useState } from "react";
 
 const Video = forwardRef(({ id, ...rest }, ref) => {
   const [videoSrc, setVideoSrc] = useState(null);
@@ -38,7 +40,14 @@ const Video = forwardRef(({ id, ...rest }, ref) => {
     );
   else
     return (
-      <div className="flex gap-5">
+      <div className="flex flex-col">
+        <label
+          htmlFor={id}
+          className="text-gray-500 flex flex-col items-center justify-center w-[20rem] py-2 h-fit border-2 border-dashed border-gray-300 cursor-pointer"
+        >
+          <MdOutlineNoteAdd size={30} />
+          <p>Upload or Drag file</p>
+        </label>
         <input
           id={id}
           type="file"
@@ -46,11 +55,20 @@ const Video = forwardRef(({ id, ...rest }, ref) => {
           ref={ref}
           {...rest}
           onChange={handleVideoChange}
-          className="p-2 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+          className="hidden p-2 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
         />
 
         {videoSrc && (
-          <Button onClick={() => setIsModalOpen(true)}>Preview Video</Button>
+          <div className="bg-gray-300 flex flex-col justify-center items-center gap-2 p-2 /h-[13rem]">
+            <video controls className="w-fit h-[10rem]">
+              <source src={videoSrc} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+
+            {/* <Button onClick={() => setIsModalOpen(true)} className="ml-auto">
+              View
+            </Button> */}
+          </div>
         )}
       </div>
     );

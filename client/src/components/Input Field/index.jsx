@@ -20,6 +20,7 @@ const InputField = forwardRef(
       id = "default",
       variant = "default",
       value,
+      required,
       removeImage = () => {},
       removePdf = () => {},
       onChange = () => {},
@@ -76,6 +77,7 @@ const InputField = forwardRef(
             id={id}
             type={type}
             placeholder={placeholder}
+            required={required}
             className={className}
             variantClasses={variantClasses}
             onChange={onChange}

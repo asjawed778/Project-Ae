@@ -7,6 +7,7 @@ const Basic = forwardRef(
       id,
       type,
       placeholder,
+      required = false,
       className,
       variantClasses,
       onChange = () => {},
@@ -19,6 +20,7 @@ const Basic = forwardRef(
         id={id}
         type={type || "text"}
         placeholder={placeholder}
+        required={required}
         onChange={onChange}
         className={clsx(
           "px-4 py-2 border border-gray-300 rounded-md outline-none",
