@@ -5,7 +5,7 @@ import CourseDetails from "../../../components/Add Course/AdditionalDetails";
 import CourseFirstStep from "../../../components/Add Course/CourseFirstStep";
 
 const AddCourse = () => {
-  const [currentStep, setCurrentStep] = useState(2);
+  const [currentStep, setCurrentStep] = useState(1);
   //   const [fileName, setFileName] = useState("");
   const {
     register,
@@ -48,7 +48,7 @@ const AddCourse = () => {
   };
 
   return (
-    <div className="p-4 w-full flex flex-col gap-6 h-[calc(100vh-5rem)] overflow-y-auto">
+    <div className="p-4 w-full flex flex-col gap-6">
       <div className="bg-[#FBFBFB] rounded-lg text-md flex justify-between items-center pr-3">
         <div
           className={`${
