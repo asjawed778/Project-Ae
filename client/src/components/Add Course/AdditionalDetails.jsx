@@ -11,7 +11,7 @@ import InputField from "../Input Field";
 import Button from "../Button/Button";
 import { useEffect, useState } from "react";
 
-export default function AdditionalDetails() {
+export default function AdditionalDetails({ currentStep, handleNext, handlePrev }) {
   const license_key = import.meta.env.VITE_CK_LICENSE_KEY;
 
   const {
@@ -241,8 +241,8 @@ export default function AdditionalDetails() {
 
         {/* Buttons */}
         <div className="flex justify-between">
-          <Button>Prev</Button>
-          <Button type="submit">Save and Next</Button>
+          <Button onClick={handlePrev}>Prev</Button>
+          <Button onClick={handleNext} type="submit">Save and Next</Button>
         </div>
       </form>
     );

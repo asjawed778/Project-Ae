@@ -1,66 +1,125 @@
 import React from "react";
 import InputField from "../Input Field";
+import Button from "../Button/Button";
+import required from "../../../public/imgs/required.svg";
+import { useForm } from "react-hook-form";
 
-const CourseFirstStep = () => {
+const CourseFirstStep = ({ currentStep, handleNext, handlePrev }) => {
+  const { register, watch } = useForm();
+  const selectedMode = watch("mode", ""); // Get the selected value
   return (
     <div className="w-full">
-      <div className="h-14 text-xl mb-8 font-semibold border-b border-neutral-500">
-        <h2>Course Details</h2>
-      </div>
-
-      <div className="p-3 flex flex-col gap-4">
-        <div className="border p-4 rounded-md border-neutral-400">
-          <InputField placeholder="Enter the course title">Course Title <span className="text-red-600">*</span> </InputField>
+      <form className="p-3 flex flex-col">
+        <div className="p-4 rounded-md">
+          <InputField placeholder="Enter the course title" className="bg-white" required="required">
+            Course Title <span className="text-red-600">*</span>
+          </InputField>
         </div>
 
-        <div className="border p-4 rounded-md border-neutral-400">
-          <InputField placeholder="Enter the subtitle">Subtitle <span className="text-red-600">*</span></InputField>
+        <div className="p-4 rounded-md">
+          <InputField placeholder="Enter the subtitle">
+            Subtitle <span className="text-red-600">*</span>
+          </InputField>
         </div>
 
-        <div className="border p-4 rounded-md border-neutral-400 flex flex-col md:flex-row gap-4 md:gap-0 md:items-center justify-between">
-          <div className="flex gap-1">
+        <div className="p-4 rounded-md flex flex-col md:flex-row gap-4 md:gap-0 md:items-center justify-between">
+          <div className="flex flex-col gap-2 w-[49%]">
+            <div className="flex gap-1">
+              <label htmlFor="language">Language</label>
+              <span className="text-red-600">*</span>
+            </div>
 
-          <select
-            name="language"
-            className="border p-2 rounded-lg border-neutral-300 outline-none cursor-pointer"
+            <select
+              id="language"
+              placeholder="select"
+              className="border p-2 rounded-lg border-neutral-300 outline-none cursor-pointer bg-white"
             >
-            <option value="">Select Language</option>
-            <option value="">Hindi</option>
-            <option value="">English</option>
-            <option value="">Hindi + English</option>
-          </select>
-          <span className="text-red-600">*</span>
-              </div>
+              <option value="">
+                Select Language
+              </option>
+              <option value="">Hindi</option>
+              <option value="">English</option>
+              <option value="">Hindi + English</option>
+            </select>
+          </div>
 
-          <div className="flex gap-2 items-center border p-2 rounded-lg border-neutral-300">
-            <span>Mode: <span className="text-red-600">*</span> </span>
-            <label htmlFor="offline" className="text-sm font-semibold cursor-pointer">
-              Offline
-            </label>
-            <input id="offline" type="radio" name="mode" value="offline" className="cursor-pointer" />
-            <label htmlFor="online" className="text-sm font-semibold cursor-pointer">
-              Online
-            </label>
-            <input id="online" type="radio" name="mode" value="online" className="cursor-pointer" />
-            <label htmlFor="hybrid" className="text-sm font-semibold cursor-pointer">
-              Hybrid
-            </label>
-            <input id="hybrid" type="radio" name="mode" value="hybrid" className="cursor-pointer" />
+          <div className="flex flex-col gap-2 w-[49%]">
+            <div className="flex gap-1">
+              <label htmlFor="language">Categories</label>
+              <span className="text-red-600">*</span>
+            </div>
+
+            <select
+              id="language"
+              className="border p-2 rounded-lg border-neutral-300 outline-none cursor-pointer bg-white"
+            >
+              <option value="">Select Categories</option>
+              <option value="">Category 1</option>
+              <option value="">Category 2</option>
+              <option value="">Category 3</option>
+            </select>
           </div>
         </div>
 
-        <div className="border p-4 rounded-md border-neutral-400">
-          <InputField placeholder="Enter Name of Instructor">Instructor <span className="text-red-600">*</span></InputField>
+        <div className="p-4 rounded-md">
+          <InputField placeholder="Enter Name of Instructor">
+            Instructor <span className="text-red-600">*</span>
+          </InputField>
         </div>
 
-        <div className="border p-4 rounded-md border-neutral-400">
-          <InputField type="image">Thumbnail Image <span className="text-red-600">*</span></InputField>
+        <div className="p-4 rounded-md flex flex-col gap-2">
+          <div>
+            Mode: <span className="text-red-600">*</span>{" "}
+          </div>
+          <div className="flex justify-between border border-neutral-300 rounded-md w-2/5 bg-white">
+            {["offline", "online", "hybrid"].map((mode) => (
+              <label
+                key={mode}
+                htmlFor={mode}
+                className={`text-sm cursor-pointer px-4 py-2 w-full text-center ${(mode === "offline" && "rounded-l-md border-r border-neutral-200") || (mode === "hybrid" && "rounded-r-md border-l border-neutral-200")} ${
+                  selectedMode === mode
+                    ? "bg-[#9CA1CD]"
+                    : ""
+                }`}
+              >
+                {mode.charAt(0).toUpperCase() + mode.slice(1)}
+                <input
+                  hidden
+                  id={mode}
+                  type="radio"
+                  value={mode}
+                  {...register("mode", { required: true })}
+                />
+              </label>
+            ))}
+          </div>
         </div>
 
-        <div className="border p-4 rounded-md border-neutral-400">
+        <div className="p-4 rounded-md">
+          <InputField type="image">
+            Thumbnail Image <span className="text-red-600">*</span>
+          </InputField>
+        </div>
+
+        <div className="p-4 rounded-md">
           <InputField type="pdf">Brochure pdf</InputField>
         </div>
-      </div>
+
+        <div
+          className={`flex ${
+            currentStep === 1
+              ? "justify-end"
+              : currentStep === 4
+              ? "justify-start"
+              : "justify-between"
+          } items-center gap-4 text-white`}
+        >
+          {currentStep > 1 && <Button onClick={handlePrev}>Prev</Button>}
+          {currentStep < 4 && (
+            <Button onClick={handleNext}>Save and Next</Button>
+          )}
+        </div>
+      </form>
     </div>
   );
 };

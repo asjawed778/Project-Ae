@@ -14,7 +14,7 @@ const InputField = forwardRef(
       children,
       type = "text",
       placeholder = "",
-      className = "",
+      className = "bg-white",
       parentClassName = "",
       labelClassName = "",
       id = "default",
