@@ -9,21 +9,17 @@ const CourseFirstStep = ({ currentStep, handleNext, handlePrev }) => {
   const selectedMode = watch("mode", ""); // Get the selected value
   return (
     <div className="w-full">
-      <form className="p-3 flex flex-col">
-        <div className="p-4 rounded-md">
+      <form className="p-3 flex flex-col gap-6 px-4">
           <InputField placeholder="Enter the course title" className="bg-white" required="required">
             Course Title <span className="text-red-600">*</span>
           </InputField>
-        </div>
 
-        <div className="p-4 rounded-md">
           <InputField placeholder="Enter the subtitle">
             Subtitle <span className="text-red-600">*</span>
           </InputField>
-        </div>
 
-        <div className="p-4 rounded-md flex flex-col md:flex-row gap-4 md:gap-0 md:items-center justify-between">
-          <div className="flex flex-col gap-2 w-[49%]">
+        <div className=" flex flex-col md:flex-row gap-4 md:gap-0 md:items-center justify-between">
+          <div className="flex flex-col gap-2 md:w-[49%] w-full">
             <div className="flex gap-1">
               <label htmlFor="language">Language</label>
               <span className="text-red-600">*</span>
@@ -43,7 +39,7 @@ const CourseFirstStep = ({ currentStep, handleNext, handlePrev }) => {
             </select>
           </div>
 
-          <div className="flex flex-col gap-2 w-[49%]">
+          <div className="flex flex-col gap-2 md:w-[49%] w-full">
             <div className="flex gap-1">
               <label htmlFor="language">Categories</label>
               <span className="text-red-600">*</span>
@@ -61,17 +57,15 @@ const CourseFirstStep = ({ currentStep, handleNext, handlePrev }) => {
           </div>
         </div>
 
-        <div className="p-4 rounded-md">
           <InputField placeholder="Enter Name of Instructor">
             Instructor <span className="text-red-600">*</span>
           </InputField>
-        </div>
 
-        <div className="p-4 rounded-md flex flex-col gap-2">
+        <div className="flex flex-col gap-2">
           <div>
             Mode: <span className="text-red-600">*</span>{" "}
           </div>
-          <div className="flex justify-between border border-neutral-300 rounded-md w-2/5 bg-white">
+          <div className="flex justify-between border border-neutral-300 rounded-md md:w-2/5 w-full bg-white">
             {["offline", "online", "hybrid"].map((mode) => (
               <label
                 key={mode}
@@ -95,15 +89,13 @@ const CourseFirstStep = ({ currentStep, handleNext, handlePrev }) => {
           </div>
         </div>
 
-        <div className="p-4 rounded-md">
-          <InputField type="image">
+          <div className="flex gap-20 flex-col md:flex-row">
+          <InputField type="image" id="thumbnail">
             Thumbnail Image <span className="text-red-600">*</span>
           </InputField>
-        </div>
 
-        <div className="p-4 rounded-md">
-          <InputField type="pdf">Brochure pdf</InputField>
-        </div>
+          <InputField type="pdf" id="pdf">Brochure pdf</InputField>
+            </div>      
 
         <div
           className={`flex ${

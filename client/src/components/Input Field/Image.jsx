@@ -2,6 +2,7 @@
 import { RxCross2 } from "react-icons/rx";
 
 import { forwardRef, useEffect, useState } from "react";
+import { AiOutlineCloudUpload } from "react-icons/ai";
 
 const Image = forwardRef(({ id, onChange = () => {}, ...rest }, ref) => {
   const [image, setImage] = useState(null);
@@ -70,15 +71,25 @@ const Image = forwardRef(({ id, onChange = () => {}, ...rest }, ref) => {
           />
         </div>
       ) : (
+        <div>
+          <label
+          htmlFor={id}
+          className="text-gray-500 flex flex-col items-center justify-center w-[15rem] py-2 h-fit border-2 border-dashed border-gray-300 cursor-pointer"
+        >
+          <AiOutlineCloudUpload size={30} />
+          <p>Upload image</p>
+        </label>
+
         <input
+          hidden
           id={id}
           type="file"
           accept="image/*"
           onChange={handleImageChange}
           ref={ref}
           {...rest}
-          className="p-2 border border-gray-300 rounded-md cursor-pointer"
-        />
+          />
+          </div>
       )}
 
       {/* Full-Screen Modal */}
