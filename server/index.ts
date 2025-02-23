@@ -4,6 +4,7 @@ import morgan from "morgan";
 import http from "http";
 import cookieParser from "cookie-parser";
 import cors from 'cors';
+import fileUpload from "express-fileupload";
 
 import { initDB } from "./app/common/services/database.service";
 import { initPassport } from "./app/common/services/passport-jwt.service";
@@ -38,6 +39,15 @@ app.use(cors({
   origin: process.env.BASE_URL,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   credentials: true,
+}));
+
+
+app.use(fileUpload({
+  useTempFiles: true,
+  tempFileDir: '/tmp/',
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
+  abortOnLimit: true, // Immediately reject oversized files
+  safeFileNames: true, // Prevent malicious file names
 }));
 
 import swaggerDocument from "./app/swagger/swagger";
