@@ -187,16 +187,9 @@ const CourseFirstStep = ({ currentStep, handleNext, handlePrev }) => {
         </div>
 
         <div
-          className={`flex ${
-            currentStep === 1
-              ? "justify-end"
-              : currentStep === 4
-              ? "justify-start"
-              : "justify-between"
-          } items-center gap-4 text-white`}
+          className={`flex justify-end items-center text-white`}
         >
-          {currentStep > 1 && <Button onClick={handlePrev}>Prev</Button>}
-          {currentStep < 4 && <Button onClick={setValues} type="submit">Save and Next</Button>}
+          <Button onClick={setValues} type="submit">Save and Next</Button>
         </div>
       </form>
     </div>

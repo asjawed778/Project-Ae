@@ -72,7 +72,7 @@ const AddCourse = () => {
             "cursor-pointer bg-[var(--color-primary)] text-white rounded-lg"
           } px-4 py-2`}
         >
-          Course Content
+          Course Structure
         </div>
         <div
           className={`${
@@ -80,7 +80,15 @@ const AddCourse = () => {
             "cursor-pointer bg-[var(--color-primary)] text-white rounded-lg"
           } px-4 py-2`}
         >
-          Pricing
+          Course Content
+        </div>
+        <div
+          className={`${
+            currentStep == 5 &&
+            "cursor-pointer bg-[var(--color-primary)] text-white rounded-lg"
+          } px-4 py-2`}
+        >
+          Pricing & Publish
         </div>
       </div>
 
@@ -93,14 +101,32 @@ const AddCourse = () => {
         {currentStep === 2 && <CourseDetails currentStep={currentStep} handleNext={handleNext} handlePrev={handlePrev} />}
         {currentStep === 3 && (
           <div className="h-[65vh] flex justify-center items-center">
-            Course Content
+            Course Structure
           </div>
         )}
         {currentStep === 4 && (
           <div className="h-[65vh] flex justify-center items-center">
-            Pricing
+            Course Content
           </div>
         )}
+        {currentStep === 5 && (
+          <div className="h-[65vh] flex justify-center items-center">
+            Pricing & Publish
+          </div>
+        )}
+
+        {currentStep >= 3 && <div
+          className={`flex ${
+            currentStep === 1
+              ? "justify-end"
+              : currentStep === 5
+              ? "justify-start"
+              : "justify-between"
+          } items-center gap-4 text-white`}
+        >
+          {currentStep > 1 && <Button onClick={handlePrev}>Prev</Button>}
+          {currentStep < 5 && <Button onClick={handleNext}>Save and Next</Button>}
+        </div>}
       </div>
     </div>
   );
