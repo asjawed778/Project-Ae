@@ -3,31 +3,45 @@ import { forwardRef, useEffect, useState } from "react";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { RxCross2 } from "react-icons/rx";
 
-const Pdf = forwardRef(({ id, ...rest }, ref) => {
+const Pdf = forwardRef(({ id, onChange =() => {} , ...rest }, ref) => {
   const [file, setFile] = useState(null);
   const [pdfUrl, setPdfUrl] = useState(null);
+  const [error, setError] = useState("")
 
   const handleFileChange = (event) => {
-    console.log("i am here", id);
     const uploadedFile = event.target.files[0];
     if (uploadedFile && uploadedFile.type === "application/pdf") {
+      const maxSize = 5 * 1024 * 1024; // maximum 5MB
+      const allowedTypes = ["application/pdf"];
+
+      if (!allowedTypes.includes(uploadedFile.type)) {
+        setError("Only pdf file is allowed.");
+        event.target.value = "";
+        return;
+      }
+
+      if (uploadedFile.size > maxSize) {
+        setError("File size should not exceed 5MB.");
+        event.target.value = "";
+        return;
+      }
+      setError("")
       setFile(uploadedFile);
     } else {
-      alert("Please upload a valid PDF file.");
+      setError("Please upload a valid PDF file.");
     }
   };
 
   const removePdf = () => {
-    // setPdf(null);
+    setFile(null);
+    setPdfUrl(null)
     if (ref?.current) {
       ref.current.value = ""; // Reset the input field
     }
   };
 
   useEffect(() => {
-    console.log("hello", ref);
     if (file) {
-      console.log("hello2", ref);
       const url = URL.createObjectURL(file);
       setPdfUrl(url);
       return () => URL.revokeObjectURL(url); // Clean up when component unmounts
@@ -37,7 +51,12 @@ const Pdf = forwardRef(({ id, ...rest }, ref) => {
   return file ? (
     <div className="group flex items-center gap-5">
       <div className="relative">
+        <div className="flex gap-3">
         <p className="text-green-600">Uploaded: {file?.name}</p>
+        <button type="button" onClick={removePdf} className="cursor-pointer ">
+          <RxCross2 className="size-5" />
+        </button>
+        </div>
 
         {/* Hover Div */}
         {pdfUrl && (
@@ -45,16 +64,13 @@ const Pdf = forwardRef(({ id, ...rest }, ref) => {
             href={pdfUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="z-10 hidden group-hover:flex items-center justify-center absolute top-0 text-xl text-white bg-black/55 w-full h-full rounded-md cursor-pointer"
+            className="z-10 mt-1 flex items-center justify-center text-xl text-white bg-black/55 w-full h-full rounded-md cursor-pointer"
           >
             Preview
           </a>
         )}
       </div>
       {/* Remove Image Button */}
-      <button onClick={removePdf} className="cursor-pointer">
-        <RxCross2 className="size-5" />
-      </button>
     </div>
   ) : (
     <div>
@@ -70,10 +86,11 @@ const Pdf = forwardRef(({ id, ...rest }, ref) => {
         id={id}
         type="file"
         accept="application/pdf"
-        onChange={() => console.log("ha bhai kaise ho")}
+        onChange={handleFileChange}
         ref={ref}
         {...rest}
       />
+      {error && <p className="text-red-600 text-xs mt-1 ml-1">{error}</p>}
     </div>
   );
 });
