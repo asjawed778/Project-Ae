@@ -65,4 +65,3 @@ exports.modifyPermissions = async (req, res, next) => {
         });
     }
 };
-
