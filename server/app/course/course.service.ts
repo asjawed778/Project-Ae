@@ -24,7 +24,7 @@ export const addAdditionalDetails = async(courseId: string, data: ICourse) => {
     return course as ICourse;
 };
 
-export const addCourseStructure = async()
+// export const addCourseStructure = async()
 
 export const getCourseById = async(courseId: string) => {
     const course = await courseSchema.findById(courseId);
