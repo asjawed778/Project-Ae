@@ -30,8 +30,8 @@ const port = Number(process.env.PORT) ?? 5000;
 
 const app: Express = express();
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser());
@@ -45,10 +45,11 @@ app.use(cors({
 app.use(fileUpload({
   useTempFiles: true,
   tempFileDir: '/tmp/',
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
-  abortOnLimit: true, // Immediately reject oversized files
-  safeFileNames: true, // Prevent malicious file names
+  limits: { fileSize: 50 * 1024 * 1024 },
+  abortOnLimit: true,
+  safeFileNames: true,
 }));
+
 
 import swaggerDocument from "./app/swagger/swagger";
 
