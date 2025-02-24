@@ -8,7 +8,12 @@ import * as fileUploadMiddleware from "../common/middleware/fileUpload.middlewar
 const router = Router();
 
 router
-    .post("/upload", fileUploadMiddleware.brouchureUpload, catchError, courseController.uploadfile)
-    .post("/details", courseValidation.courseDetails, courseController.addCourseDetails)
+    .post("/thumbnail", fileUploadMiddleware.thumbnailUpload, catchError, courseController.uploadfile)
+    .post("/brouchure", fileUploadMiddleware.brouchureUpload, catchError, courseController.uploadfile)
+    .post("/details", courseValidation.courseDetails, catchError, courseController.addCourseDetails)
+    .put("/details/:courseId", courseValidation.courseDetails, catchError, courseController.addCourseDetails)
+    .post("/trailer-video", fileUploadMiddleware.videoUpload, catchError, courseController.uploadfile)
+    .put("/additional-details/:courseId", courseValidation.AdditionalDetails, catchError, courseController.addAdditionalDetails)
+    .get("/instructors", courseController.getIntructorList)
 
 export default router;

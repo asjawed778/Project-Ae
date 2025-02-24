@@ -52,7 +52,6 @@ export const putObject = async (file: { tempFilePath: string; name: string; mime
         }
 
         const url = `https://${S3_BUCKET_NAME}.s3.${S3_REGION_NAME}.amazonaws.com/${key}`;
-        console.log("Uploaded file URL:", url);
         return { url, key };
     } catch (err) {
         console.error("Error uploading file to S3:", (err as Error).message);
@@ -84,7 +83,7 @@ export const deleteObject = async (url: string): Promise<{ success: boolean; key
         const command = new DeleteObjectCommand(params);
         await s3Client.send(command);
 
-        console.log(`File deleted: ${key}`);
+        // console.log(`File deleted: ${key}`);
         return { success: true, key };
     } catch (err) {
         console.error("Error deleting file from S3:", (err as Error).message);

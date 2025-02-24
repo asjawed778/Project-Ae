@@ -44,10 +44,10 @@ courseLifecycleSchema.pre("save", function (next) {
         ...doc.TERMINATED
     ];
 
-    doc.allCourses = [...new Set(statusCourses.map(course => new mongoose.Schema.Types.ObjectId(course.toString())))] as mongoose.Schema.Types.ObjectId[];
+    doc.allCourses = [...new Set(statusCourses.map(course => new mongoose.Schema.Types.ObjectId(course?.toString())))] as mongoose.Schema.Types.ObjectId[];
 
     // Check if any course appears in multiple statuses
-    const courseSet = new Set(statusCourses.map(course => course.toString()));
+    const courseSet = new Set(statusCourses.map(course => course?.toString()));
 
     if (courseSet.size !== statusCourses.length) {
         return next(new Error("A course can only belong to one status field."));

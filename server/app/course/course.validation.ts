@@ -41,21 +41,22 @@ export const courseDetails = [
 ];
 
 export const AdditionalDetails = [
-
     param('courseId')
         .notEmpty().withMessage('courseId is required')
         .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
 
     body('keypoints')
+        .notEmpty().withMessage('At least one keypoint is required')
         .isArray().withMessage('Keypoints must be an array')
-        .customSanitizer((value: unknown[]) => value.map(String)) // Convert each item to a string
-        .custom((value: string[]) => value.every((item: string) => typeof item === 'string'))
+        .customSanitizer((value: unknown) => Array.isArray(value) ? value.map(String) : []) // Prevent undefined errors
+        .custom((value: string[]) => value.every((item) => typeof item === 'string'))
         .withMessage('Each keypoint must be a string'),
 
     body('tags')
+        .notEmpty().withMessage('At least one tag is required')
         .isArray().withMessage('Tags must be an array')
-        .customSanitizer((value: unknown[]) => value.map(String)) // Convert each item to a string
-        .custom((value: string[]) => value.every((item: string) => typeof item === 'string'))
+        .customSanitizer((value: unknown) => Array.isArray(value) ? value.map(String) : []) // Prevent undefined errors
+        .custom((value: string[]) => value.every((item) => typeof item === 'string'))
         .withMessage('Each tag must be a string'),
 
     body('description')
@@ -74,11 +75,11 @@ export const AdditionalDetails = [
 
     body('trailerVideo')
         .optional()
-        .isString().withMessage("Trailer vdo url must be a string")
-        .isURL().withMessage("Trailer vdo must be a valid URL") 
-        .matches(/^https?:\/\/.*\.amazonaws\.com\/.*/).withMessage("Invalid AWS S3 URL format")  
-    
+        .isString().withMessage('Trailer video URL must be a string')
+        .isURL().withMessage('Trailer video must be a valid URL') 
+        .matches(/^https?:\/\/.*\.amazonaws\.com\/.*/).withMessage('Invalid AWS S3 URL format')  
 ];
+
 
 export const courseContentStructure = [
     param("courseId")
@@ -107,7 +108,5 @@ export const courseContentStructure = [
         .optional()
         .isString().withMessage("SubSection description must be a string")
 ];
-
-
 
 
