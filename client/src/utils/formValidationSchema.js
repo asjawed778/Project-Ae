@@ -26,7 +26,7 @@ export const signupSchema = yup.object({
 });
 
 export const signinSchema = yup.object({
-  identifier: yup
+  email: yup
     .string()
     .email("Invalid email format")
     .required("Email is required"),

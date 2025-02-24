@@ -143,7 +143,7 @@ function LoginModal({
                 Email
               </label>
               <input
-                {...register("identifier", {
+                {...register("email", {
                   validate: (value) =>
                     validator.isEmail(value) || "Invalid email address",
                 })}
