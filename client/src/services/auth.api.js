@@ -28,11 +28,21 @@ export const apiAuth = createApi({
       }),
     }),
     logout: builder.mutation({
-      query: () => ({
+      query: ({accessToken}) => ({
         url: "user/logout",
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`, // Send token in Authorization header
+        },
+        credentials: "include",
       }),
     }),
+    // logout: builder.mutation({
+    //   query: () => ({
+    //     url: "user/logout",
+    //     method: "POST",
+    //   }),
+    // }),
     updatePassword: builder.mutation({
       query: (data) => ({
         url: "user/update-password",
