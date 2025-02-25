@@ -89,7 +89,7 @@ export const addAdditionalDetails = asyncHandler(async(req: Request, res: Respon
 
 export const addCourseStructure = asyncHandler(async(req: Request, res: Response) => {
     const courseId = req.params.courseId;
-    const data = req.body; 
+    const data = req.body; // hello this is amit
 
     if(courseId) {
         const course = await courseService.getCourseById(courseId);
