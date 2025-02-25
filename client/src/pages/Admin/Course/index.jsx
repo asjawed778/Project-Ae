@@ -3,10 +3,10 @@ import { useForm } from "react-hook-form";
 import Button from "../../../components/Button/Button";
 import CourseDetails from "../../../components/Add Course/AdditionalDetails";
 import CourseFirstStep from "../../../components/Add Course/CourseFirstStep";
+import CourseStructure from "../../../components/Add Course/CourseStructure";
 
 const AddCourse = () => {
   const [currentStep, setCurrentStep] = useState(1);
-  //   const [fileName, setFileName] = useState("");
   const {
     register,
     handleSubmit,
@@ -95,14 +95,26 @@ const AddCourse = () => {
       <div className="bg-[#F5F5F5] rounded-lg p-2 w-full">
         {currentStep === 1 && (
           <div>
-            <CourseFirstStep currentStep={currentStep} handleNext={handleNext} handlePrev={handlePrev} />
+            <CourseFirstStep
+              currentStep={currentStep}
+              handleNext={handleNext}
+              handlePrev={handlePrev}
+            />
           </div>
         )}
-        {currentStep === 2 && <CourseDetails currentStep={currentStep} handleNext={handleNext} handlePrev={handlePrev} />}
+        {currentStep === 2 && (
+          <CourseDetails
+            currentStep={currentStep}
+            handleNext={handleNext}
+            handlePrev={handlePrev}
+          />
+        )}
         {currentStep === 3 && (
-          <div className="h-[65vh] flex justify-center items-center">
-            Course Structure
-          </div>
+          <CourseStructure
+            currentStep={currentStep}
+            handleNext={handleNext}
+            handlePrev={handlePrev}
+          />
         )}
         {currentStep === 4 && (
           <div className="h-[65vh] flex justify-center items-center">
@@ -115,18 +127,22 @@ const AddCourse = () => {
           </div>
         )}
 
-        {currentStep >= 3 && <div
-          className={`flex ${
-            currentStep === 1
-              ? "justify-end"
-              : currentStep === 5
-              ? "justify-start"
-              : "justify-between"
-          } items-center gap-4 text-white`}
-        >
-          {currentStep > 1 && <Button onClick={handlePrev}>Prev</Button>}
-          {currentStep < 5 && <Button onClick={handleNext}>Save and Next</Button>}
-        </div>}
+        {currentStep >= 3 && (
+          <div
+            className={`flex ${
+              currentStep === 1
+                ? "justify-end"
+                : currentStep === 5
+                ? "justify-start"
+                : "justify-between"
+            } items-center gap-4 text-white`}
+          >
+            {currentStep > 1 && <Button onClick={handlePrev}>Prev</Button>}
+            {currentStep < 5 && (
+              <Button onClick={handleNext}>Save and Next</Button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
