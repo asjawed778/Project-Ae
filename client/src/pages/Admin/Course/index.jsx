@@ -3,9 +3,10 @@ import { useForm } from "react-hook-form";
 import Button from "../../../components/Button/Button";
 import CourseDetails from "../../../components/Add Course/AdditionalDetails";
 import CourseFirstStep from "../../../components/Add Course/CourseFirstStep";
+import CourseStructure from "../../../components/Add Course/CourseStructure";
 
 const AddCourse = () => {
-  const [currentStep, setCurrentStep] = useState(2);
+  const [currentStep, setCurrentStep] = useState(3);
   const {
     register,
     handleSubmit,
@@ -109,9 +110,11 @@ const AddCourse = () => {
           />
         )}
         {currentStep === 3 && (
-          <div className="h-[65vh] flex justify-center items-center">
-            Course Structure
-          </div>
+          <CourseStructure
+            currentStep={currentStep}
+            handleNext={handleNext}
+            handlePrev={handlePrev}
+          />
         )}
         {currentStep === 4 && (
           <div className="h-[65vh] flex justify-center items-center">
