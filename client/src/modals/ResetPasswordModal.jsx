@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { RxCross1 } from "react-icons/rx";
-import { useDispatch } from "react-redux";
+import { toast } from "react-hot-toast";
+// import { useDispatch } from "react-redux";
 
 import ButtonLoading from "../components/Button/ButtonLoading";
-import { resetPassword } from "../services/operations/authApi";
+import { useSendForgotPasswordOtpMutation } from "../services/auth.api";
+// import { resetPassword } from "../services/operations/authApi";
 
 /**
  * ResetPasswordModal Component - Handles resetting the password by sending a reset email.
- * 
+ *
  * @param {Object} props - Component properties.
  * @param {Function} props.setEmail - Function to update the user's email state.
  * @param {boolean} props.resetModal - State to control the visibility of the modal.
@@ -20,9 +22,11 @@ function ResetPasswordModal({
   setResetModal,
   setUpdatePasswordModal,
 }) {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+  const [sendForgotPasswordOtp, { isLoading }] =
+    useSendForgotPasswordOtpMutation();
 
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [userEmail, setUserEmail] = useState({ email: "" });
 
   const isFormValid = userEmail.email.trim() !== "";
@@ -37,19 +41,37 @@ function ResetPasswordModal({
     setUserEmail({ email: e.target.value });
   };
 
-
   /**
    * Handles the form submission to request a password reset.
    * @param {Event} e - Form submission event.
    */
-  const resetPasswordSubmitHandler = (e) => {
+  const resetPasswordSubmitHandler = async (e) => {
     e.preventDefault();
 
     const { email } = userEmail;
     setEmail(email);
-    dispatch(resetPassword(userEmail, setResetModal, setUpdatePasswordModal));
+
+    await sendForgotPasswordOtp(userEmail);
+
+    toast.success("OTP sent successfully");
+
+    // to close reset modal
+    setResetModal(false);
+
+    // to invoke otp modal
+    setUpdatePasswordModal(true);
+
     setUserEmail({ email: "" });
   };
+
+  // const resetPasswordSubmitHandler = (e) => {
+  //   e.preventDefault();
+
+  //   const { email } = userEmail;
+  //   setEmail(email);
+  //   dispatch(resetPassword(userEmail, setResetModal, setUpdatePasswordModal));
+  //   setUserEmail({ email: "" });
+  // };
 
   return (
     <div
@@ -92,7 +114,7 @@ function ResetPasswordModal({
             }`}
             disabled={!isFormValid}
           >
-            {loading ? <ButtonLoading /> : <p>Submit</p>}
+            {isLoading ? <ButtonLoading /> : <p>Submit</p>}
           </button>
         </form>
       </div>

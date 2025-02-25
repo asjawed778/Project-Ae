@@ -1,26 +1,30 @@
-import { useEffect, useRef, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 import ButtonLoading from "../components/Button/ButtonLoading";
-import { verifySignupOTP } from "../services/operations/authApi";
-
+import { useVerifySignupOtpMutation } from "../services/auth.api";
+import { login } from "../store/reducers/authReducer";
+// import { verifySignupOTP } from "../services/operations/authApi";
 
 /**
  * OTPModal Component - Handles OTP verification for signup.
- * 
+ *
  * @param {Object} props - Component properties.
  * @param {boolean} props.otpModal - State to control the visibility of the modal.
  * @param {Function} props.setOtpModal - Function to update modal visibility state.
  * @param {Object} props.signupData - User data including email and other details.
  */
 function OTPModal({ otpModal, setOtpModal, signupData }) {
+  const [verifySignupOtp, { isLoading, error }] = useVerifySignupOtpMutation();
+
   const otpInputRefs = useRef([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [isOtpComplete, setIsOtpComplete] = useState(false);
 
   useEffect(() => {
@@ -50,7 +54,6 @@ function OTPModal({ otpModal, setOtpModal, signupData }) {
     }
   };
 
-
   /**
    * Handles input changes for OTP fields and moves focus accordingly.
    * @param {Event} e - Input event.
@@ -71,7 +74,7 @@ function OTPModal({ otpModal, setOtpModal, signupData }) {
     setIsOtpComplete(otpValues.length === 6);
   };
 
-   /**
+  /**
    * Handles backspace key to move focus backward.
    * @param {KeyboardEvent} e - Key down event.
    * @param {number} index - Index of the current input field.
@@ -90,12 +93,30 @@ function OTPModal({ otpModal, setOtpModal, signupData }) {
    * Handles OTP submission.
    * @param {Event} e - Form submission event.
    */
-  const otpSubmitHandler = (e) => {
+  const otpSubmitHandler = async (e) => {
     e.preventDefault();
     const otpValues = otpInputRefs.current.map((ref) => ref.value).join("");
     const userRegisterData = { ...signupData, otp: otpValues };
-    dispatch(verifySignupOTP(userRegisterData, setOtpModal, navigate));
+    try {
+      const res = await verifySignupOtp(userRegisterData);
+
+      if (res.data.success) {
+        dispatch(login({ token: res.data.token, user: res.data.user }));
+        toast.success("User Registerd successfully");
+        setOtpModal(false);
+        navigate("/");
+      }
+    } catch (error) {
+      toast.error(error);
+    }
   };
+
+  // const otpSubmitHandler = (e) => {
+  //   e.preventDefault();
+  //   const otpValues = otpInputRefs.current.map((ref) => ref.value).join("");
+  //   const userRegisterData = { ...signupData, otp: otpValues };
+  //   dispatch(verifySignupOTP(userRegisterData, setOtpModal, navigate));
+  // };
 
   return (
     <div
@@ -145,7 +166,8 @@ function OTPModal({ otpModal, setOtpModal, signupData }) {
           }`}
           disabled={!isOtpComplete}
         >
-          {loading ? <ButtonLoading /> : <p>Submit</p>}
+          {isLoading ? <ButtonLoading /> : <p>Submit</p>}
+          {/* {loading ? <ButtonLoading /> : <p>Submit</p>} */}
         </button>
       </form>
     </div>

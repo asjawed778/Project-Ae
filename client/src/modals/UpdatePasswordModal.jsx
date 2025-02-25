@@ -1,16 +1,20 @@
-import { useEffect, useRef, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
-import { useDispatch } from "react-redux";
-import ButtonLoading from "../components/Button/ButtonLoading";
-import { updatePassword } from "../services/operations/authApi";
 
+import { toast } from "react-hot-toast";
+import { useEffect, useRef, useState } from "react";
+// import { useDispatch } from "react-redux";
+
+import ButtonLoading from "../components/Button/ButtonLoading";
+import { useUpdatePasswordMutation } from "../services/auth.api";
+
+// import { updatePassword } from "../services/operations/authApi";
 
 /**
  * UpdatePasswordModal Component
- * 
+ *
  * This component renders a modal for updating the password using an OTP verification system.
  * Users enter a six-digit OTP sent to their email and then update their password.
- * 
+ *
  * @component
  * @param {Object} props - Component props
  * @param {string} props.email - The email of the user
@@ -22,14 +26,16 @@ function UpdatePasswordModal({
   email,
   updatePasswordModal,
   setUpdatePasswordModal,
-  setLoginModal,
 }) {
   const modalRef = useRef(null);
   const otpInputRefs = useRef([]);
-  const dispatch = useDispatch();
+
+  // const dispatch = useDispatch();
+
+  const [updatePassword, { isLoading, error }] = useUpdatePasswordMutation();
 
   const [isOtpComplete, setIsOtpComplete] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState({
     email: email,
     otp: "",
@@ -65,15 +71,14 @@ function UpdatePasswordModal({
 
   if (!updatePasswordModal) return null;
 
-   /**
+  /**
    * Closes the modal
    */
   const closeModal = () => {
     setUpdatePasswordModal(false);
   };
 
-
-   /**
+  /**
    * Handles OTP input changes and auto-focuses next field
    * @param {Object} e - Event object
    * @param {number} index - OTP input index
@@ -92,7 +97,7 @@ function UpdatePasswordModal({
     setIsOtpComplete(otpValues.length === 6);
   };
 
-   /**
+  /**
    * Handles backspace key navigation for OTP inputs
    * @param {Object} e - Event object
    * @param {number} index - OTP input index
@@ -115,18 +120,33 @@ function UpdatePasswordModal({
     setUserData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-   /**
+  /**
    * Handles OTP submission and dispatches the updatePassword action
    * @param {Object} e - Event object
    */
-  const otpSubmitHandler = (e) => {
+
+  const otpSubmitHandler = async (e) => {
     e.preventDefault();
     const otpValues = otpInputRefs.current.map((ref) => ref.value).join("");
     const userRegisterData = { ...userData, otp: otpValues };
-    dispatch(
-      updatePassword(userRegisterData, setUpdatePasswordModal, setLoginModal)
-    );
+
+    try {
+      await updatePassword(userRegisterData);
+      toast.success("Password Updated Successfully");
+      setUpdatePasswordModal(false);
+    } catch (err) {
+      toast.error(error);
+    }
   };
+
+  // const otpSubmitHandler = (e) => {
+  //   e.preventDefault();
+  //   const otpValues = otpInputRefs.current.map((ref) => ref.value).join("");
+  //   const userRegisterData = { ...userData, otp: otpValues };
+  //   dispatch(
+  //     updatePassword(userRegisterData, setUpdatePasswordModal, setLoginModal)
+  //   );
+  // };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center backdrop-blur-lg z-50">
@@ -182,13 +202,15 @@ function UpdatePasswordModal({
 
         <button
           className={`w-full p-2 rounded-lg transition ${
-            loading
+            isLoading
               ? "bg-gray-500 cursor-not-allowed"
               : "bg-blue-600 hover:bg-blue-700"
           }`}
-          disabled={!isOtpComplete || loading}
+          // disabled={!isOtpComplete || loading}
+          disabled={!isOtpComplete || isLoading}
         >
-          {loading ? <ButtonLoading /> : "Submit"}
+          {/* {loading ? <ButtonLoading /> : "Submit"} */}
+          {isLoading ? <ButtonLoading /> : "Submit"}
         </button>
       </form>
     </div>

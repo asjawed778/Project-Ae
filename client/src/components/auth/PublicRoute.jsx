@@ -3,9 +3,9 @@ import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
 function PublicRoute({ children }) {
-    const { token } = useSelector((store) => store.auth)
+    const { accessToken } = useSelector((store) => store.auth)
 
-    if (token === null) {
+    if (accessToken === null) {
         return children
     } else {
         return <Navigate to="/" />

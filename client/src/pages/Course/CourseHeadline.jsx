@@ -1,20 +1,21 @@
 import { GoHome } from "react-icons/go";
 import { FaCircleCheck } from "react-icons/fa6";
 import { PiGreaterThanBold } from "react-icons/pi";
+import { RiArrowRightWideLine } from "react-icons/ri";
+
 
 import Button from "../../components/Button/Button";
 import coder from "../../../public/imgs/slider/coder.jpg";
 
 export default function CourseHeadline({ specificCourse }) {
-  console.log("inside", specificCourse)
   return (
     <div className="bg-[#FFF7ED] flex flex-col gap-5 px-10 md:px-20  lg:px-[250px] pt-5 pb-16">
-      <div className="flex gap-3">
+      <div className="flex gap-3 items-center">
         <GoHome size={20} />
-        <PiGreaterThanBold color="grey" size={15} className="mt-1" />
+        <RiArrowRightWideLine color="grey" size={20}  />
         <h1 className="text-gray-600 font-semibold">Course</h1>
-        <PiGreaterThanBold color="grey" size={15} className="mt-1" />
-        <h1 className="text-gray-600 font-semibold">
+        <RiArrowRightWideLine color="grey" size={20}  />
+        <h1 className="text-neutral-500 font-semibold text-xs">
           {specificCourse?.courseTitle}
         </h1>
       </div>

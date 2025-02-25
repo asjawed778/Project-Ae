@@ -3,20 +3,43 @@ import { CiSearch } from "react-icons/ci";
 
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
+import { toast } from "react-hot-toast";
 import { logout } from "../../store/reducers/authReducer";
 import HamNavbar from "./HamNavbar";
-import { logoutUser } from "../../services/operations/authApi";
+import { useLogoutMutation } from "../../services/auth.api";
+// import { logoutUser } from "../../services/operations/authApi";
 
 export default function Header() {
-  const { token } = useSelector((store) => store.auth);
-  const navigate = useNavigate()
-
+  const { accessToken } = useSelector((store) => store.auth);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const [logoutUser, { isLoading, error }] = useLogoutMutation();
+
   const handleLogout = async () => {
-    dispatch(logoutUser(navigate));
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      if (!accessToken) {
+        throw new Error("No access token found.");
+      }
+
+      const result = await logoutUser(accessToken);
+      // console.log("logout result",result)
+      if (result?.error) {
+        throw new Error(JSON.stringify(result.error));
+      }
+      dispatch(logout());
+      toast.success("Logged out successfully");
+      navigate("/auth");
+    } catch (err) {
+      const error = JSON.parse(err?.message);
+      // toast.error(error.data.message);
+      console.error(error.data.message)
+    }
   };
+  // const handleLogout = async () => {
+  //   dispatch(logoutUser(navigate));
+  // };
 
   return (
     <nav className="flex w-full items-center justify-between gap-4 h-20 py-4 px-10 sm:px-20 md:px-10">
@@ -65,15 +88,15 @@ export default function Header() {
               Contact Us
             </Link> */}
 
-          {token ? (
+          {accessToken ? (
             <button
               onClick={handleLogout}
-              className="text-[var(--color-primary)]"
+              className="text-[var(--color-primary)] cursor-pointer"
             >
               Logout
             </button>
           ) : (
-            <Link to="/auth" className="text-[var(--color-primary)]">
+            <Link  to="/auth" className="text-[var(--color-primary)] cursor-pointer">
               Login
             </Link>
           )}

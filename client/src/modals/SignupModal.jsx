@@ -1,22 +1,30 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { sendSignupOTP } from "../services/operations/authApi";
-import ButtonLoading from "../components/Button/ButtonLoading";
 import logo from "../../public/logo.svg";
 import google from "../../public/imgs/google.svg";
 import apple from "../../public/imgs/apple.svg";
+
+import { toast } from "react-hot-toast";
 import { RxCross2 } from "react-icons/rx";
-import { useForm } from "react-hook-form";
-import validator from "validator";
 import { FiEye } from "react-icons/fi";
 import { FiEyeOff } from "react-icons/fi";
 
+import { useForm } from "react-hook-form";
+import validator from "validator";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+
+import ButtonLoading from "../components/Button/ButtonLoading";
+import { useSendSignupOtpMutation } from "../services/auth.api";
+// import { sendSignupOTP } from "../services/operations/authApi";
+
+import { yupResolver } from "@hookform/resolvers/yup";
+import { signupSchema } from "../utils/formValidationSchema";
+
 /**
  * SignupModal Component
- * 
+ *
  * This component renders a signup modal that allows users to register an account.
  * It includes form validation, password visibility toggling, and OTP dispatching.
- * 
+ *
  * @param {Object} props - Component props
  * @param {boolean} props.signupModal - Controls the visibility of the signup modal
  * @param {Function} props.setSignupModal - Function to set the signup modal visibility
@@ -31,28 +39,34 @@ function SignupModal({
   setSignupData,
   setLoginModal,
 }) {
+  const [sendSignupOtp, { isLoading, error }] = useSendSignupOtpMutation();
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
     reset,
     watch,
     formState: { errors },
-  } = useForm();
-  const dispatch = useDispatch();
+  } = useForm({
+    resolver: yupResolver(signupSchema),
+  });
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+
+  // const [loading, setLoading] = useState(false);
 
   if (!signupModal) return null;
 
-   /**
+  /**
    * Closes the signup modal.
    */
   const signupModalCloseHandler = () => {
     setSignupModal(false);
   };
 
-   /**
+  /**
    * Handles overlay click to close the modal.
    * @param {Event} e - Click event
    */
@@ -66,38 +80,24 @@ function SignupModal({
    * Handles the signup form submission.
    * @param {Object} data - Form data containing user credentials
    */
+
   const signupFormSubmitHandler = async (data) => {
     try {
-      setLoading(true);
       setSignupData(data);
-      await dispatch(sendSignupOTP(data, setSignupModal, setOtpModal));
-    } catch (err) {
-      console.log("Sign in error: ", err);
-    } finally {
+      const result = await sendSignupOtp(data);
+      if (result?.error) {
+        throw new Error(JSON.stringify(result.error));
+      }
+      toast.success("OTP sent successfully");
+      setSignupModal(false);
+      setOtpModal(true);
       reset();
-      setLoading(false);
+    } catch (err) {
+      const error = JSON.parse(err.message);
+      if (error.status === 409) {
+        toast.error(error.data.message);
+      }
     }
-  };
-  const formValidation = {
-    ...register("password", {
-      required: "Password is required",
-      minLength: {
-        value: 8,
-        message: "Password must be at least 8 characters",
-      },
-      maxLength: {
-        value: 100,
-        message: "Password must not exceed 100 characters",
-      },
-      validate: {
-        hasUppercase: (value) =>
-          /[A-Z]/.test(value) || "Password must have an uppercase letter",
-        hasLowercase: (value) =>
-          /[a-z]/.test(value) || "Password must have a lowercase letter",
-        noSpaces: (value) =>
-          !/\s/.test(value) || "Password must not contain spaces",
-      },
-    }),
   };
 
   return (
@@ -110,11 +110,13 @@ function SignupModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center">
-
-        <div className="relative h-12 w-28">
-          <img src={logo} className="h-full w-full absolute" alt="logo" />
-        </div>
-        <RxCross2 onClick={signupModalCloseHandler}  className="text-lg cursor-pointer"/>
+          <div className="relative h-12 w-28">
+            <img src={logo} className="h-full w-full absolute" alt="logo" />
+          </div>
+          <RxCross2
+            onClick={signupModalCloseHandler}
+            className="text-lg cursor-pointer"
+          />
         </div>
         <div className="p-5 flex flex-col w-[80%] mx-auto">
           <p className="text-neutral-700 text-xs font-semibold">
@@ -136,13 +138,7 @@ function SignupModal({
                 </label>
               </div>
               <input
-                {...register("name", {
-                  required: "name is required",
-                  maxLength: {
-                    value: 50,
-                    message: "Name must not exceed 50 characters",
-                  },
-                })}
+                {...register("name")}
                 id="name"
                 type="text"
                 className="w-full outline-0 border px-2 py-1 rounded focus:border-blue-500"
@@ -159,7 +155,6 @@ function SignupModal({
               </label>
               <input
                 {...register("email", {
-                  required: "Email is required",
                   validate: (value) =>
                     validator.isEmail(value) || "Invalid email address",
                 })}
@@ -181,7 +176,7 @@ function SignupModal({
               </div>
               <div className="relative">
                 <input
-                  {...formValidation}
+                  {...register("password")}
                   id="password"
                   type={!showPassword ? "password" : "text"}
                   className="w-full outline-0 border px-2 py-1 rounded focus:border-blue-500"
@@ -207,22 +202,18 @@ function SignupModal({
                 Confirm Password
               </label>
               <div className="relative">
-              <input
-                {...register("confirmPassword", {
-                  required: "Confirm Password is required",
-                  validate: (value) =>
-                  value === watch("password") || "Passwords do not match",
-                })}
-                type={!showConfirmPassword ? "password" : "text"}
-                className="w-full outline-0 border px-2 py-1 rounded focus:border-blue-500"
+                <input
+                  {...register("confirmPassword")}
+                  type={!showConfirmPassword ? "password" : "text"}
+                  className="w-full outline-0 border px-2 py-1 rounded focus:border-blue-500"
                 />
                 <div
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="text-sm absolute right-2 top-1/2 -translate-y-1/2"
+                  className="text-sm absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
                 >
                   {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
                 </div>
-                </div>
+              </div>
               {errors?.confirmPassword && (
                 <p className="text-red-500 text-xs mt-1">
                   {errors?.confirmPassword?.message}
@@ -232,10 +223,20 @@ function SignupModal({
             <div className="flex items-center justify-between mt-3">
               <button
                 type="submit"
-                disabled={loading}
-                className={`flex items-center justify-center gap-2 py-2 h-8 w-full bg-blue-600 text-xs text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 ${loading && "cursor-not-allowed"}`}
+                disabled={isLoading}
+                // disabled={loading}
+                className={`flex items-center justify-center gap-2 py-2 h-8 w-full bg-blue-600 text-xs text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 ${
+                  isLoading && "cursor-not-allowed"
+                } cursor-pointer`}
               >
-                {loading ? <><ButtonLoading /> </> : "Register"}
+                {/* {loading ? <><ButtonLoading /> </> : "Register"} */}
+                {isLoading ? (
+                  <>
+                    <ButtonLoading />{" "}
+                  </>
+                ) : (
+                  "Register"
+                )}
               </button>
             </div>
           </form>
@@ -248,14 +249,14 @@ function SignupModal({
           </div>
 
           <div className="flex items-center justify-center gap-3">
-            <div className="flex justify-center items-center border h-9 w-16 relative border-neutral-300 hover:bg-neutral-100 rounded-lg">
+            <div className="flex justify-center items-center border h-9 w-16 relative border-neutral-300 hover:bg-neutral-100 rounded-lg cursor-pointer">
               <img
                 src={apple}
                 className="h-[60%] w-[70%] absolute"
                 alt="apple-logo"
               />
             </div>
-            <div className="flex justify-center items-center border h-9 w-16 relative border-neutral-300 hover:bg-neutral-100 rounded-lg">
+            <div className="flex justify-center items-center border h-9 w-16 relative border-neutral-300 hover:bg-neutral-100 rounded-lg cursor-pointer">
               <img
                 src={google}
                 className="h-[60%] w-[70%] absolute"
