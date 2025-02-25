@@ -10,7 +10,7 @@ import { useLogoutMutation } from "../../services/auth.api";
 // import { logoutUser } from "../../services/operations/authApi";
 
 export default function Header() {
-  const { token } = useSelector((store) => store.auth);
+  const { accessToken } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -18,12 +18,23 @@ export default function Header() {
 
   const handleLogout = async () => {
     try {
-      await logoutUser();
+      const accessToken = localStorage.getItem("accessToken");
+      if (!accessToken) {
+        throw new Error("No access token found.");
+      }
+
+      const result = await logoutUser(accessToken);
+      // console.log("logout result",result)
+      if (result?.error) {
+        throw new Error(JSON.stringify(result.error));
+      }
       dispatch(logout());
       toast.success("Logged out successfully");
       navigate("/auth");
     } catch (err) {
-      toast.error("Error", error.message);
+      const error = JSON.parse(err?.message);
+      // toast.error(error.data.message);
+      console.error(error.data.message)
     }
   };
   // const handleLogout = async () => {
@@ -77,15 +88,15 @@ export default function Header() {
               Contact Us
             </Link> */}
 
-          {token ? (
+          {accessToken ? (
             <button
               onClick={handleLogout}
-              className="text-[var(--color-primary)]"
+              className="text-[var(--color-primary)] cursor-pointer"
             >
               Logout
             </button>
           ) : (
-            <Link to="/auth" className="text-[var(--color-primary)]">
+            <Link  to="/auth" className="text-[var(--color-primary)] cursor-pointer">
               Login
             </Link>
           )}

@@ -22,10 +22,6 @@ const subSectionSchema = new mongoose.Schema<ISubSection>({
         type: Boolean,
         required: false
     },
-    isCompleted: {
-        type: Boolean,
-        required: false
-    }
 }, { timestamps: true });
 
 export default mongoose.model("SubSection", subSectionSchema);

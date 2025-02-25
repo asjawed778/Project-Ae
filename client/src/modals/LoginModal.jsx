@@ -67,35 +67,22 @@ function LoginModal({
         throw new Error(JSON.stringify(res.error));
       }
       if (res?.data?.success) {
-        const token = res.data.token;
-        const user = res.data.user;
+        const accessToken = res.data.data.accessToken;
+        const refreshToken = res.data.data.refreshToken;
+        const user = res.data.data.user;
 
-        dispatch(loginReducer({ token, user }));
-        Cookies.set("token", token, { expires: 7 }); // Token valid for 7 days
+        dispatch(loginReducer({ accessToken, refreshToken, user }));
+        // Cookies.set("accessToken", accessToken, { expires: 7 }); // Token valid for 7 days
+        // Cookies.set("refreshToken", refreshToken, { expires: 7 }); // Token valid for 7 days
         toast.success("User Login successfully");
         navigate("/");
         reset();
       }
-    } catch (err) {
+    } catch (err) { 
       const error = JSON.parse(err?.message);
       toast.error(error.data.message);
     }
   };
-
-  // const loginFormSubmitHandler = async(data) => {
-  //   try{
-  //     setLoading(true)
-  //     const result = await dispatch(loginUser(data, navigate));
-  //     if(result) throw new Error()
-  //     reset()
-  //   }catch(err)
-  //   {
-  //     console.log("Error at login modal:", err)
-  //   }
-  //   finally{
-  //     setLoading(false)
-  //   }
-  // };
 
   return (
     <div
@@ -143,7 +130,7 @@ function LoginModal({
                 Email
               </label>
               <input
-                {...register("identifier", {
+                {...register("email", {
                   validate: (value) =>
                     validator.isEmail(value) || "Invalid email address",
                 })}

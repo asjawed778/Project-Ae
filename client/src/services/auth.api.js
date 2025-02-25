@@ -8,34 +8,44 @@ export const apiAuth = createApi({
     // Auth APIs
     sendSignupOtp: builder.mutation({
       query: (data) => ({
-        url: "send-signup-otp",
+        url: "user/send-signup-otp",
         method: "POST",
         body: data,
       }),
     }),
     verifySignupOtp: builder.mutation({
       query: (data) => ({
-        url: "verify-signup-otp",
+        url: "user/verify-signup-otp",
         method: "POST",
         body: data,
       }),
     }),
     login: builder.mutation({
       query: (data) => ({
-        url: "login",
+        url: "user/login",
         method: "POST",
         body: data,
       }),
     }),
     logout: builder.mutation({
-      query: () => ({
-        url: "logout",
+      query: ({accessToken}) => ({
+        url: "user/logout",
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`, // Send token in Authorization header
+        },
+        credentials: "include",
       }),
     }),
+    // logout: builder.mutation({
+    //   query: () => ({
+    //     url: "user/logout",
+    //     method: "POST",
+    //   }),
+    // }),
     updatePassword: builder.mutation({
       query: (data) => ({
-        url: "update-password",
+        url: "user/update-password",
         method: "POST",
         body: data,
       }),

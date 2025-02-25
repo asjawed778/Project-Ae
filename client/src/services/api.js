@@ -1,10 +1,11 @@
 import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { logout, login } from "../store/reducers/authReducer";
 
-const baseURL = `${import.meta.env.VITE_BE_URL}/api/v1/`;
+const baseURL = `${import.meta.env.VITE_BE_URL}/api/`;
 
 export const publicBaseQuery = fetchBaseQuery({
   baseUrl: baseURL,
+  credentials: "include"
 });
 
 export const privateBaseQuery = fetchBaseQuery({
