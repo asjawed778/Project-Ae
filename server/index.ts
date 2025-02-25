@@ -5,7 +5,7 @@ import http from "http";
 import cookieParser from "cookie-parser";
 import cors from 'cors';
 import fileUpload from "express-fileupload";
-// hi this is amit
+
 import { initDB } from "./app/common/services/database.service";
 import { initPassport } from "./app/common/services/passport-jwt.service";
 import { loadConfig } from "./app/common/helper/config.hepler";
