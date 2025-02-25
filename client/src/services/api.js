@@ -5,6 +5,7 @@ const baseURL = `${import.meta.env.VITE_BE_URL}/api/`;
 
 export const publicBaseQuery = fetchBaseQuery({
   baseUrl: baseURL,
+  credentials: "include"
 });
 
 export const privateBaseQuery = fetchBaseQuery({

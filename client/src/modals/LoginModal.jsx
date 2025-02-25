@@ -72,8 +72,8 @@ function LoginModal({
         const user = res.data.data.user;
 
         dispatch(loginReducer({ accessToken, refreshToken, user }));
-        Cookies.set("accessToken", accessToken, { expires: 7 }); // Token valid for 7 days
-        Cookies.set("refreshToken", refreshToken, { expires: 7 }); // Token valid for 7 days
+        // Cookies.set("accessToken", accessToken, { expires: 7 }); // Token valid for 7 days
+        // Cookies.set("refreshToken", refreshToken, { expires: 7 }); // Token valid for 7 days
         toast.success("User Login successfully");
         navigate("/");
         reset();
