@@ -5,9 +5,10 @@ import CourseDetails from "../../../components/Add Course/AdditionalDetails";
 import CourseFirstStep from "../../../components/Add Course/CourseFirstStep";
 import CourseStructure from "../../../components/Add Course/CourseStructure";
 import CourseContent from "../../../components/Add Course/CourseContent";
+import Pricing from "../../../components/Add Course/Pricing";
 
 const AddCourse = () => {
-  const [currentStep, setCurrentStep] = useState(3);
+  const [currentStep, setCurrentStep] = useState(4);
   const {
     register,
     handleSubmit,
@@ -125,9 +126,11 @@ const AddCourse = () => {
           />
         )}
         {currentStep === 5 && (
-          <div className="h-[65vh] flex justify-center items-center">
-            Pricing & Publish
-          </div>
+          <Pricing
+            currentStep={currentStep}
+            handleNext={handleNext}
+            handlePrev={handlePrev}
+          />
         )}
 
         {currentStep >= 3 && (
@@ -139,12 +142,7 @@ const AddCourse = () => {
                 ? "justify-start"
                 : "justify-between"
             } items-center gap-4 text-white`}
-          >
-            {currentStep > 1 && <Button onClick={handlePrev}>Prev</Button>}
-            {currentStep < 5 && (
-              <Button onClick={handleNext}>Save and Next</Button>
-            )}
-          </div>
+          ></div>
         )}
       </div>
     </div>

@@ -12,9 +12,9 @@ export const fourthStepValidationSchema = yup.object().shape({
           .of(
             yup.object().shape({
               title: yup.string().required("Subsection title is required"),
-              description: yup
-                .string()
-                .required("Subsection description is required"),
+              image: yup.mixed().required("Image is required"),
+              pdf: yup.mixed().required("PDF is required"),
+              video: yup.mixed().required("Video is required"),
             })
           )
           .min(1, "At least one subsection is required"),

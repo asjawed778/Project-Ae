@@ -12,9 +12,6 @@ export const thirdStepValidationSchema = yup.object().shape({
           .of(
             yup.object().shape({
               title: yup.string().required("Subsection title is required"),
-              description: yup
-                .string()
-                .required("Subsection description is required"),
             })
           )
           .min(1, "At least one subsection is required"),

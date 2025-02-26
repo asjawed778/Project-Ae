@@ -15,14 +15,20 @@ export default function CourseStructure({
   handlePrev,
 }) {
   // React Hook Form
-  const { control, handleSubmit, register, watch } = useForm({
+  const {
+    control,
+    handleSubmit,
+    register,
+    watch,
+    formState: { errors },
+  } = useForm({
     resolver: yupResolver(thirdStepValidationSchema),
     defaultValues: {
       sections: [
         {
           title: "",
           description: "",
-          subsections: [{ title: "", description: "" }],
+          subsections: [{ title: "" }],
         },
       ],
     },
@@ -44,7 +50,7 @@ export default function CourseStructure({
 
   return (
     <div className="flex flex-col gap-3">
-      <h1 className="relative w-fit ml-5">
+      <h1 className="relative w-fit">
         <span>Section</span>
 
         <img
@@ -58,28 +64,52 @@ export default function CourseStructure({
         {sectionFields.map((_, sectionIndex) => (
           <div
             key={sectionIndex}
-            className="flex flex-col gap-3 border p-4 rounded-md shadow-sm"
+            className="relative flex flex-col gap-3 px-5 py-4 border border-gray-300 rounded-md"
           >
-            {/* Section Title */}
-            <InputField
-              id="step3-title"
-              {...register(`sections.${sectionIndex}.title`)}
-              placeholder="Title"
-            >
-              Title :
-            </InputField>
+            <p className="absolute right-5 -top-0">{sectionIndex + 1}</p>
+
+            <div>
+              {/* Section Title */}
+              <InputField
+                id="step3-title"
+                {...register(`sections.${sectionIndex}.title`)}
+                placeholder="Title"
+              >
+                Title :
+              </InputField>
+
+              {Array.isArray(errors?.sections) &&
+                errors?.sections[sectionIndex]?.title && (
+                  <p className="text-red-600 text-xs ml-1 mt-0.5">
+                    {errors?.sections[sectionIndex]?.title?.message}
+                  </p>
+                )}
+            </div>
 
             {/* Section Description */}
-            <label htmlFor="step3-description">Description :</label>
-            <textarea
-              id="step3-description"
-              {...register(`sections.${sectionIndex}.description`)}
-              placeholder="Description"
-              className="w-full p-2 mt-2 border border-gray-300 rounded outline-none"
-            />
+            <div>
+              <label htmlFor="step3-description">Description :</label>
+              <textarea
+                id="step3-description"
+                {...register(`sections.${sectionIndex}.description`)}
+                placeholder="Description"
+                className="bg-white w-full p-2 mt-2 border border-gray-300 rounded outline-none"
+              />
+
+              {Array.isArray(errors?.sections) &&
+                errors?.sections[sectionIndex]?.description && (
+                  <p className="text-red-600 text-xs ml-1 mt-0.5">
+                    {errors?.sections[sectionIndex]?.description?.message}
+                  </p>
+                )}
+            </div>
 
             {/* Subsections */}
-            <SubSectionFields control={control} sectionIndex={sectionIndex} />
+            <SubSectionFields
+              control={control}
+              sectionIndex={sectionIndex}
+              errors={errors}
+            />
 
             {/* Remove Section Button */}
             {sectionFields.length > 1 && (
@@ -91,6 +121,8 @@ export default function CourseStructure({
                 Remove Section
               </button>
             )}
+
+            {/* <div className="bg-white h-5 w-full" /> */}
           </div>
         ))}
 
@@ -110,13 +142,12 @@ export default function CourseStructure({
           <FaPlus />
         </Button>
 
-        {/* Submit Button */}
-        <button
-          type="submit"
-          className="bg-green-500 text-white px-4 py-2 rounded ml-2"
-        >
-          Submit
-        </button>
+        <div className="flex gap-5 justify-between">
+          <Button onClick={handlePrev}>Previous</Button>
+
+          {/* Submit Button */}
+          <Button type="submit">Save and Next</Button>
+        </div>
       </form>
     </div>
   );
