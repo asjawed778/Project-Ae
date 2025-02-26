@@ -14,9 +14,9 @@ export const privateBaseQuery = fetchBaseQuery({
     const state = getState();
 
     // Skip setting the accessToken for the /refresh-token endpoint
-    const token = state.auth.token;
-    if (token) {
-      headers.set("Authorization", `Bearer ${token}`);
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken) {
+      headers.set("Authorization", `Bearer ${accessToken}`);
     }
 
     return headers;

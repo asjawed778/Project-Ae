@@ -10,11 +10,16 @@ export const apiCourse = createApi({
       query: (file) => {
         const formData = new FormData();
         formData.append("thumbnail", file)
-
+        const accessToken = localStorage.getItem("accessToken");
+        
         return{
           url: "course/thumbnail",
           method: "POST",
-          body: formData
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // Send token in Authorization header
+          },
+          credentials: "include",
         }
       },
     }),
@@ -22,19 +27,34 @@ export const apiCourse = createApi({
       query: (file) => {
         const formData = new FormData();
         formData.append("brouchure", file)
+        const accessToken = localStorage.getItem("accessToken");
 
         return{
           url: "course/brouchure",
           method: "POST",
-          body: formData
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // Send token in Authorization header
+          },
+          credentials: "include",
         }
       },
     }),
     uploadDetails: builder.mutation({
-      query: (data) => ({
+      query: (data) =>{
+        
+        return{
           url: "course/details",
           method: "POST",
-          body: data 
+          body: data,
+          credentials: "include", 
+      }},
+    }),
+    getDropdownOptions: builder.query({
+      query: (endpoint) => ({
+        url: endpoint,
+        method: "GET",
+        credentials: "include",
       }),
     }),
     getAllCategory: builder.query({
@@ -83,6 +103,7 @@ export const {
   useUploadThumbnailMutation,
   useUploadBrouchureMutation,
   useUploadDetailsMutation,
+  useGetDropdownOptionsQuery,
   useGetAllCategoryQuery,
   useAddCategoryMutation,
   useAddCourseMutation,
