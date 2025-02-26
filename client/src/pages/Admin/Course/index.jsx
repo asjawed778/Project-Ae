@@ -4,9 +4,10 @@ import Button from "../../../components/Button/Button";
 import CourseDetails from "../../../components/Add Course/AdditionalDetails";
 import CourseFirstStep from "../../../components/Add Course/CourseFirstStep";
 import CourseStructure from "../../../components/Add Course/CourseStructure";
+import CourseContent from "../../../components/Add Course/CourseContent";
 
 const AddCourse = () => {
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(3);
   const {
     register,
     handleSubmit,
@@ -117,9 +118,11 @@ const AddCourse = () => {
           />
         )}
         {currentStep === 4 && (
-          <div className="h-[65vh] flex justify-center items-center">
-            Course Content
-          </div>
+          <CourseContent
+            currentStep={currentStep}
+            handleNext={handleNext}
+            handlePrev={handlePrev}
+          />
         )}
         {currentStep === 5 && (
           <div className="h-[65vh] flex justify-center items-center">

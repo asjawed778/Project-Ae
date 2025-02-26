@@ -5,18 +5,14 @@ import { useFieldArray, useForm } from "react-hook-form";
 import InputField from "../Input Field";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { thirdStepValidationSchema } from "./Schema/thirdStepValidationSchema";
-import SubSectionFields from "./Course Structure/SubSectionFields";
+import { fourthStepValidationSchema } from "./Schema/fourthStepValidationSchema";
+import SubSectionFields from "./Course Content/SubSectionFields";
 import Button from "../Button/Button";
 
-export default function CourseStructure({
-  currentStep,
-  handleNext,
-  handlePrev,
-}) {
+export default function CourseContent({ currentStep, handleNext, handlePrev }) {
   // React Hook Form
   const { control, handleSubmit, register, watch } = useForm({
-    resolver: yupResolver(thirdStepValidationSchema),
+    resolver: yupResolver(fourthStepValidationSchema),
     defaultValues: {
       sections: [
         {
@@ -62,7 +58,7 @@ export default function CourseStructure({
           >
             {/* Section Title */}
             <InputField
-              id="step3-title"
+              id="step4-title"
               {...register(`sections.${sectionIndex}.title`)}
               placeholder="Title"
             >
@@ -70,9 +66,9 @@ export default function CourseStructure({
             </InputField>
 
             {/* Section Description */}
-            <label htmlFor="step3-description">Description :</label>
+            <label htmlFor="step4-description">Description :</label>
             <textarea
-              id="step3-description"
+              id="step4-description"
               {...register(`sections.${sectionIndex}.description`)}
               placeholder="Description"
               className="w-full p-2 mt-2 border border-gray-300 rounded outline-none"

@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-export const thirdStepValidationSchema = yup.object().shape({
+export const fourthStepValidationSchema = yup.object().shape({
   sections: yup
     .array()
     .of(
