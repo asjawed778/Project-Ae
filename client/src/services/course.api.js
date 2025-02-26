@@ -6,6 +6,30 @@ export const apiCourse = createApi({
   baseQuery: authBaseQuery,
   endpoints: (builder) => ({
     // Courses APIs
+    uploadThumbnail: builder.mutation({
+      query: (file) => {
+        const formData = new FormData();
+        formData.append("thumbnail", file)
+
+        return{
+          url: "course/thumbnail",
+          method: "POST",
+          body: formData
+        }
+      },
+    }),
+    uploadBrouchure: builder.mutation({
+      query: (file) => {
+        const formData = new FormData();
+        formData.append("brouchure", file)
+
+        return{
+          url: "course/brouchure",
+          method: "POST",
+          body: formData
+        }
+      },
+    }),
     getAllCategory: builder.query({
       query: () => ({
         url: "course/get-all-category",
@@ -49,6 +73,8 @@ export const apiCourse = createApi({
 
 export const {
   // Courses
+  useUploadThumbnailMutation,
+  useUploadBrouchureMutation,
   useGetAllCategoryQuery,
   useAddCategoryMutation,
   useAddCourseMutation,
@@ -56,17 +82,3 @@ export const {
   useGetCategoryCourseQuery,
   useGetFullCourseDetailsQuery,
 } = apiCourse;
-
-// import { SERVER_URL } from "./api";
-
-// // add courses in Admin
-// export const addCourseEndpoints = {
-//   GET_ALL_CATEGORY: SERVER_URL + `/course/get-all-category`,
-//   ADD_COURSES: SERVER_URL + `/course/add-course`,
-//   GET_ALL_COURSES: SERVER_URL + `/course/get-all-course`,
-//   GET_COURSE_BY_CATEGORY: (categoryId) =>
-//     SERVER_URL + `/course/get-category-course/${categoryId}`,
-//   GET_FULL_COURSE_DETAILS: (courseId) =>
-//     SERVER_URL + `/course/get-full-course-details/${courseId}`,
-//   ADD_CATEGORY: SERVER_URL + `course/add-category`,
-// };
