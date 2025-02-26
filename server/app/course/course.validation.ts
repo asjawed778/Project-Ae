@@ -80,7 +80,6 @@ export const AdditionalDetails = [
         .matches(/^https?:\/\/.*\.amazonaws\.com\/.*/).withMessage('Invalid AWS S3 URL format')  
 ];
 
-
 export const courseContentStructure = [
     param("courseId")
         .notEmpty().withMessage("courseId is required")
@@ -104,6 +103,42 @@ export const courseContentStructure = [
         .notEmpty().withMessage("SubSection title is required")
         .isString().withMessage("SubSection title must be a string"),
 
+];
+
+export const coursePreview = [
+    param('courseId')
+        .notEmpty().withMessage('courseId is required')
+        .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
+];
+
+export const publishCourse = [
+    param('courseId')
+        .notEmpty().withMessage('courseId is required')
+        .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
+];
+
+export const unpublishCourse = [
+    param('courseId')
+        .notEmpty().withMessage('courseId is required')
+        .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
+];
+
+export const terminateCourse = [
+    param('courseId')
+        .notEmpty().withMessage('courseId is required')
+        .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
+];
+
+export const draftCourse = [
+    param('courseId')
+        .notEmpty().withMessage('courseId is required')
+        .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
+];
+
+export const getPublishedCourseByCategory = [
+    param('categoryId')
+        .notEmpty().withMessage('categoryId is required')
+        .isMongoId().withMessage('Invalid categoryId. Must be a valid MongoDB ObjectId'),
 ];
 
 

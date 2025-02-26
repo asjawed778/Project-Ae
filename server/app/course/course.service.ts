@@ -1,5 +1,7 @@
+import mongoose from "mongoose";
 import { ICourse, ISection, ISubSection } from "./course.dto";
 import courseSchema from "./course.schema";
+import courseLifecycleSchema from "./courseLifecycle.schema";
 import sectionSchema from "./section.schema";
 import subSectionSchema from "./subSection.schema";
 
@@ -58,3 +60,122 @@ export const getCourseById = async (courseId: string) => {
     const course = await courseSchema.findById(courseId);
     return course as ICourse;
 };
+
+export const getCoursePreview = async (courseId: string) => {
+    const course = await courseSchema
+        .findById(courseId)
+        .populate({
+            path: "sections",
+            populate: {
+                path: "subSections",
+            },
+        });
+
+    return course;
+};
+
+export const draftCourse = async (userId: string, courseId: string) => {
+    let lifeCycle = await courseLifecycleSchema.findOne({ userId });
+
+    if (!lifeCycle) {
+        lifeCycle = new courseLifecycleSchema({ userId, allCourses: [], DRAFT: [], PUBLISHED: [], UNPUBLISHED: [], TERMINATED: [] });
+    }
+
+    lifeCycle.PUBLISHED = lifeCycle.PUBLISHED.filter(id => id.toString() !== courseId);
+    lifeCycle.UNPUBLISHED = lifeCycle.UNPUBLISHED.filter(id => id.toString() !== courseId);
+    lifeCycle.TERMINATED = lifeCycle.TERMINATED.filter(id => id.toString() !== courseId);
+
+    if (!lifeCycle.DRAFT.some(id => id.toString() === courseId)) {
+        lifeCycle.DRAFT.push(new mongoose.Types.ObjectId(courseId) as unknown as mongoose.Schema.Types.ObjectId);
+    }
+
+    if (!lifeCycle.allCourses.some(id => id.toString() === courseId)) {
+        lifeCycle.allCourses.push(new mongoose.Types.ObjectId(courseId) as unknown as mongoose.Schema.Types.ObjectId);
+    }
+
+    await lifeCycle.save();
+    return lifeCycle;
+};
+
+// Todo : edge case verify is that user is owner of the course
+export const publishCourse = async (userId: string, courseId: string) => {
+    let lifeCycle = await courseLifecycleSchema.findOne({ userId });
+
+    if (!lifeCycle) {
+        lifeCycle = new courseLifecycleSchema({ userId, allCourses: [], DRAFT: [], PUBLISHED: [], UNPUBLISHED: [], TERMINATED: [] });
+    }
+
+    // Remove the course from all other status fields
+    lifeCycle.DRAFT = lifeCycle.DRAFT.filter(id => id.toString() !== courseId);
+    lifeCycle.UNPUBLISHED = lifeCycle.UNPUBLISHED.filter(id => id.toString() !== courseId);
+    lifeCycle.TERMINATED = lifeCycle.TERMINATED.filter(id => id.toString() !== courseId);
+
+    // Add the course to PUBLISHED if it's not already present
+    if (!lifeCycle.PUBLISHED.some(id => id.toString() === courseId)) {
+        lifeCycle.PUBLISHED.push(new mongoose.Types.ObjectId(courseId) as unknown as mongoose.Schema.Types.ObjectId);
+    }
+
+    if (!lifeCycle.allCourses.some(id => id.toString() === courseId)) {
+        lifeCycle.allCourses.push(new mongoose.Types.ObjectId(courseId) as unknown as mongoose.Schema.Types.ObjectId);
+    }
+
+    await lifeCycle.save();
+    return lifeCycle;
+};
+
+export const unpublishCourse = async (userId: string, courseId: string) => {
+    let lifeCycle = await courseLifecycleSchema.findOne({ userId });
+
+    if (!lifeCycle) {
+        lifeCycle = new courseLifecycleSchema({ userId, allCourses: [], DRAFT: [], PUBLISHED: [], UNPUBLISHED: [], TERMINATED: [] });
+    }
+
+    // Remove the course from all other status fields
+    lifeCycle.DRAFT = lifeCycle.DRAFT.filter(id => id.toString() !== courseId);
+    lifeCycle.PUBLISHED = lifeCycle.PUBLISHED.filter(id => id.toString() !== courseId);
+    lifeCycle.TERMINATED = lifeCycle.TERMINATED.filter(id => id.toString() !== courseId);
+
+    // Add the course to UNPUBLISHED if it's not already present
+    if (!lifeCycle.UNPUBLISHED.some(id => id.toString() === courseId)) {
+        lifeCycle.UNPUBLISHED.push(new mongoose.Types.ObjectId(courseId) as unknown as mongoose.Schema.Types.ObjectId);
+    }
+
+    // ✅ Ensure course is in allCourses
+    if (!lifeCycle.allCourses.some(id => id.toString() === courseId)) {
+        lifeCycle.allCourses.push(new mongoose.Types.ObjectId(courseId) as unknown as mongoose.Schema.Types.ObjectId);
+    }
+
+    await lifeCycle.save();
+    return lifeCycle;
+};
+
+export const terminateCourse = async (userId: string, courseId: string) => {
+    let lifeCycle = await courseLifecycleSchema.findOne({ userId });
+
+    if (!lifeCycle) {
+        lifeCycle = new courseLifecycleSchema({ userId, allCourses: [], DRAFT: [], PUBLISHED: [], UNPUBLISHED: [], TERMINATED: [] });
+    }
+
+    // Remove the course from all other status fields
+    lifeCycle.DRAFT = lifeCycle.DRAFT.filter(id => id.toString() !== courseId);
+    lifeCycle.PUBLISHED = lifeCycle.PUBLISHED.filter(id => id.toString() !== courseId);
+    lifeCycle.UNPUBLISHED = lifeCycle.UNPUBLISHED.filter(id => id.toString() !== courseId);
+
+    // Add the course to TERMINATED if it's not already present
+    if (!lifeCycle.TERMINATED.some(id => id.toString() === courseId)) {
+        lifeCycle.TERMINATED.push(new mongoose.Types.ObjectId(courseId) as unknown as mongoose.Schema.Types.ObjectId);
+    }
+
+    // ✅ Ensure course is in allCourses
+    if (!lifeCycle.allCourses.some(id => id.toString() === courseId)) {
+        lifeCycle.allCourses.push(new mongoose.Types.ObjectId(courseId) as unknown as mongoose.Schema.Types.ObjectId);
+    }
+
+    await lifeCycle.save();
+    return lifeCycle;
+};
+
+
+
+
+
