@@ -104,9 +104,6 @@ export const courseContentStructure = [
         .notEmpty().withMessage("SubSection title is required")
         .isString().withMessage("SubSection title must be a string"),
 
-    body("sections.*.subSections.*.description")
-        .optional()
-        .isString().withMessage("SubSection description must be a string")
 ];
 
 
