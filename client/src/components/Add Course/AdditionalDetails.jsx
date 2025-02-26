@@ -55,7 +55,6 @@ export default function AdditionalDetails({
     name: "tags",
   });
 
-  const quillRef = useRef(null);
 
   const addKeypoint = () => {
     clearErrors("keypoints");
