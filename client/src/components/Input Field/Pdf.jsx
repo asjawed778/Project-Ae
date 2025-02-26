@@ -2,13 +2,27 @@
 import { forwardRef, useEffect, useState } from "react";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { RxCross2 } from "react-icons/rx";
+import { useUploadBrouchureMutation } from "../../services/course.api";
 
 const Pdf = forwardRef(({ id, onChange =() => {} , ...rest }, ref) => {
   const [file, setFile] = useState(null);
   const [pdfUrl, setPdfUrl] = useState(null);
   const [error, setError] = useState("")
 
-  const handleFileChange = (event) => {
+  const [uploadBrouchure, { isLoading, isError, error: uploadError }] =
+    useUploadBrouchureMutation();
+
+
+    const uploadPdf = async (file) => {
+      try {
+        await uploadBrouchure(file).unwrap();
+        console.log("Upload successful");
+      } catch (err) {
+        console.error("Upload failed", err);
+      }
+    };
+
+  const handleFileChange = async(event) => {
     const uploadedFile = event.target.files[0];
     if (uploadedFile && uploadedFile.type === "application/pdf") {
       const maxSize = 5 * 1024 * 1024; // maximum 5MB
@@ -27,6 +41,7 @@ const Pdf = forwardRef(({ id, onChange =() => {} , ...rest }, ref) => {
       }
       setError("")
       setFile(uploadedFile);
+      await uploadPdf(uploadedFile);
     } else {
       setError("Please upload a valid PDF file.");
     }
@@ -69,8 +84,9 @@ const Pdf = forwardRef(({ id, onChange =() => {} , ...rest }, ref) => {
             Preview
           </a>
         )}
+
+        {isLoading && <div className="text-green-500">Uploading...</div> }
       </div>
-      {/* Remove Image Button */}
     </div>
   ) : (
     <div>
