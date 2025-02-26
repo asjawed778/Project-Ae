@@ -42,8 +42,9 @@ export interface ISection extends BaseSchema {
 
 export interface ISubSection extends BaseSchema {
     title: string;
-    description: string;
-    video: string;
+    video?: string;
+    pdf?: string;
+    image?: string;
     resources?: string[];
     isPreview: boolean;
 }
@@ -75,3 +76,4 @@ export interface ICourseLifeCycle extends BaseSchema {
     UNPUBLISHED: mongoose.Schema.Types.ObjectId[];
     TERMINATED: mongoose.Schema.Types.ObjectId[];
 }
+
