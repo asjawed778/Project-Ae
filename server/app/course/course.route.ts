@@ -8,12 +8,13 @@ import * as fileUploadMiddleware from "../common/middleware/fileUpload.middlewar
 const router = Router();
 
 router
-    .post("/thumbnail", fileUploadMiddleware.thumbnailUpload, catchError, courseController.uploadfile)
-    .post("/brouchure", fileUploadMiddleware.brouchureUpload, catchError, courseController.uploadfile)
-    .post("/details", courseValidation.courseDetails, catchError, courseController.addCourseDetails)
-    .put("/details/:courseId", courseValidation.courseDetails, catchError, courseController.addCourseDetails)
-    .post("/trailer-video", fileUploadMiddleware.videoUpload, catchError, courseController.uploadfile)
-    .put("/additional-details/:courseId", courseValidation.AdditionalDetails, catchError, courseController.addAdditionalDetails)
-    .get("/instructors", courseController.getIntructorList)
+    .post("/thumbnail", authMiddlerware.auth, authMiddlerware.isSuperAdmin, fileUploadMiddleware.thumbnailUpload, catchError, courseController.uploadPublicFile)
+    .post("/brouchure",authMiddlerware.auth, authMiddlerware.isSuperAdmin, fileUploadMiddleware.brouchureUpload, fileUploadMiddleware.brouchureUpload, catchError, courseController.uploadPublicFile)
+    .post("/details",authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.courseDetails, catchError, courseController.addCourseDetails)
+    .put("/details/:courseId",authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.courseDetails, catchError, courseController.addCourseDetails)
+    .post("/trailer-video",authMiddlerware.auth, authMiddlerware.isSuperAdmin, fileUploadMiddleware.videoUpload, catchError, courseController.uploadPublicFile)
+    .put("/additional-details/:courseId",authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.AdditionalDetails, catchError, courseController.addAdditionalDetails)
+    .put("/structure/:courseId",authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.courseContentStructure, catchError, courseController.addCourseStructure)
+    .get("/instructors",authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseController.getIntructorList)
 
 export default router;

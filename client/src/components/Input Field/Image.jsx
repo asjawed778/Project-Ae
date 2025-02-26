@@ -2,11 +2,15 @@
 import { RxCross2 } from "react-icons/rx";
 import { forwardRef, useEffect, useState } from "react";
 import { AiOutlineCloudUpload } from "react-icons/ai";
+import { useUploadThumbnailMutation } from "../../services/course.api";
 
 const Image = forwardRef(({ id, onChange = () => {}, ...rest }, ref) => {
   const [image, setImage] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [error, setError] = useState("");
+
+  const [uploadThumbnail, { isLoading, isError, error: uploadError }] =
+    useUploadThumbnailMutation();
 
   useEffect(() => {
     return () => {
@@ -16,7 +20,17 @@ const Image = forwardRef(({ id, onChange = () => {}, ...rest }, ref) => {
     };
   }, [image]);
 
-  const handleImageChange = (event) => {
+  const uploadImage = async (file) => {
+    try {
+       const result = await uploadThumbnail(file).unwrap();
+       console.log("Upload image: ", result)
+      console.log("Upload successful");
+    } catch (err) {
+      console.error("Upload failed", err);
+    }
+  };
+
+  const handleImageChange = async(event) => {
     const file = event.target.files?.[0];
     if (file) {
       const maxSize = 5 * 1024 * 1024; // maximum 5MB
@@ -38,6 +52,8 @@ const Image = forwardRef(({ id, onChange = () => {}, ...rest }, ref) => {
       const imageUrl = URL.createObjectURL(file);
       setImage(imageUrl);
       onChange(event); // Call the external onChange if needed
+
+      await uploadImage(file);
     }
   };
 
@@ -116,6 +132,10 @@ const Image = forwardRef(({ id, onChange = () => {}, ...rest }, ref) => {
           />
         </div>
       )}
+
+      {
+        isLoading && <div className="text-green-500">Uploading...</div>
+      }
     </>
   );
 });
