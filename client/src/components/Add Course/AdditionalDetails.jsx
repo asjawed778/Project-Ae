@@ -10,8 +10,11 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import InputField from "../Input Field";
 import Button from "../Button/Button";
 import { yupResolver } from "@hookform/resolvers/yup";
-import SecondStepValidationSchema from "./Schema/secondStepValidationSchema";
 import { useEffect, useState } from "react";
+import secondStepValidationSchema from "./Schema/secondStepValidationSchema";
+import { RxCross2 } from "react-icons/rx";
+import { FaPlus } from "react-icons/fa6";
+
 
 export default function AdditionalDetails({
   currentStep,
@@ -27,10 +30,12 @@ export default function AdditionalDetails({
     watch,
     setValue,
     getValues,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm({
-    defaultValues: { keypoints: [{ value: "" }], description: "", tags: [""] },
-    // resolver: yupResolver(SecondStepValidationSchema),
+    defaultValues: { keypoints: [], description: "", tags: [] },
+    resolver: yupResolver(secondStepValidationSchema),
   });
 
   const {
@@ -51,26 +56,21 @@ export default function AdditionalDetails({
     name: "tags",
   });
 
+
   const addKeypoint = () => {
-    console.log("keypoints: ", watch("keypoints"));
-
-    if (keypoints[keypoints.length - 1].value.trim() !== "") {
-      console.log("gi");
-
-      appendKeypoint({ value: "" });
-    }
+    clearErrors("keypoints");
+    appendKeypoint("");
   };
-
+  
   const onSubmit = (data) => {
     console.log("Form Data:", data);
-
-    // handleNext();
+    handleNext();
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+    <form onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
       <div className="flex flex-col gap-5">
-        {/* Key points */}
+        {/* KEYPOINT  */}
         <div className="flex flex-col gap-3">
           <div className="relative flex gap-1 w-fit">
             <span>Key Points</span>
@@ -80,42 +80,41 @@ export default function AdditionalDetails({
               className="absolute -right-3 top-2 w-[7px]"
             />
           </div>
-
-          {/* Show Keypoints */}
-          {keypoints.map((keypoint, index) => (
-            <div key={index} className="flex gap-2 items-center">
-              <Controller
-                name={`keypoints.${index}.value`}
-                control={control}
-                defaultValue={keypoint.value}
-                render={({ keypoint }) => (
-                  <input
-                    {...keypoint}
-                    className="w-full p-2 rounded border border-gray-300 outline-none"
-                    placeholder={`Key Point ${index + 1}`}
+          <div>
+            {keypoints.length === 0 && appendKeypoint("")}
+            {keypoints.map((field, index) => (
+              <div key={field.id}>
+              <div className="flex items-center gap-1 mt-2">
+                <input
+                  id={index}
+                  {...register(`keypoints.${index}`)}
+                  className={`border p-2 w-full rounded-lg bg-white border-neutral-300 outline-0`}
+                  placeholder={`Keypoint ${index + 1}`}
                   />
-                )}
-              />
-
-              <div className="flex items-center gap-3">
-                {keypoints.length > 1 && (
-                  <Button type="button" onClick={() => removeKeypoint(index)}>
-                    <RiDeleteBin6Line size={25} />
-                  </Button>
-                )}
-
-                {keypoints.length - 1 === index && (
-                  <Button
-                    type="button"
-                    onClick={addKeypoint}
-                    // disabled={!keypoints[index].value.trim()}
+                 <button
+                  type="button"
+                  onClick={() => removeKeypoint(index)}
+                  className="text-neutral-400 text-3xl cursor-pointer hover:text-neutral-500"
                   >
-                    <CiSquarePlus size={25} />
-                  </Button>
-                )}
+                  <RiDeleteBin6Line />
+                </button>
               </div>
-            </div>
-          ))}
+              {errors?.keypoints && (
+                <p className="text-red-500 text-xs">{errors?.keypoints[index]?.message}</p>
+              )}
+                  </div>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={addKeypoint}
+            className="text-primary w-fit px-4 py-2 rounded flex gap-1 items-center cursor-pointer"
+          >
+            <FaPlus />
+            <span className="font-semibold">
+              Add more keypoint
+            </span>
+          </button>
         </div>
 
         {/* Tags */}
@@ -131,7 +130,7 @@ export default function AdditionalDetails({
                 newTag.value = ""; // Clear input after adding
               }
             }}
-            {...register(`newTag`)}
+            // {...register(`newTag`)}
             labelClassName="relative flex"
             parentClassName="w-full"
           >
@@ -144,17 +143,25 @@ export default function AdditionalDetails({
           </InputField>
 
           {/* Show Tags */}
-          <div className="min-h-[7rem] flex flex-wrap gap-5 w-full px-3 py-1 border border-gray-300 rounded-md">
+          {tags?.length > 0 && <div className="min-h-[5rem] flex flex-wrap gap-3 w-full px-3 py-1 border border-gray-300 rounded-md">
             {tags.length > 0 &&
               tags.map((field, index) => (
-                <p
+                <div
                   key={index}
-                  className="bg-[#D0D7EFB2] h-fit w-fit py-1 px-8 rounded-full"
+                  className="bg-[#D0D7EFB2] h-fit w-fit py-1 px-4 rounded-full flex items-center justify-around gap-2"
                 >
+                  <span>
                   {field.value}
-                </p>
+                  </span>
+                  <div onClick={() => tagRemove(index)} className="cursor-pointer text-neutral-500 hover:bg-[#d2d2d4eb] hover:rounded-full">
+                    <RxCross2 />
+                  </div>
+                </div> 
               ))}
-          </div>
+          </div>}
+          {errors?.tags && (
+            <p className="text-red-500 text-sm">{errors.tags.message}</p>
+          )}
         </div>
 
         {/* Discription */}
@@ -183,39 +190,55 @@ export default function AdditionalDetails({
               )}
             />
           </div>
+          {errors?.description && (
+            <p className="text-red-500 text-xs">{errors.description.message}</p>
+          )}
         </div>
 
         {/* 2-Column Section */}
         <div className="flex flex-wrap sm:flex-nowrap justify-center gap-5">
           {/* First Column */}
           <div className="flex-1 flex flex-col gap-5 w-full">
-            <InputField
-              id="duraion"
-              // required={true}
-              placeholder="eg. 30m:02s"
-              labelClassName="relative flex"
-            >
-              <p>Duration</p>
-              <img
-                src={required}
-                alt="required"
-                className="size-2 absolute top-1 -right-3"
-              />
-            </InputField>
+            <div>
+              <InputField
+                {...register("duration")}
+                id="duraion"
+                // required={true}
+                placeholder="eg. 30m:02s"
+                labelClassName="relative flex"
+              >
+                <p>Duration</p>
+                <img
+                  src={required}
+                  alt="required"
+                  className="size-2 absolute top-1 -right-3"
+                />
+              </InputField>
+              {errors?.duration && (
+                <p className="text-red-500 text-xs">
+                  {errors.duration.message}
+                </p>
+              )}
+            </div>
 
-            <InputField
-              id="total-lecture"
-              required={true}
-              placeholder="eg. 1"
-              labelClassName="relative flex"
-            >
-              <p>Total Lecture</p>
-              <img
-                src={required}
-                alt="required"
-                className="size-2 absolute top-1 -right-3"
-              />
-            </InputField>
+            <div>
+              <InputField
+                {...register("lecture")}
+                id="total-lecture"
+                placeholder="eg. 1"
+                labelClassName="relative flex"
+              >
+                <p>Total Lecture</p>
+                <img
+                  src={required}
+                  alt="required"
+                  className="size-2 absolute top-1 -right-3"
+                />
+              </InputField>
+              {errors?.lecture && (
+                <p className="text-red-500 text-xs">{errors.lecture.message}</p>
+              )}
+            </div>
           </div>
 
           {/* Second Column */}
