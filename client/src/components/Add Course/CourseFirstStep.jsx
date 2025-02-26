@@ -28,9 +28,9 @@ const CourseFirstStep = ({ currentStep, handleNext, handlePrev }) => {
     try {
       const result = await uploadDetails(data);
       console.log("Uploaded Data", data);
-      console.log("FIrst Step Form Data Uploaded Successfully", result);
+      console.log("Result after submitting:", result);
       if (result?.error) {
-        throw new Error(result.error.data.data.message);
+        throw new Error(result.error.data.message);
       }
       handleNext();
     } catch (err) {
@@ -193,7 +193,7 @@ const CourseFirstStep = ({ currentStep, handleNext, handlePrev }) => {
         <div className={`flex justify-end items-center text-white`}>
           <Button
             type="submit"
-            className={`disabled:bg-gray-400 w-40 ${
+            className={`flex items-center justify-center disabled:bg-gray-400 w-40 ${
               isLoading && "cursor-not-allowed"
             }`}
           >
