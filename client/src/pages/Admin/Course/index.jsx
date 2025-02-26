@@ -8,7 +8,7 @@ import CourseContent from "../../../components/Add Course/CourseContent";
 import Pricing from "../../../components/Add Course/Pricing";
 
 const AddCourse = () => {
-  const [currentStep, setCurrentStep] = useState(4);
+  const [currentStep, setCurrentStep] = useState(1);
   const {
     register,
     handleSubmit,
@@ -131,18 +131,6 @@ const AddCourse = () => {
             handleNext={handleNext}
             handlePrev={handlePrev}
           />
-        )}
-
-        {currentStep >= 3 && (
-          <div
-            className={`flex ${
-              currentStep === 1
-                ? "justify-end"
-                : currentStep === 5
-                ? "justify-start"
-                : "justify-between"
-            } items-center gap-4 text-white`}
-          ></div>
         )}
       </div>
     </div>
