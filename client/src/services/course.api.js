@@ -30,6 +30,13 @@ export const apiCourse = createApi({
         }
       },
     }),
+    uploadDetails: builder.mutation({
+      query: (data) => ({
+          url: "course/details",
+          method: "POST",
+          body: data 
+      }),
+    }),
     getAllCategory: builder.query({
       query: () => ({
         url: "course/get-all-category",
@@ -75,6 +82,7 @@ export const {
   // Courses
   useUploadThumbnailMutation,
   useUploadBrouchureMutation,
+  useUploadDetailsMutation,
   useGetAllCategoryQuery,
   useAddCategoryMutation,
   useAddCourseMutation,

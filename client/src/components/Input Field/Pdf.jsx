@@ -4,7 +4,7 @@ import { AiOutlineCloudUpload } from "react-icons/ai";
 import { RxCross2 } from "react-icons/rx";
 import { useUploadBrouchureMutation } from "../../services/course.api";
 
-const Pdf = forwardRef(({ id, onChange =() => {} , ...rest }, ref) => {
+const Pdf = forwardRef(({ id, onChange =() => {}, setvalue , ...rest }, ref) => {
   const [file, setFile] = useState(null);
   const [pdfUrl, setPdfUrl] = useState(null);
   const [error, setError] = useState("")
@@ -15,8 +15,9 @@ const Pdf = forwardRef(({ id, onChange =() => {} , ...rest }, ref) => {
 
     const uploadPdf = async (file) => {
       try {
-        await uploadBrouchure(file).unwrap();
-        console.log("Upload successful");
+        const result = await uploadBrouchure(file).unwrap();
+        const brouchureUrl = result?.data?.url;
+        setvalue("brouchure", brouchureUrl);
       } catch (err) {
         console.error("Upload failed", err);
       }
