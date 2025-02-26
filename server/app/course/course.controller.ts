@@ -9,7 +9,7 @@ import * as UserService from '../user/user.service';
 import * as CourseCategoryService from "../category/category.service";
 
 
-export const uploadfile = asyncHandler(async(req: Request, res: Response) => {
+export const uploadPublicFile = asyncHandler(async(req: Request, res: Response) => {
     const allowedFields = ["thumbnail", "brouchure", "trailerVideo", "video"];
 
     // Ensure req.files is not null or undefined
@@ -26,7 +26,7 @@ export const uploadfile = asyncHandler(async(req: Request, res: Response) => {
 
     const file = req.files[fileKey] as UploadedFile;
 
-    const uploadPath = `course/${fileKey}`;
+    const uploadPath = `public/course/${fileKey}`;
 
     const result = await AWSservice.putObject(file, uploadPath);
 
@@ -89,7 +89,7 @@ export const addAdditionalDetails = asyncHandler(async(req: Request, res: Respon
 
 export const addCourseStructure = asyncHandler(async(req: Request, res: Response) => {
     const courseId = req.params.courseId;
-    const data = req.body;
+    const { sections } = req.body;
 
     if(courseId) {
         const course = await courseService.getCourseById(courseId);
@@ -97,6 +97,9 @@ export const addCourseStructure = asyncHandler(async(req: Request, res: Response
             throw createHttpError(404, "Course id invalid, course not found")
         }
     }
+
+    const result = await courseService.addCourseStructure(courseId, sections);
+    res.send(createResponse({ course: result }, "Course structure added successfully"));
     
 });
 
