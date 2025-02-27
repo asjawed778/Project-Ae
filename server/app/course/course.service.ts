@@ -5,6 +5,18 @@ import courseLifecycleSchema from "./courseLifecycle.schema";
 import sectionSchema from "./section.schema";
 import subSectionSchema from "./subSection.schema";
 
+
+export const isCourseOwner = async (userId: string, courseId: string): Promise<boolean> => {
+    
+    const courseLifecycle = await courseLifecycleSchema.findOne({
+        userId: new mongoose.Types.ObjectId(userId),
+        allCourses: new mongoose.Types.ObjectId(courseId),
+    });
+
+    return !!courseLifecycle;
+};
+
+
 export const addCourseDetails = async (courseId: string, data: ICourse) => {
     let course;
 
@@ -15,6 +27,14 @@ export const addCourseDetails = async (courseId: string, data: ICourse) => {
     }
 
     return course as ICourse;
+};
+
+export const getCourseDetails = async (courseId: string) => {
+    const courseDetails = await courseSchema
+        .findById(courseId)
+        .select("title subtitle category language instructor courseMode thumbnail brouchure")
+        .lean();
+    return courseDetails;
 };
 
 export const addAdditionalDetails = async (courseId: string, data: ICourse) => {
@@ -175,6 +195,28 @@ export const terminateCourse = async (userId: string, courseId: string) => {
     return lifeCycle;
 };
 
+export const getFullCourseDetails = async (courseId: string) => {
+    const course = await courseSchema
+        .findById(courseId)
+        .populate({
+            path: "instructor",
+            select: "_id name email profilePic",
+        })
+        .populate({
+            path: "category",
+            select: "_id name",
+        })
+        .populate({
+            path: "sections",
+            populate: {
+                path: "subSections",
+                select: "_id title",
+            },
+        });
+
+    return course;
+        
+};
 
 
 

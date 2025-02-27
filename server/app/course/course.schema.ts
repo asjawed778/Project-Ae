@@ -33,7 +33,7 @@ const courseSchema = new mongoose.Schema<ICourse>({
     },
     instructor: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        ref: "user",
         required: function(this: ICourse): boolean { return !this.isDraft; }
     },
     ratingAndReviews: [{
@@ -42,7 +42,7 @@ const courseSchema = new mongoose.Schema<ICourse>({
     }],
     category: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Category",
+        ref: "CourseCategory",
         required: function(this: ICourse): boolean { return !this.isDraft; }
     },
     price: {

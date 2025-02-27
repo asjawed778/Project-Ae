@@ -129,6 +129,12 @@ export const terminateCourse = [
         .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
 ];
 
+export const getFullCourseDetails = [
+    param('courseId')
+        .notEmpty().withMessage('courseId is required')
+        .isMongoId().withMessage('Invalid courseId. Must be a valid MongoDB ObjectId'),
+];
+
 export const draftCourse = [
     param('courseId')
         .notEmpty().withMessage('courseId is required')

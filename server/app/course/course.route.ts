@@ -16,11 +16,13 @@ router
     .put("/additional-details/:courseId",authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.AdditionalDetails, catchError, courseController.addAdditionalDetails)
     .put("/structure/:courseId",authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.courseContentStructure, catchError, courseController.addCourseStructure)
     .get("/instructors",authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseController.getIntructorList)
+    .get("/all-details/:courseId", courseValidation.getFullCourseDetails, courseController.getFullCourseDetails)
     .get("/preview/:courseId",authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.coursePreview, catchError, courseController.getCoursePreview)
     .post("/publish/:courseId",authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.publishCourse, catchError, courseController.publishCourse)
     .post("/unpublish/:courseId",authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.unpublishCourse, catchError, courseController.unpublishCourse)
     .post("/terminate/:courseId",authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.terminateCourse, catchError, courseController.terminateCourse)
     .post("/draft/:courseId",authMiddlerware.auth, authMiddlerware.isSuperAdmin, courseValidation.draftCourse, catchError, courseController.draftCourse)
     .get("/published/:categoryId", courseValidation.getPublishedCourseByCategory, courseController.getPublishedCourseByCategory)
+    
 
 export default router;

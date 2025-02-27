@@ -47,6 +47,10 @@ export const addCourseDetails = asyncHandler(async(req: Request, res: Response) 
         if(!course) {
             throw createHttpError(404, "Course id invalid, course not found")
         }
+        const isCourseOwner = await courseService.isCourseOwner(userId, courseId);
+        if(!isCourseOwner) {
+            throw createHttpError(401, "You are not authorized to update this course");
+        }
         previousCategoryId = course.category?.toString() || null;
     }
 
@@ -77,6 +81,22 @@ export const addCourseDetails = asyncHandler(async(req: Request, res: Response) 
         await courseService.draftCourse(userId, result._id?.toString());
     }
     res.send(createResponse(result, "CourseDetails Added/Updated successfully"));
+});
+
+// Todo : complete this function -- this for course details step 1
+export const getCourseDetails = asyncHandler(async(req: Request, res: Response) => {
+    if (!req.user) {
+        throw createHttpError(401, "User not authenticated");
+    }
+    const userId = req.user._id;
+    const courseId = req.params.courseId;
+
+    const isCourseOwner = await courseService.isCourseOwner(userId, courseId);
+    if(!isCourseOwner) {
+        throw createHttpError(401, "You are not authorized to view this course");
+    }
+
+    
 });
 
 export const addAdditionalDetails = asyncHandler(async(req: Request, res: Response) => {
@@ -182,7 +202,14 @@ export const getPublishedCourseByCategory = asyncHandler(async(req: Request, res
     res.send(createResponse(courses, "Published courses by category fetched successfully"));
 });
 
-
+export const getFullCourseDetails = asyncHandler(async(req: Request, res: Response) => {
+    const courseId = req.params.courseId;
+    const course = await courseService.getFullCourseDetails(courseId);
+    if(!course) {
+        throw createHttpError(404, "Course id invalid, course not found")
+    }
+    res.send(createResponse(course, "Full course details fetched successfully"));
+});
 
 
 export const getIntructorList = asyncHandler(async(req: Request, res: Response) => {
