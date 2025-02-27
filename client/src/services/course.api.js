@@ -50,6 +50,32 @@ export const apiCourse = createApi({
           credentials: "include", 
       }},
     }),
+    uploadAdditionalDetails: builder.mutation({
+      query: ({data, id}) =>{
+        return{
+          url: `course/additional-details/${id}`,
+          method: "PUT",
+          body: data,
+          credentials: "include", 
+      }},
+    }),
+    uploadCourseStructure: builder.mutation({
+      query: ({data, id}) =>{
+        return{
+          url: `course/structure/${id}`,
+          method: "PUT",
+          body: data,
+          credentials: "include", 
+      }},
+    }),
+    publishCourse: builder.mutation({
+      query: ({id}) =>{
+        return{
+          url: `course/publish/${id}`,
+          method: "POST",
+          credentials: "include", 
+      }},
+    }),
     getDropdownOptions: builder.query({
       query: (endpoint) => ({
         url: endpoint,
@@ -103,6 +129,9 @@ export const {
   useUploadThumbnailMutation,
   useUploadBrouchureMutation,
   useUploadDetailsMutation,
+  useUploadAdditionalDetailsMutation,
+  useUploadCourseStructureMutation,
+  usePublishCourseMutation,
   useGetDropdownOptionsQuery,
   useGetAllCategoryQuery,
   useAddCategoryMutation,
