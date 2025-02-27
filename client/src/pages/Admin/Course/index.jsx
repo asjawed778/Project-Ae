@@ -8,6 +8,7 @@ import CourseContent from "../../../components/Add Course/CourseContent";
 import Pricing from "../../../components/Add Course/Pricing";
 
 const AddCourse = () => {
+  const [courseId, setCourseId] = useState(null);
   const [currentStep, setCurrentStep] = useState(1);
   const {
     register,
@@ -39,7 +40,6 @@ const AddCourse = () => {
 
   const handleNext = async () => {
     const isValid = await trigger();
-
     if (isValid) {
       setCurrentStep((prev) => prev + 1);
     }
@@ -101,6 +101,7 @@ const AddCourse = () => {
               currentStep={currentStep}
               handleNext={handleNext}
               handlePrev={handlePrev}
+              setCourseId={setCourseId}
             />
           </div>
         )}
@@ -109,6 +110,7 @@ const AddCourse = () => {
             currentStep={currentStep}
             handleNext={handleNext}
             handlePrev={handlePrev}
+            courseId={courseId}
           />
         )}
         {currentStep === 3 && (
@@ -116,6 +118,7 @@ const AddCourse = () => {
             currentStep={currentStep}
             handleNext={handleNext}
             handlePrev={handlePrev}
+            courseId={courseId}
           />
         )}
         {currentStep === 4 && (
@@ -130,6 +133,7 @@ const AddCourse = () => {
             currentStep={currentStep}
             handleNext={handleNext}
             handlePrev={handlePrev}
+            courseId={courseId}
           />
         )}
       </div>

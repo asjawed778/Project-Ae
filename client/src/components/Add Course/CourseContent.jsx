@@ -139,7 +139,8 @@ export default function CourseContent({ currentStep, handleNext, handlePrev }) {
           <Button onClick={handlePrev}>Previous</Button>
 
           {/* Submit Button */}
-          <Button type="submit">Save and Next</Button>
+          {/* <Button type="submit">Save and Next</Button> */}
+          <Button onClick={handleNext}>Skip</Button>
         </div>
       </form>
     </div>

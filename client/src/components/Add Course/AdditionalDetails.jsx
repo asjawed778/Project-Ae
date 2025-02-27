@@ -14,13 +14,19 @@ import { useEffect, useRef, useState } from "react";
 import secondStepValidationSchema from "./Schema/secondStepValidationSchema";
 import { RxCross2 } from "react-icons/rx";
 import { FaPlus } from "react-icons/fa6";
+import { useUploadAdditionalDetailsMutation } from "../../services/course.api";
+import ButtonLoading from "../Button/ButtonLoading";
 
 export default function AdditionalDetails({
   currentStep,
   handleNext,
   handlePrev,
+  courseId
 }) {
   const license_key = import.meta.env.VITE_CK_LICENSE_KEY;
+
+  const [uploadAdditionalDetails, { isLoading, isError, error: uploadError }] =
+    useUploadAdditionalDetailsMutation();
 
   const {
     control,
@@ -61,9 +67,23 @@ export default function AdditionalDetails({
     appendKeypoint("");
   };
 
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
-    handleNext();
+  const onSubmit = async(formData) => {
+    try {
+      const {tags} = formData
+      const newTags = tags.map((tag) => tag.value)
+
+      const data = {...formData, tags:newTags};
+      console.log("submitted data", data) 
+      const id = `${courseId}`;
+      const result = await uploadAdditionalDetails({data, id});
+      console.log("Result after submitting Second Step:", result);
+      if (result?.error) {   
+        throw new Error(result.error.data.message);
+      }
+      handleNext();
+    } catch (err) {
+      console.log("Second Step form Error:", err);
+    }
   };
 
   return (
@@ -274,7 +294,15 @@ export default function AdditionalDetails({
       {/* Buttons */}
       <div className="flex justify-between">
         <Button onClick={handlePrev}>Previous</Button>
-        <Button type="submit">Save and Next</Button>
+        {/* <Button type="submit">Save and Next</Button> */}
+        <Button
+            type="submit"
+            className={`flex items-center justify-center disabled:bg-gray-400 w-40 ${
+              isLoading && "cursor-not-allowed"
+            }`}
+          >
+            {isLoading ? <ButtonLoading /> : <p>Save and Next</p>}
+          </Button>
       </div>
     </form>
   );

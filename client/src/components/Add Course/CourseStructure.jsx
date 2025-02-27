@@ -8,12 +8,17 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { thirdStepValidationSchema } from "./Schema/thirdStepValidationSchema";
 import SubSectionFields from "./Course Structure/SubSectionFields";
 import Button from "../Button/Button";
+import { useUploadCourseStructureMutation } from "../../services/course.api";
+import ButtonLoading from "../Button/ButtonLoading";
 
 export default function CourseStructure({
   currentStep,
   handleNext,
   handlePrev,
+  courseId
 }) {
+  const [uploadCourseStructure, { isLoading, isError, error: uploadError }] =
+    useUploadCourseStructureMutation();
   // React Hook Form
   const {
     control,
@@ -28,7 +33,7 @@ export default function CourseStructure({
         {
           title: "",
           description: "",
-          subsections: [{ title: "" }],
+          subSections: [{ title: "" }],
         },
       ],
     },
@@ -43,9 +48,19 @@ export default function CourseStructure({
     name: "sections",
   });
 
-  const onSubmit = (data) => {
-    console.log("Submitted Data:", data);
-    handleNext();
+  const onSubmit = async(data) => {
+    try {
+      console.log("submitted data", data) 
+      const id = `${courseId}`;
+      const result = await uploadCourseStructure({data, id});
+      console.log("Result after submitting Third Step:", result);
+      if (result?.error) {   
+        throw new Error(result.error.data.message);
+      }
+      handleNext();
+    } catch (err) {
+      console.log("Third Step form Error:", err);
+    }
   };
 
   return (
@@ -133,7 +148,7 @@ export default function CourseStructure({
             appendSection({
               title: "",
               description: "",
-              subsections: [{ title: "", description: "" }],
+              subSections: [{ title: "", description: "" }],
             })
           }
           className="flex items-center gap-2"
@@ -146,7 +161,15 @@ export default function CourseStructure({
           <Button onClick={handlePrev}>Previous</Button>
 
           {/* Submit Button */}
-          <Button type="submit">Save and Next</Button>
+          {/* <Button type="submit">Save and Next</Button> */}
+          <Button
+            type="submit"
+            className={`flex items-center justify-center disabled:bg-gray-400 w-40 ${
+              isLoading && "cursor-not-allowed"
+            }`}
+          >
+            {isLoading ? <ButtonLoading /> : <p>Save and Next</p>}
+          </Button>
         </div>
       </form>
     </div>

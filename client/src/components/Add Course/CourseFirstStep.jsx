@@ -8,7 +8,7 @@ import { useUploadDetailsMutation } from "../../services/course.api";
 import ButtonLoading from "../Button/ButtonLoading";
 import Dropdown from "../Dropdown/Dropdown";
 
-const CourseFirstStep = ({ currentStep, handleNext, handlePrev }) => {
+const CourseFirstStep = ({ currentStep, handleNext, handlePrev, setCourseId }) => {
   const [uploadDetails, { isLoading, isError, error: uploadError }] =
     useUploadDetailsMutation();
 
@@ -32,6 +32,8 @@ const CourseFirstStep = ({ currentStep, handleNext, handlePrev }) => {
       if (result?.error) {
         throw new Error(result.error.data.message);
       }
+      
+      setCourseId(result?.data.data._id)
       handleNext();
     } catch (err) {
       console.log("First Step form Error:", err);

@@ -4,8 +4,12 @@ import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Button from "../Button/Button";
+import { usePublishCourseMutation } from "../../services/course.api";
+import ButtonLoading from "../Button/ButtonLoading";
 
-export default function Pricing({ currentStep, handleNext, handlePrev }) {
+export default function Pricing({ currentStep, handleNext, handlePrev, courseId }) {
+  const [publishCourse, { isLoading, isError, error: uploadError }] =
+    usePublishCourseMutation();
   const {
     register,
     handleSubmit,
@@ -35,9 +39,18 @@ export default function Pricing({ currentStep, handleNext, handlePrev }) {
     }
   }, [actualPrice, discount]);
 
-  const onSubmit = (data) => {
-    handleNext();
-    console.log("Form Data Submitted:", data);
+  const onSubmit = async(data) => {
+    try {
+      const id = `${courseId}`;
+      const result = await publishCourse({id});
+      console.log("Result after submitting Fifth Step:", result);
+      if (result?.error) {   
+        throw new Error(result.error.data.message);
+      }
+      handleNext();
+    } catch (err) {
+      console.log("Fifth Step form Error:", err);
+    }
   };
 
   return (
@@ -102,7 +115,15 @@ export default function Pricing({ currentStep, handleNext, handlePrev }) {
         <Button onClick={handlePrev}>Previous</Button>
 
         {/* Submit Button */}
-        <Button type="submit">Submit</Button>
+        {/* <Button type="submit">Submit</Button> */}
+        <Button
+            type="submit"
+            className={`flex items-center justify-center disabled:bg-gray-400 w-40 ${
+              isLoading && "cursor-not-allowed"
+            }`}
+          >
+            {isLoading ? <ButtonLoading /> : <p>Publish</p>}
+          </Button>
       </div>
     </form>
   );
