@@ -53,7 +53,7 @@ export const addCourseDetails = asyncHandler(async(req: Request, res: Response) 
     const { category, instructor } = data;
 
     const isInstrucotrExist = await UserService.getInstructorById(instructor?.toString());
-    if(isInstrucotrExist) {
+    if(!isInstrucotrExist) {
         throw createHttpError(404, "Instructor id is invalid, Not found");
     }
     const isCategoryExist = await CourseCategoryService.getCourseCategoryById(category?.toString());
