@@ -34,7 +34,7 @@ export default function Carousal() {
 
   useEffect(() => {
     if (allCategories?.success) {
-      dispatch(setCategories(allCategories.categories || []));
+      dispatch(setCategories(allCategories.data || []));
     }
   }, [allCategories, dispatch]);
 
@@ -46,7 +46,7 @@ export default function Carousal() {
 
   useEffect(() => {
     if (activeTab && categoryCourse?.success) {
-      dispatch(setCourses(categoryCourse.courses));
+      dispatch(setCourses(categoryCourse?.data?.courses));
     }
   }, [activeTab, categoryCourse, dispatch]);
 
@@ -103,18 +103,18 @@ export default function Carousal() {
         <div className="flex items-center flex-wrap md:flex-nowrap gap-5 p-4 mx-auto">
           {coursesAll?.map((course, index) => (
             <Link
-              key={course._id}
-              to={`/course/${course._id}`}
+              key={index}
+              to={`/course/${course?._id}`}
               className="bg-white flex flex-col gap-2 w-[296px] pb-3 rounded-lg shadow-md mx-auto md:mx-0"
             >
               <img
-                src={course.thumbnail}
-                alt={course.courseTitle}
+                src={course?.thumbnail}
+                alt={course?.courseTitle}
                 className="w-[100%] h-40 rounded-lg object-cover"
               />
               <div className="flex flex-col px-5">
                 <h3 className="font-sans text-[var(--color-secondary)]">
-                  {course.courseTitle}
+                  {course?.courseTitle}
                 </h3>
 
                 <hr className="mt-5 border-gray-200" />
@@ -126,8 +126,8 @@ export default function Carousal() {
                       className="w-[25px] h-[25px]"
                     />
                     <p className="text-gray-600">
-                      {course.courseMode.charAt(0).toUpperCase() +
-                        course.courseMode.slice(1).toLowerCase()}
+                      {course?.courseMode?.charAt(0).toUpperCase() +
+                        course?.courseMode?.slice(1).toLowerCase()}
                     </p>
                   </div>
 
@@ -138,8 +138,8 @@ export default function Carousal() {
                       className="w-[25px] h-[25px]"
                     />
                     <p className="text-gray-600">
-                      {course.courseLanguage.charAt(0).toUpperCase() +
-                        course.courseLanguage.slice(1).toLowerCase()}
+                      {course?.language?.charAt(0).toUpperCase() +
+                        course?.language?.slice(1).toLowerCase()}
                     </p>
                   </div>
 

@@ -9,10 +9,10 @@ export const apiCourse = createApi({
     uploadThumbnail: builder.mutation({
       query: (file) => {
         const formData = new FormData();
-        formData.append("thumbnail", file)
+        formData.append("thumbnail", file);
         const accessToken = localStorage.getItem("accessToken");
-        
-        return{
+
+        return {
           url: "course/thumbnail",
           method: "POST",
           body: formData,
@@ -20,16 +20,16 @@ export const apiCourse = createApi({
             Authorization: `Bearer ${accessToken}`, // Send token in Authorization header
           },
           credentials: "include",
-        }
+        };
       },
     }),
     uploadBrouchure: builder.mutation({
       query: (file) => {
         const formData = new FormData();
-        formData.append("brouchure", file)
+        formData.append("brouchure", file);
         const accessToken = localStorage.getItem("accessToken");
 
-        return{
+        return {
           url: "course/brouchure",
           method: "POST",
           body: formData,
@@ -37,44 +37,47 @@ export const apiCourse = createApi({
             Authorization: `Bearer ${accessToken}`, // Send token in Authorization header
           },
           credentials: "include",
-        }
+        };
       },
     }),
     uploadDetails: builder.mutation({
-      query: (data) =>{
-        
-        return{
+      query: (data) => {
+        return {
           url: "course/details",
           method: "POST",
           body: data,
-          credentials: "include", 
-      }},
+          credentials: "include",
+        };
+      },
     }),
     uploadAdditionalDetails: builder.mutation({
-      query: ({data, id}) =>{
-        return{
+      query: ({ data, id }) => {
+        return {
           url: `course/additional-details/${id}`,
           method: "PUT",
           body: data,
-          credentials: "include", 
-      }},
+          credentials: "include",
+        };
+      },
     }),
     uploadCourseStructure: builder.mutation({
-      query: ({data, id}) =>{
-        return{
+      query: ({ data, id }) => {
+        return {
           url: `course/structure/${id}`,
           method: "PUT",
           body: data,
-          credentials: "include", 
-      }},
+          credentials: "include",
+        };
+      },
     }),
     publishCourse: builder.mutation({
-      query: ({id}) =>{
-        return{
+      query: ({ id }) => {
+        return {
           url: `course/publish/${id}`,
           method: "POST",
-          credentials: "include", 
-      }},
+          credentials: "include",
+        };
+      },
     }),
     getDropdownOptions: builder.query({
       query: (endpoint) => ({
@@ -85,7 +88,7 @@ export const apiCourse = createApi({
     }),
     getAllCategory: builder.query({
       query: () => ({
-        url: "course/get-all-category",
+        url: "course/category",
         method: "GET",
       }),
     }),
@@ -111,7 +114,7 @@ export const apiCourse = createApi({
     }),
     getCategoryCourse: builder.query({
       query: (categoryId) => ({
-        url: `course/get-category-course/${categoryId}`,
+        url: `course/published/${categoryId}`,
         method: "GET",
       }),
     }),
