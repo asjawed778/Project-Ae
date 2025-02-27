@@ -120,7 +120,7 @@ export const apiCourse = createApi({
     }),
     getFullCourseDetails: builder.query({
       query: (courseId) => ({
-        url: `course/get-full-course-details/${courseId}`,
+        url: `course/all-details/${courseId}`, 
         method: "GET",
       }),
     }),

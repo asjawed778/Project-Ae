@@ -22,12 +22,13 @@ export default function courseLandingpage() {
     window.scrollTo(0, 0)
     if(courseDetails?.success)
     {
-      dispatch(setSpecificCourse(courseDetails?.course))
+      dispatch(setSpecificCourse(courseDetails?.data))
     }
   }, [courseDetails, isLoading])
 
   const courses = useSelector((state) => state.courses);
   const specificCourse = courses?.specificCourse;
+  console.log("course Details",specificCourse)
 
 
 
