@@ -79,6 +79,15 @@ export const addCourseDetails = asyncHandler(async(req: Request, res: Response) 
     res.send(createResponse(result, "CourseDetails Added/Updated successfully"));
 });
 
+export const getCourseDetails = asyncHandler(async(req: Request, res: Response) => {
+    if (!req.user) {
+        throw createHttpError(401, "User not authenticated");
+    }
+    const userId = req.user._id;
+    const courseId = req.params.courseId;
+    
+});
+
 export const addAdditionalDetails = asyncHandler(async(req: Request, res: Response) => {
     const courseId = req.params.courseId;
     const data = req.body;
