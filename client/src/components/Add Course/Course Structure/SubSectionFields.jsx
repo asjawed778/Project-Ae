@@ -11,7 +11,7 @@ export default function SubSectionFields({ control, sectionIndex, errors }) {
     remove: removeSubsection,
   } = useFieldArray({
     control,
-    name: `sections.${sectionIndex}.subsections`,
+    name: `sections.${sectionIndex}.subSections`,
   });
 
   return (
@@ -25,18 +25,18 @@ export default function SubSectionFields({ control, sectionIndex, errors }) {
               <InputField
                 id="step3-subsection-title"
                 {...control.register(
-                  `sections.${sectionIndex}.subsections.${subIndex}.title`
+                  `sections.${sectionIndex}.subSections.${subIndex}.title`
                 )}
                 placeholder="Subsection Title"
                 // parentClassName="w-full"
               />
 
               {Array.isArray(errors?.sections) &&
-                errors?.sections[sectionIndex]?.subsections[subIndex]
+                errors?.sections[sectionIndex]?.subSections[subIndex]
                   ?.title && (
                   <p className="text-red-600 text-xs ml-1 mt-0.5">
                     {
-                      errors?.sections[sectionIndex]?.subsections[subIndex]
+                      errors?.sections[sectionIndex]?.subSections[subIndex]
                         .title?.message
                     }
                   </p>
