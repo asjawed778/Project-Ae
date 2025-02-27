@@ -4,7 +4,7 @@ import { forwardRef, useEffect, useState } from "react";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { useUploadThumbnailMutation } from "../../services/course.api";
 
-const Image = forwardRef(({ id, onChange = () => {}, ...rest }, ref) => {
+const Image = forwardRef(({ id, onChange = () => {}, setvalue, ...rest }, ref) => {
   const [image, setImage] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [error, setError] = useState("");
@@ -23,8 +23,8 @@ const Image = forwardRef(({ id, onChange = () => {}, ...rest }, ref) => {
   const uploadImage = async (file) => {
     try {
        const result = await uploadThumbnail(file).unwrap();
-       console.log("Upload image: ", result)
-      console.log("Upload successful");
+       const thumbnailUrl = result?.data?.url
+       setvalue("thumbnail", thumbnailUrl);
     } catch (err) {
       console.error("Upload failed", err);
     }

@@ -4,8 +4,14 @@ import Button from "../Button/Button";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import firstStepValidationSchema from "./Schema/firstStepValidationSchema";
+import { useUploadDetailsMutation } from "../../services/course.api";
+import ButtonLoading from "../Button/ButtonLoading";
+import Dropdown from "../Dropdown/Dropdown";
 
 const CourseFirstStep = ({ currentStep, handleNext, handlePrev }) => {
+  const [uploadDetails, { isLoading, isError, error: uploadError }] =
+    useUploadDetailsMutation();
+
   const {
     register,
     handleSubmit,
@@ -16,15 +22,20 @@ const CourseFirstStep = ({ currentStep, handleNext, handlePrev }) => {
     resolver: yupResolver(firstStepValidationSchema),
   });
 
-  const selectedMode = watch("mode", ""); // Get the selected value
+  const selectedMode = watch("courseMode", ""); // Get the selected value
 
-  const setValues = () => {
-    setValue("thumbnail", "https://via.placeholder.com/150");
-    setValue("pdf", "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
-  }
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
-    handleNext();
+  const onSubmit = async (data) => {
+    try {
+      const result = await uploadDetails(data);
+      console.log("Uploaded Data", data);
+      console.log("Result after submitting:", result);
+      if (result?.error) {
+        throw new Error(result.error.data.message);
+      }
+      handleNext();
+    } catch (err) {
+      console.log("First Step form Error:", err);
+    }
   };
   return (
     <div className="w-full">
@@ -36,13 +47,13 @@ const CourseFirstStep = ({ currentStep, handleNext, handlePrev }) => {
           <InputField
             placeholder="Enter the course title"
             className="bg-white"
-            {...register("courseTitle")}
+            {...register("title")}
           >
             Course Title <span className="text-red-600">*</span>
           </InputField>
-          {errors?.courseTitle && (
+          {errors?.title && (
             <p className="text-red-600 text-xs ml-1 mt-0.5">
-              {errors?.courseTitle.message}
+              {errors?.title.message}
             </p>
           )}
         </div>
@@ -77,9 +88,9 @@ const CourseFirstStep = ({ currentStep, handleNext, handlePrev }) => {
               {...register("language")}
             >
               <option value="">Select Language</option>
-              <option value="hindi">Hindi</option>
-              <option value="english">English</option>
-              <option value="hinglish">Hindi + English</option>
+              <option value="HINDI">Hindi</option>
+              <option value="ENGLISH">English</option>
+              <option value="HINGLISH">Hindi + English</option>
             </select>
             {errors?.language && (
               <p className="text-red-600 text-xs ml-1 -mt-1.5">
@@ -89,23 +100,14 @@ const CourseFirstStep = ({ currentStep, handleNext, handlePrev }) => {
           </div>
 
           <div className="flex flex-col gap-2 md:w-[49%] w-full">
-            <div className="flex gap-1">
-              <label htmlFor="language" className="cursor-pointer">
-                Categories
-              </label>
-              <span className="text-red-600">*</span>
-            </div>
-
-            <select
-              id="language"
-              className="border p-2 rounded-lg border-neutral-300 outline-none cursor-pointer bg-white"
+            <Dropdown
+              required={true}
+              className="w-full"
+              placeholder="Select a Category"
+              label="Category"
               {...register("category")}
-            >
-              <option value="">Select Categories</option>
-              <option value="one">Category 1</option>
-              <option value="two">Category 2</option>
-              <option value="three">Category 3</option>
-            </select>
+              endpoint={"course/category"}
+            />
             {errors?.category && (
               <p className="text-red-600 text-xs ml-1 -mt-1.5">
                 {errors?.category.message}
@@ -114,15 +116,17 @@ const CourseFirstStep = ({ currentStep, handleNext, handlePrev }) => {
           </div>
         </div>
 
-        <div>
-          <InputField
-            placeholder="Enter Name of Instructor"
+        <div className="flex flex-col gap-2">
+          <Dropdown
+            required={true}
+            className="w-full"
+            placeholder="Select an Instuctor"
+            label="Instructor"
             {...register("instructor")}
-          >
-            Instructor <span className="text-red-600">*</span>
-          </InputField>
+            endpoint={"course/instructors"}
+          />
           {errors?.instructor && (
-            <p className="text-red-600 text-xs ml-1 mt-0.5">
+            <p className="text-red-600 text-xs ml-1 -mt-1.5">
               {errors?.instructor.message}
             </p>
           )}
@@ -133,63 +137,68 @@ const CourseFirstStep = ({ currentStep, handleNext, handlePrev }) => {
             Mode: <span className="text-red-600">*</span>{" "}
           </div>
           <div className="flex justify-between border border-neutral-300 rounded-md md:w-2/5 w-full bg-white">
-            {["offline", "online", "hybrid"].map((mode) => (
+            {["OFFLINE", "ONLINE", "HYBRID"].map((mode) => (
               <label
                 key={mode}
                 htmlFor={mode}
                 className={`text-sm cursor-pointer px-4 py-2 w-full text-center capitalize ${
-                  (mode === "offline" &&
+                  (mode === "OFFLINE" &&
                     "rounded-l-md border-r border-neutral-200") ||
-                  (mode === "hybrid" &&
+                  (mode === "HYBRID" &&
                     "rounded-r-md border-l border-neutral-200")
                 } ${selectedMode === mode ? "bg-[#9CA1CD]" : ""}`}
               >
-                {mode}
+                {mode.toLowerCase()}
                 <input
                   hidden
                   id={mode}
                   type="radio"
                   value={mode}
-                  {...register("mode")}
+                  {...register("courseMode")}
                 />
               </label>
             ))}
           </div>
-          {errors?.mode && (
+          {errors?.courseMode && (
             <p className="text-red-600 text-xs ml-1 -mt-1.5">
-              {errors?.mode.message}
+              {errors?.courseMode.message}
             </p>
           )}
         </div>
 
         <div className="flex gap-20 flex-col md:flex-row">
           <div>
-          <InputField type="image" id="thumbnail">
-            Thumbnail Image <span className="text-red-600">*</span>
-          </InputField>
-          {errors?.thumbnail && (
-            <p className="text-red-600 text-xs ml-1 mt-0.5">
-              {errors?.thumbnail.message}
-            </p>
-          )}
+            <InputField setvalue={setValue} type="image" id="thumbnail">
+              Thumbnail Image <span className="text-red-600">*</span>
+            </InputField>
+            {errors?.thumbnail && (
+              <p className="text-red-600 text-xs ml-1 mt-0.5">
+                {errors?.thumbnail.message}
+              </p>
+            )}
           </div>
 
-            <div>
-          <InputField type="pdf" id="pdf">
-            Brochure pdf <span className="text-red-600">*</span>
-          </InputField>
-          {errors?.pdf && (
-            <p className="text-red-600 text-xs ml-1 mt-0.5">
-              {errors?.pdf.message}
-            </p>
-          )}
-            </div>
+          <div>
+            <InputField setvalue={setValue} type="pdf" id="pdf">
+              Brochure pdf <span className="text-red-600">*</span>
+            </InputField>
+            {errors?.brouchure && (
+              <p className="text-red-600 text-xs ml-1 mt-0.5">
+                {errors?.brouchure.message}
+              </p>
+            )}
+          </div>
         </div>
 
-        <div
-          className={`flex justify-end items-center text-white`}
-        >
-          <Button onClick={setValues} type="submit">Save and Next</Button>
+        <div className={`flex justify-end items-center text-white`}>
+          <Button
+            type="submit"
+            className={`flex items-center justify-center disabled:bg-gray-400 w-40 ${
+              isLoading && "cursor-not-allowed"
+            }`}
+          >
+            {isLoading ? <ButtonLoading /> : <p>Save and Next</p>}
+          </Button>
         </div>
       </form>
     </div>

@@ -21,6 +21,7 @@ const InputField = forwardRef(
       variant = "default",
       value,
       required,
+      setvalue,
       removeImage = () => {},
       removePdf = () => {},
       onChange = () => {},
@@ -58,6 +59,7 @@ const InputField = forwardRef(
         {/* Input Field */}
         {type === "image" ? (
           <Image
+            setvalue={setvalue}
             id={id}
             onChange={onChange}
             ref={ref} // Attach ref for React Hook Form
@@ -65,6 +67,7 @@ const InputField = forwardRef(
           />
         ) : type === "pdf" ? (
           <Pdf
+            setvalue={setvalue}
             id={id}
             file={value}
             onChange={onChange}
