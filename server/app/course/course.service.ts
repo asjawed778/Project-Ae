@@ -218,6 +218,56 @@ export const getFullCourseDetails = async (courseId: string) => {
         
 };
 
+export const getPublishedCoursesByCategory = async (categoryId: string, pageNo = 1) => {
+    const pageSize = 10; // Number of courses per page
+    const skip = (pageNo - 1) * pageSize; // Calculate the number of documents to skip
+
+    const result = await courseLifecycleSchema.aggregate([
+        {
+            $match: { PUBLISHED: { $exists: true, $ne: [] } } // Ensure published courses exist
+        },
+        {
+            $unwind: "$PUBLISHED" // Unwind the published courses array
+        },
+        {
+            $lookup: {
+                from: "courses",
+                localField: "PUBLISHED",
+                foreignField: "_id",
+                as: "courseDetails"
+            }
+        },
+        {
+            $unwind: "$courseDetails" // Flatten course details
+        },
+        {
+            $match: { "courseDetails.category": new mongoose.Types.ObjectId(categoryId) } // Filter by category
+        },
+        {
+            $project: {
+                _id: "$courseDetails._id",
+                title: "$courseDetails.title",
+                subtitle: "$courseDetails.subtitle",
+                thumbnail: "$courseDetails.thumbnail",
+                language: "$courseDetails.language",
+                courseMode: "$courseDetails.courseMode"
+            }
+        },
+        { $skip: skip }, // Skip previous pages
+        { $limit: pageSize } // Limit results per page
+    ]);
+
+    return {
+        success: true,
+        totalCourses: result.length,
+        page: pageNo,
+        pageSize,
+        courses: result
+    };
+};
+
+
+
 
 
 
