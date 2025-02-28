@@ -6,7 +6,7 @@ import { toast } from "react-hot-toast";
 
 import ButtonLoading from "../components/Button/ButtonLoading";
 import { useVerifySignupOtpMutation } from "../services/auth.api";
-import { login } from "../store/reducers/authReducer";
+import { login as loginReducer } from "../store/reducers/authReducer";
 // import { verifySignupOTP } from "../services/operations/authApi";
 
 /**
@@ -96,18 +96,26 @@ function OTPModal({ otpModal, setOtpModal, signupData }) {
   const otpSubmitHandler = async (e) => {
     e.preventDefault();
     const otpValues = otpInputRefs.current.map((ref) => ref.value).join("");
-    const userRegisterData = { ...signupData, otp: otpValues };
+    const {email} = signupData
+    const userRegisterData = { email, otp: otpValues };
     try {
       const res = await verifySignupOtp(userRegisterData);
+      if (res?.error) {
+        throw new Error(JSON.stringify(res.error));
+      }
+      const accessToken = res.data.data.accessToken;
+      const refreshToken = res.data.data.refreshToken;
+      const user = res.data.data.user;
 
-      if (res.data.success) {
-        dispatch(login({ token: res.data.token, user: res.data.user }));
+      if (res?.data.success) {
+        dispatch(loginReducer({ accessToken, refreshToken, user }))
         toast.success("User Registerd successfully");
         setOtpModal(false);
         navigate("/");
       }
-    } catch (error) {
-      toast.error(error);
+    } catch (err) {
+      const error = JSON.parse(err?.message);
+      toast.error(error.data.message);
     }
   };
 
@@ -159,7 +167,7 @@ function OTPModal({ otpModal, setOtpModal, signupData }) {
         </div>
 
         <button
-          className={`w-full p-2 rounded-md text-white ${
+          className={`w-full flex justify-center items-center p-2 rounded-md text-white ${
             isOtpComplete
               ? "bg-blue-600 hover:bg-blue-700"
               : "bg-gray-400 cursor-not-allowed"

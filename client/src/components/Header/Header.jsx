@@ -24,7 +24,6 @@ export default function Header() {
       }
 
       const result = await logoutUser(accessToken);
-      console.log("logout result",result)
       if (result?.error) {
         throw new Error(JSON.stringify(result.error));
       }

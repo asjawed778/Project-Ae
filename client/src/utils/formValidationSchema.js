@@ -19,10 +19,10 @@ export const signupSchema = yup.object({
     .matches(/[0-9]/, "Password must contain at least one number")
     .matches(/[\W_]/, "Password must contain at least one special character")
     .matches(/^\S*$/, "Password must not contain spaces"),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref("password")], "Passwords do not match")
-    .required("Confirm Password is required"),
+  // confirmPassword: yup
+  //   .string()
+  //   .oneOf([yup.ref("password")], "Passwords do not match")
+  //   .required("Confirm Password is required"),
 });
 
 export const signinSchema = yup.object({
