@@ -6,6 +6,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Button from "../Button/Button";
 import { usePublishCourseMutation } from "../../services/course.api";
 import ButtonLoading from "../Button/ButtonLoading";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 export default function Pricing({ currentStep, handleNext, handlePrev, courseId }) {
   const [publishCourse, { isLoading, isError, error: uploadError }] =
@@ -25,6 +27,8 @@ export default function Pricing({ currentStep, handleNext, handlePrev, courseId 
       courseAction: "published",
     },
   });
+
+  const navigate = useNavigate()
 
   const actualPrice = watch("actualPrice");
   const discount = watch("discount");
@@ -47,7 +51,9 @@ export default function Pricing({ currentStep, handleNext, handlePrev, courseId 
       if (result?.error) {   
         throw new Error(result.error.data.message);
       }
-      handleNext();
+      toast.success("Course Published Successfully");
+      navigate("/admin")
+      
     } catch (err) {
       console.log("Fifth Step form Error:", err);
     }

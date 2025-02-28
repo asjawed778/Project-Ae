@@ -83,8 +83,8 @@ function SignupModal({
 
   const signupFormSubmitHandler = async (data) => {
     try {
-      setSignupData(data);
       const result = await sendSignupOtp(data);
+      setSignupData(data);
       if (result?.error) {
         throw new Error(JSON.stringify(result.error));
       }
@@ -93,6 +93,7 @@ function SignupModal({
       setOtpModal(true);
       reset();
     } catch (err) {
+      console.log("signuperr", err)
       const error = JSON.parse(err.message);
       if (error.status === 409) {
         toast.error(error.data.message);
@@ -194,7 +195,7 @@ function SignupModal({
                 </p>
               )}
             </div>
-            <div>
+            {/* <div>
               <label
                 htmlFor="password"
                 className="text-xs font-semibold mb-0.5"
@@ -219,7 +220,7 @@ function SignupModal({
                   {errors?.confirmPassword?.message}
                 </p>
               )}
-            </div>
+            </div> */}
             <div className="flex items-center justify-between mt-3">
               <button
                 type="submit"

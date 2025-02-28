@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 
 export default function HamNavbar({ handleLogout }) {
   const location = useLocation(); // Hook to access the current location
-  const { token } = useSelector((store) => store.auth);
+  const { accessToken } = useSelector((store) => store.auth);
 
   // useState
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -95,7 +95,7 @@ export default function HamNavbar({ handleLogout }) {
             Blog
           </Link>
 
-          {token ? (
+          {accessToken ? (
             <button
               onClick={handleHamLogout}
               className="text-center text-[var(--color-primary)] active:text-white active:bg-[var(--color-primary)] w-full px-5 py-3 duration-200"
