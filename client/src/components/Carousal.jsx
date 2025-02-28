@@ -22,15 +22,15 @@ export default function Carousal() {
 
   const categories = useSelector((state) => state.categories.categories);
   const coursesAll = useSelector((state) => state.courses.courses);
-
+  
   const [activeTab, setActiveTab] = useState(null);
-
+  
   const { data: allCategories, isLoading: allCategoriesLoader } =
-    useGetAllCategoryQuery();
+  useGetAllCategoryQuery();
   const { data: categoryCourse, isLoading: categoriesCourseLoader } =
-    useGetCategoryCourseQuery(activeTab, {
-      skip: !activeTab,
-    });
+  useGetCategoryCourseQuery(activeTab, {
+    skip: !activeTab,
+  });
 
   useEffect(() => {
     if (allCategories?.success) {
@@ -80,7 +80,7 @@ export default function Carousal() {
                       : " border-transparent text-gray-600 carousel-item"
                   }`}
                 >
-                  {tab.categoryName}
+                  {tab.name}
                 </button>
               )
           )}

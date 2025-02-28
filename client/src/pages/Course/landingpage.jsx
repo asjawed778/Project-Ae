@@ -28,7 +28,6 @@ export default function courseLandingpage() {
 
   const courses = useSelector((state) => state.courses);
   const specificCourse = courses?.specificCourse;
-  console.log("course Details",specificCourse)
 
 
 

@@ -94,9 +94,10 @@ export const apiCourse = createApi({
     }),
     addCategory: builder.mutation({
       query: (data) => ({
-        url: "course/add-category",
+        url: "course/category",
         method: "POST",
         body: data,
+        credentials: "include"
       }),
     }),
     addCourse: builder.mutation({
