@@ -133,6 +133,16 @@ function App() {
             </LazyComponent>
           }
         />
+        <Route
+          path="/reset-password/:token"
+          element={
+            <LazyComponent>
+              <PublicRoute>
+                <AuthPage reset={true} />
+              </PublicRoute>
+            </LazyComponent>
+          }
+        />
 
         <Route path="*" element={<PageNotFound />} />
       </Routes>

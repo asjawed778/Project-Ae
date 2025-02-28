@@ -115,7 +115,12 @@ function OTPModal({ otpModal, setOtpModal, signupData }) {
       }
     } catch (err) {
       const error = JSON.parse(err?.message);
-      toast.error(error.data.message);
+      if (error.status === 401) {
+        toast.error(error.data.message);
+      }
+      if (error.status === 404) {
+        toast.error(error.data.message);
+      }
     }
   };
 
