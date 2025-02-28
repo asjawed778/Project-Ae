@@ -24,7 +24,7 @@ export default function Header() {
       }
 
       const result = await logoutUser(accessToken);
-      // console.log("logout result",result)
+      console.log("logout result",result)
       if (result?.error) {
         throw new Error(JSON.stringify(result.error));
       }
@@ -34,7 +34,7 @@ export default function Header() {
     } catch (err) {
       const error = JSON.parse(err?.message);
       // toast.error(error.data.message);
-      console.error(error.data.message)
+      console.error(error?.data.message)
     }
   };
   // const handleLogout = async () => {
