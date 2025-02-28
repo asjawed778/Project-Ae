@@ -197,8 +197,13 @@ export const unpublishCourse = asyncHandler(async(req: Request, res: Response) =
 
 export const getPublishedCourseByCategory = asyncHandler(async(req: Request, res: Response) => {
     const categoryId = req.params.categoryId;
+    const pageNo = parseInt(req.query.pageNo as string) || 1;
+    const category = await CourseCategoryService.getCourseCategoryById(categoryId);
+    if(!category) {
+        throw createHttpError(404, "Category id invalid, category not found")
+    }
 
-    const courses = await CourseCategoryService.getPublishedCoursesByCategory(categoryId);
+    const courses = await courseService.getPublishedCoursesByCategory(categoryId, pageNo);
     res.send(createResponse(courses, "Published courses by category fetched successfully"));
 });
 
