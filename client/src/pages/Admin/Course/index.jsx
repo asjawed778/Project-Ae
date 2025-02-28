@@ -9,7 +9,7 @@ import Pricing from "../../../components/Add Course/Pricing";
 
 const AddCourse = () => {
   const [courseId, setCourseId] = useState(null);
-  const [currentStep, setCurrentStep] = useState(2);
+  const [currentStep, setCurrentStep] = useState(1);
   const {
     register,
     handleSubmit,
