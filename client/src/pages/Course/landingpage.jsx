@@ -22,7 +22,7 @@ export default function courseLandingpage() {
     window.scrollTo(0, 0)
     if(courseDetails?.success)
     {
-      dispatch(setSpecificCourse(courseDetails?.course))
+      dispatch(setSpecificCourse(courseDetails?.data))
     }
   }, [courseDetails, isLoading])
 
