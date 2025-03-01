@@ -19,7 +19,7 @@ const REFRESH_TOKEN_EXPIRY: string = process.env.REFRESH_TOKEN_EXPIRY as string;
 export const generateTokens = (payload: Payload) => {
   try {
     const accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET, {
-      expiresIn: '15m',
+      expiresIn: '7d',
     });
 
     const refreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET, {
@@ -56,7 +56,6 @@ export const decodeAccessToken = async (encryptedAccessToken: string) => {
     encryptedAccessToken,
     ACCESS_TOKEN_SECRET
   ) as Payload;
-  // console.log("Payload is : ", payload);
   if (payload === null) {
     throw createHttpError(403, {
       message: "Invalid Token...",

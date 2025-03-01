@@ -4,50 +4,56 @@ import clock from "../../public/imgs/slider/language2.png";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
-import {
-  getAllCategory,
-  getCourseByCategory,
-} from "../services/operations/addCourses";
+import { setCourses } from "../store/reducers/coursesReducer";
+import { setCategories } from "../store/reducers/adminCategoryReducer";
 import CourseSkeleton from "./skeletons/CourseSkeleton";
+import {
+  useGetAllCategoryQuery,
+  useGetCategoryCourseQuery,
+} from "../services/course.api";
+import Button from "./Button/Button";
 
 export default function Carousal() {
   const dispatch = useDispatch();
 
-  const [skeleton, setSkeleton] = useState(false);
-
   // otherwise it is called again and again
-  useEffect(() => {
-    dispatch(getAllCategory());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getAllCategory());
+  // }, []);
 
   const categories = useSelector((state) => state.categories.categories);
-  const coursesAll = useSelector((state) => state.courses.courses.courses);
-  console.log("all categories:", categories)
+  const coursesAll = useSelector((state) => state.courses.courses);
+  
+  const [activeTab, setActiveTab] = useState(null);
+  
+  const { data: allCategories, isLoading: allCategoriesLoader } =
+  useGetAllCategoryQuery();
+  const { data: categoryCourse, isLoading: categoriesCourseLoader } =
+  useGetCategoryCourseQuery(activeTab, {
+    skip: !activeTab,
+  });
 
-  const [activeTab, setActiveTab] = useState(null); // Start with null or a default value
+  useEffect(() => {
+    if (allCategories?.success) {
+      dispatch(setCategories(allCategories.data || []));
+    }
+  }, [allCategories, dispatch]);
 
   useEffect(() => {
     if (categories.length > 0 && !activeTab) {
-      setActiveTab(categories[0]._id); // Set the default value when categories are fetched
+      setActiveTab(categories[0]._id);
     }
-  }, [categories]); // Run this effect whenever categories change
+  }, [categories]);
 
-  async function getcourses(){
-    setSkeleton(true)
-    await dispatch(getCourseByCategory(activeTab));
-    setSkeleton(false)
-  }
   useEffect(() => {
-    if (activeTab) {
-      getcourses()
+    if (activeTab && categoryCourse?.success) {
+      dispatch(setCourses(categoryCourse?.data?.courses));
     }
-  }, [activeTab]);
+  }, [activeTab, categoryCourse, dispatch]);
 
   return (
     <div className="p-8 mt-4 w-full mx-auto">
-      {/* Title and Subtitle */}
-      <div className=" mb-6 items-center">
+      <div className="mb-6 items-center">
         <h2 className="font-sans font-semibold text-2xl text-[var(--color-primary)]">
           All the skills you need in one place
         </h2>
@@ -61,49 +67,55 @@ export default function Carousal() {
       <div className="flex w-auto gap-4 space-x-1 overflow-x-auto carousel  scroll-snap-x scroll-smooth ">
         {categories
           .filter((_, i) => i < 4)
-          .map((tab) => (
-            tab.courses.length !== 0 && <button
-              key={tab._id}
-              onClick={() => {
-                setActiveTab(tab._id);
-              }}
-              className={`flex justify-center items-center w-fit px-0 py-2 border-b-2 cursor-pointer ${
-                activeTab === tab._id
-                  ? " border-[var(--color-primary)] text-[var(--color-primary)]"
-                  : " border-transparent text-gray-600 carousel-item"
-              }`}
-            >
-              {tab.categoryName}
-            </button>
-          ))}
+          .map(
+            (tab) =>
+              tab.courses.length !== 0 && (
+                <button
+                  key={tab._id}
+                  onClick={() => {
+                    setActiveTab(tab._id);
+                  }}
+                  className={`flex justify-center items-center w-fit px-0 py-2 border-b-2 cursor-pointer ${
+                    activeTab === tab._id
+                      ? " border-[var(--color-primary)] text-[var(--secondary-heading-color)]"
+                      : " border-transparent text-[var(--alt-secondary-text-color)] carousel-item"
+                  }`}
+                >
+                  {tab.name}
+                </button>
+              )
+          )}
       </div>
+
       <div className="relative w-[80%]">
         <hr className="border-gray-200" />
-        {coursesAll && <Link
-          to="/course"
-          className="absolute right-0 -top-3 font-bold text-xs text-[var(--color-primary)] bg-white px-5"
-        >
-          View More 
-        </Link>}
+        {coursesAll.length !== 0 && (
+          <Link
+            to="/course"
+            className="absolute right-0 -top-3 font-bold text-xs text-[var(--color-primary)] bg-white px-5"
+          >
+            View More
+          </Link>
+        )}
       </div>
 
       {/* Scrollable Course Cards */}
-      {!skeleton ? (
+      {!(allCategoriesLoader || categoriesCourseLoader) ? (
         <div className="flex items-center flex-wrap md:flex-nowrap gap-5 p-4 mx-auto">
           {coursesAll?.map((course, index) => (
             <Link
               key={index}
-              to={`/course/${course._id}`}
-              className="bg-white flex flex-col gap-2 w-[296px] pb-3 rounded-lg shadow-md mx-auto"
+              to={`/course/${course?._id}`}
+              className="bg-white flex flex-col gap-2 w-[296px] pb-3 rounded-lg shadow-md mx-auto md:mx-0"
             >
               <img
-                src={course.thumbnail}
-                alt={course.courseTitle}
+                src={course?.thumbnail}
+                alt={course?.title}
                 className="w-[100%] h-40 rounded-lg object-cover"
               />
               <div className="flex flex-col px-5">
                 <h3 className="font-sans text-[var(--color-secondary)]">
-                  {course.courseTitle}
+                  {course?.title}
                 </h3>
 
                 <hr className="mt-5 border-gray-200" />
@@ -112,11 +124,11 @@ export default function Carousal() {
                     <img
                       src={user}
                       alt="userLive"
-                      className="w-[25px] h-[25px] text-blue-950"
+                      className="w-[25px] h-[25px]"
                     />
                     <p className="text-gray-600">
-                      {course.courseMode.charAt(0).toUpperCase() +
-                        course.courseMode.slice(1).toLowerCase()}
+                      {course?.courseMode?.charAt(0).toUpperCase() +
+                        course?.courseMode?.slice(1).toLowerCase()}
                     </p>
                   </div>
 
@@ -127,14 +139,14 @@ export default function Carousal() {
                       className="w-[25px] h-[25px]"
                     />
                     <p className="text-gray-600">
-                      {course.courseLanguage.charAt(0).toUpperCase() +
-                        course.courseLanguage.slice(1).toLowerCase()}
+                      {course?.language?.charAt(0).toUpperCase() +
+                        course?.language?.slice(1).toLowerCase()}
                     </p>
                   </div>
 
-                  <button className="text-white whitespace-nowrap bg-[var(--color-secondary)] hover:bg-[var(--color-secondary-hover)] active:bg-[var(--color-secondary-active)] px-3 py-1 ml-auto rounded-md duration-200">
+                  <Button className="text-white whitespace-nowrap px-3 py-1 ml-auto rounded-md duration-200">
                     Learn More
-                  </button>
+                  </Button>
                 </div>
               </div>
             </Link>

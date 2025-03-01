@@ -1,16 +1,25 @@
-import { useEffect, useRef, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
-import { useDispatch } from "react-redux";
-import ButtonLoading from "../components/Button/ButtonLoading";
-import { updatePassword } from "../services/operations/authApi";
 
+import { toast } from "react-hot-toast";
+import { useEffect, useRef, useState } from "react";
+// import { useDispatch } from "react-redux";
+
+import ButtonLoading from "../components/Button/ButtonLoading";
+import { useResetPasswordMutation } from "../services/auth.api";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { resetPasswordSchema } from "../utils/formValidationSchema";
+import { useNavigate, useParams } from "react-router-dom";
+import { FiEye, FiEyeOff } from "react-icons/fi";
+
+// import { updatePassword } from "../services/operations/authApi";
 
 /**
  * UpdatePasswordModal Component
- * 
+ *
  * This component renders a modal for updating the password using an OTP verification system.
  * Users enter a six-digit OTP sent to their email and then update their password.
- * 
+ *
  * @component
  * @param {Object} props - Component props
  * @param {string} props.email - The email of the user
@@ -22,31 +31,28 @@ function UpdatePasswordModal({
   email,
   updatePasswordModal,
   setUpdatePasswordModal,
-  setLoginModal,
 }) {
+  const [token, setToken] = useState("");
+  const params = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const paramToken = params?.token;
+    setToken(paramToken);
+  }, [params?.token]);
+
   const modalRef = useRef(null);
-  const otpInputRefs = useRef([]);
-  const dispatch = useDispatch();
 
-  const [isOtpComplete, setIsOtpComplete] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [userData, setUserData] = useState({
-    email: email,
-    otp: "",
-    newPassword: "",
-    confirmNewPassword: "",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(resetPasswordSchema),
   });
-  const { newPassword, confirmNewPassword } = userData;
 
-  useEffect(() => {
-    setUserData((prevState) => ({ ...prevState, email: email }));
-  }, [email]);
-
-  useEffect(() => {
-    if (updatePasswordModal) {
-      otpInputRefs.current[0]?.focus();
-    }
-  }, [updatePasswordModal]);
+  const [showPassword, setShowPassword] = useState(false);
+  const [resetPassword, { isLoading, error }] = useResetPasswordMutation();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -65,130 +71,82 @@ function UpdatePasswordModal({
 
   if (!updatePasswordModal) return null;
 
-   /**
+  /**
    * Closes the modal
    */
   const closeModal = () => {
     setUpdatePasswordModal(false);
   };
-
-
-   /**
-   * Handles OTP input changes and auto-focuses next field
-   * @param {Object} e - Event object
-   * @param {number} index - OTP input index
-   */
-  const handleInputChange = (e, index) => {
-    const { value } = e.target;
-    if (value.length > 1) {
-      otpInputRefs.current[index].value = value[value.length - 1];
-    }
-
-    if (/^[0-9]$/.test(otpInputRefs.current[index].value) && index < 5) {
-      otpInputRefs.current[index + 1]?.focus();
-    }
-
-    const otpValues = otpInputRefs.current.map((ref) => ref.value).join("");
-    setIsOtpComplete(otpValues.length === 6);
-  };
-
-   /**
-   * Handles backspace key navigation for OTP inputs
-   * @param {Object} e - Event object
-   * @param {number} index - OTP input index
-   */
-  const handleKeyDown = (e, index) => {
-    if (
-      e.key === "Backspace" &&
-      !otpInputRefs.current[index].value &&
-      index > 0
-    ) {
-      otpInputRefs.current[index - 1]?.focus();
-    }
-  };
-
   /**
-   * Handles form input changes
-   * @param {Object} e - Event object
-   */
-  const loginFormChangeHandler = (e) => {
-    setUserData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-   /**
    * Handles OTP submission and dispatches the updatePassword action
    * @param {Object} e - Event object
    */
-  const otpSubmitHandler = (e) => {
-    e.preventDefault();
-    const otpValues = otpInputRefs.current.map((ref) => ref.value).join("");
-    const userRegisterData = { ...userData, otp: otpValues };
-    dispatch(
-      updatePassword(userRegisterData, setUpdatePasswordModal, setLoginModal)
-    );
+
+  const onSubmit = async (data) => {
+    try {
+      const result = await resetPassword({ data, token });
+      if (result?.error) {
+        throw new Error(JSON.stringify(result.error));
+      }
+      toast.success("Password Updated Successfully");
+      setUpdatePasswordModal(false);
+      navigate("/auth");
+    } catch (err) {
+      const error = JSON.parse(err.message);
+      if (error.status === 401) {
+        toast.error(error.data.message);
+      }
+    }
   };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center backdrop-blur-lg z-50">
       <form
         ref={modalRef}
-        className="bg-white rounded-lg shadow-lg w-96 p-6"
-        onSubmit={otpSubmitHandler}
+        className="bg-white flex flex-col gap-5 rounded-lg shadow-lg w-96 p-6"
+        onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">
-            Email Verification
-          </h3>
+        <div className="flex justify-between items-center mb-2">
+          <h3 className="text-lg font-semibold">Password Reset</h3>
           <RxCross2
             className="cursor-pointer text-gray-600"
             onClick={closeModal}
           />
         </div>
-        <p className="text-gray-600 text-sm mb-4">
-          A six-digit OTP has been sent to your Email. Please enter it below to
-          verify your Email.
-        </p>
-        <div className="flex justify-center gap-2 mb-4">
-          {[...Array(6)].map((_, index) => (
+
+        <div className="flex flex-col gap-1">
+          <label htmlFor="email" className="text-sm font-semibold">
+            New Password
+          </label>
+          <div className="relative">
             <input
-              key={index}
-              type="text"
-              className="w-10 h-10 border rounded-lg text-center text-lg"
-              maxLength="1"
-              ref={(el) => (otpInputRefs.current[index] = el)}
-              onChange={(e) => handleInputChange(e, index)}
-              onKeyDown={(e) => handleKeyDown(e, index)}
+              type={!showPassword ? "password" : "text"}
+              className="w-full px-2 py-1 border outline-0 rounded focus:border-blue-500"
+              {...register("newPassword")}
             />
-          ))}
+            <div
+              onClick={() => setShowPassword(!showPassword)}
+              className="text-sm absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+            >
+              {showPassword ? <FiEyeOff /> : <FiEye />}
+            </div>
+          </div>
+          {errors?.newPassword && (
+            <p className="text-red-500 text-xs ml-1 -mt-1">
+              {errors?.newPassword?.message}
+            </p>
+          )}
         </div>
-
-        <input
-          type="password"
-          className="w-full p-2 mb-2 border rounded-lg"
-          placeholder="New Password"
-          value={newPassword}
-          name="newPassword"
-          onChange={loginFormChangeHandler}
-        />
-
-        <input
-          type="password"
-          className="w-full p-2 mb-4 border rounded-lg"
-          placeholder="Confirm Password"
-          value={confirmNewPassword}
-          name="confirmNewPassword"
-          onChange={loginFormChangeHandler}
-        />
-
         <button
-          className={`w-full p-2 rounded-lg transition ${
-            loading
+          type="submit"
+          className={`w-full flex justify-center items-center text-white p-2 rounded-lg transition ${
+            isLoading
               ? "bg-gray-500 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700"
+              : "bg-primary hover:bg-primary-hover"
           }`}
-          disabled={!isOtpComplete || loading}
+          disabled={isLoading}
         >
-          {loading ? <ButtonLoading /> : "Submit"}
+          {isLoading ? <ButtonLoading /> : "Submit"}
         </button>
       </form>
     </div>

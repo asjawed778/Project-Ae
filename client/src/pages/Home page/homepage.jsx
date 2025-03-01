@@ -1,10 +1,12 @@
 import backgroundImage from "../../../public/imgs/slider/Artboard.png";
+import backgroundVideo from "../../../public/video/background_video.mp4"
 import { useState } from "react";
 import { motion } from "framer-motion";
 import BookDemoClass from "../Course/BookDemoClass";
 import Courses from "../../components/Carousal";
 import Membership from "../../components/Membership";
 import { Link } from "react-router-dom";
+import Button from "../../components/Button/Button";
 
 const gradientBackground = {
   background:
@@ -39,7 +41,7 @@ function HomePage() {
       variants={containerVariants}
     >
       {/* Main Section */}
-      <motion.div
+      {/* <motion.div
         style={{
           backgroundImage: `url(${backgroundImage})`,
           backgroundSize: "cover",
@@ -47,7 +49,19 @@ function HomePage() {
         }}
         className="w-full flex flex-col md:flex-row items-center justify-around p-4"
         variants={itemVariants}
-      >
+      > */}
+      <motion.div className="relative w-full flex flex-col md:flex-row items-center justify-around p-4">
+        {/* Background Video */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute top-0 left-0 w-full h-full object-cover -z-10"
+        >
+          <source src={backgroundVideo} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
         {/* Text Section */}
         <motion.div
           className="flex flex-col items-start text-left text-white px-4 mb-8"
@@ -57,13 +71,13 @@ function HomePage() {
             className="text-2xl md:text-4xl font-sans"
             variants={itemVariants}
           >
-            Transform Your Abilities
+            Ready For the Future
           </motion.h2>
           <motion.h2
             className="text-2xl md:text-4xl font-sans mb-4"
             variants={itemVariants}
           >
-            Into Capabilities
+            At Praxia Skill
           </motion.h2>
 
           <motion.p
@@ -88,9 +102,10 @@ function HomePage() {
           <Link
             to="/course"
             variants={itemVariants}
-            className="relative bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg duration-200"
+            
           >
-            Explore Program
+            <Button type="button" className="relative py-2 px-6 rounded-lg duration-200">Explore Program</Button>
+            
           </Link>
         </motion.div>
 

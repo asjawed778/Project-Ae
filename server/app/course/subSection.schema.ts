@@ -6,11 +6,15 @@ const subSectionSchema = new mongoose.Schema<ISubSection>({
         type: String,
         required: true
     },
-    description: {
+    video: {
         type: String,
         required: false
     },
-    video: {
+    pdf: {
+        type: String,
+        required: false
+    },
+    image: {
         type: String,
         required: false
     },
@@ -22,10 +26,6 @@ const subSectionSchema = new mongoose.Schema<ISubSection>({
         type: Boolean,
         required: false
     },
-    isCompleted: {
-        type: Boolean,
-        required: false
-    }
 }, { timestamps: true });
 
 export default mongoose.model("SubSection", subSectionSchema);

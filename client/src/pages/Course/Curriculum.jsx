@@ -2,11 +2,13 @@ import { RiArrowDropUpLine, RiArrowDropDownLine } from "react-icons/ri";
 import { FaCheck } from "react-icons/fa";
 import { FaLock } from "react-icons/fa";
 import { ImFilesEmpty } from "react-icons/im";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../components/Button/Button";
 export default function Curriculum({ specificCourse }) {
   // console.log("specific", specificCourse)
   const [expandedLessons, setExpandedLessons] = useState({});
+  const [lessonsData, setLessonsData] = useState([]);
+
   const toggleLesson = (index, hasSubLessons) => {
     if (!hasSubLessons) return;
     setExpandedLessons((prev) => ({
@@ -14,68 +16,30 @@ export default function Curriculum({ specificCourse }) {
       [index]: !prev[index],
     }));
   };
-  const lessonsData = [
-    {
-      title: "Lessons With Video Content",
-      totalLessons: 5,
-      totalDuration: "45 Mins",
-      expanded: false,
-      subLessons: [],
-    },
-    {
-      title: "Lessons With Video Content",
-      totalLessons: 3,
-      totalDuration: "45 Mins",
-      expanded: true,
-      subLessons: [
-        {
-          title: "Lessons with video content",
-          duration: "12:30",
-          completed: true,
-          locked: false,
-        },
-        {
-          title: "Lessons with hello video content",
-          duration: "2:25",
-          completed: false,
-          locked: false,
-        },
-        {
-          title: "Lessons with video content",
-          duration: "12:30",
-          completed: true,
-          locked: false,
-        },
-        {
-          title: "Lessons with hello video content",
-          duration: "2:25",
-          completed: false,
-          locked: true,
-        },
-      ],
-    },
-    {
-      title: "Lessons With Video Content",
-      totalLessons: 5,
-      totalDuration: "45 Mins",
-      expanded: false,
-      subLessons: [
-        {
-          title: "Lessons with video content",
-          duration: "12:30",
-          completed: true,
-          locked: false,
-        },
-        {
-          title: "Lessons with hello video content",
-          duration: "2:25",
-          completed: false,
-          locked: true,
-        },
-      ],
-    },
-  ];
 
+  function courseData() {
+    return specificCourse?.sections.map((section) => ({
+      title: section.title,
+      description: section.description,
+      totalLessons: section.subSections.length,
+      totalDuration: "45 Mins",
+      expanded: false,
+      subLessons: section.subSections.map(sub => ({
+        title: sub.title,
+        duration: "2:25",
+        completed: true,
+        locked: true,
+      })),
+    }))
+  
+  }
+
+  useEffect(() => {
+    const data = courseData;
+    setLessonsData(data)
+  },[specificCourse])
+  
+  
   return (
     <div
       style={{ backgroundColor: "rgb(244, 246, 252)" }}
@@ -113,7 +77,7 @@ export default function Curriculum({ specificCourse }) {
                   </div>
                 </div>
                 <div className="flex items-center gap-4 text-zinc-600">
-                  <span>{lesson.totalLessons} Lessions</span>
+                  <span>{lesson.totalLessons} {lesson.totalLessons > 1 ? "Lessions" : "Lession"}</span>
                   <span>{lesson.totalDuration}</span>
                 </div>
               </div>
@@ -128,18 +92,20 @@ export default function Curriculum({ specificCourse }) {
                 } `}
               >
                 {lesson.subLessons.map((subLesson, index) => (
-                  <div key={index} className="mb-4 ml-6 pr-2">
+                  <div key={index} className="mb-4 ml-6 pr-2 text-sm">
                     <div className="flex flex-col md:flex-row justify-between gap-5">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 w-[15rem]">
-                          <ImFilesEmpty className="text-xl" />
-                          <span className="">{subLesson.title}</span>
+                          <div className="w-6 text-end">
+                            <ImFilesEmpty className="text-xl" />
+                          </div>
+                          <span className="text-start">{subLesson.title}</span>
                         </div>
                       </div>
                       <div className="flex gap-4 text-zinc-600 justify-evenly items-center w-auto md:w-[40%]">
                         <Button className="h-fit">Preview</Button>
                         <span>{subLesson.duration}</span>
-                        <span>
+                        <span className="w-4">
                           {subLesson.locked ? (
                             <FaLock />
                           ) : subLesson.completed ? (

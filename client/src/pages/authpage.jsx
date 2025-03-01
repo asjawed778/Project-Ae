@@ -1,8 +1,13 @@
-import logo from "../../public/logo.svg";
+import logo from "../../public/logopng.png";
+// import logo from "../../public/logo.svg";
 import googleImage from "../../public/imgs/google.svg";
 import appleImage from "../../public/imgs/apple.svg";
+// import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa6";
+import { IoHome } from "react-icons/io5";
 
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
 
 // import './AuthPage.css';
 import SignupModal from "../modals/SignupModal";
@@ -10,17 +15,29 @@ import OTPModal from "../modals/OTPModals";
 import LoginModal from "../modals/LoginModal";
 import ResetPasswordModal from "../modals/ResetPasswordModal";
 import UpdatePasswordModal from "../modals/UpdatePasswordModal";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Initial Page on Screen
-function AuthPage() {
+function AuthPage({reset=false}) {
+  const navigate = useNavigate()
+
   const [signupModal, setSignupModal] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
   const [otpModal, setOtpModal] = useState(false);
   const [signupData, setSignupData] = useState(null);
-
+  
   const [resetModal, setResetModal] = useState(false);
   const [updatePasswordModal, setUpdatePasswordModal] = useState(false);
+
+  //to invoke the reset passoword modal
+  
+  useEffect(() => {
+    if(reset)
+    {
+      setResetModal(false);
+      setUpdatePasswordModal(true);
+    }
+  },[reset])
 
   // email to send while changing password
   const [email, setEmail] = useState("");
@@ -38,19 +55,28 @@ function AuthPage() {
 
   return (
     <>
+      {/* <div onClick={() => navigate("/")} className="absolute left-5 top-3 flex gap-2 items-center">
+        <FaArrowLeft className="text-md" />
+        <IoHome className="text-xl" />
+      </div> */}
+      <div onClick={() => navigate("/")} className="absolute left-5 top-3 font-semibold flex gap-2 items-center cursor-pointer text-[var(--alt-secondary-color)] hover:text-[var(--secondary-color)]">
+        <FaArrowLeft />
+        <span className="mb-1">Back to home</span>
+      </div>
       <div className="flex flex-wrap items-center justify-between h-screen py-10 px-20">
         {/* First Row */}
         <div className="flex flex-col items-start gap-2 mb-6 mx-auto">
-          <img src={logo} alt="logo" className="w-[450px]" />
-          <p className="font-bold text-lg text-gray-600 flex flex-col ml-3">
-            <span>Transforming Your Abilities</span>
-            <span>into Capabilities</span>
+          <img onClick={() => navigate("/")} src={logo} alt="logo" className="w-[450px] h-auto -ml-9 cursor-pointer" />
+          <p className="font-bold text-lg text-[var(--alt-secondary-color)] flex flex-col ml-3">
+            <span>Ready For the Future</span>
+            <span>At Praxia Skill</span>
           </p>
         </div>
 
         {/* Second Row */}
         <div className="flex flex-col gap-5 w-[25rem] mx-auto">
-          <button className="hover:bg-gray-100 flex items-center justify-center px-5 py-3 border border-black rounded-full duration-300 cursor-pointer">
+          {/* temporarily this part is deactivated */}
+          {/* <button className="hover:bg-gray-100 flex items-center justify-center px-5 py-3 border border-black rounded-full duration-300 cursor-pointer">
             <img src={googleImage} alt="Google" className="h-5 w-fit" />
             <p>Sign up with Google</p>
           </button>
@@ -65,10 +91,10 @@ function AuthPage() {
               or
             </span>
             <hr />
-          </div>
+          </div> */}
 
           <button
-            className="text-white bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] active:bg-[var(--color-primary-active)] px-5 py-3 rounded-full duration-300"
+            className="text-white bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] active:bg-[var(--color-primary-active)] px-5 py-3 rounded-full duration-300 cursor-pointer"
             onClick={createAccountHandler}
           >
             Create account
@@ -90,7 +116,7 @@ function AuthPage() {
           </p>
 
           <button
-            className="text-[var(--color-primary)] hover:text-white hover:bg-[var(--color-primary)] active:bg-[var(--color-primary-active)] border border-[var(--color-primary)] px-5 py-3 rounded-full duration-300"
+            className="text-[var(--color-primary)] hover:text-white hover:bg-[var(--color-primary)] active:bg-[var(--color-primary-active)] border border-[var(--color-primary)] px-5 py-3 rounded-full duration-300 cursor-pointer"
             onClick={loginAccountHandler}
           >
             SignIn
