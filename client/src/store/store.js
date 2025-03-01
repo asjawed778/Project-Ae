@@ -5,10 +5,8 @@ import storage from "redux-persist/lib/storage"; // Use sessionStorage if needed
 // Importing Reducers
 import adminCategoryReducer from "./reducers/adminCategoryReducer";
 import authReducer from "./reducers/authReducer";
-// import commentReducer from "./reducers/commentReducer";
 import coursesReducer from "./reducers/coursesReducer";
-// import postReducer from "./reducers/postReducer";
-// import userPostReducer from "./reducers/userPostReducer";
+
 
 // Importing Apis
 import { apiAuth } from "../services/auth.api";

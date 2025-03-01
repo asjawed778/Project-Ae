@@ -96,11 +96,11 @@ export default function HamNavbar({ handleLogout }) {
           </Link>
 
           <Link
-              to="/contact-us"
-              className="text-center text-[var(--color-primary)] active:text-white active:bg-[var(--color-primary)] w-full px-5 py-3 duration-200"
-            >
-              Contact Us
-            </Link>
+            to="/contact-us"
+            className="text-center text-[var(--color-primary)] active:text-white active:bg-[var(--color-primary)] w-full px-5 py-3 duration-200"
+          >
+            Contact Us
+          </Link>
 
           {accessToken ? (
             <button
@@ -118,9 +118,12 @@ export default function HamNavbar({ handleLogout }) {
             </Link>
           )}
 
-<a href="tel:+919876543210" className="cursor-pointer text-center text-[var(--color-primary)] active:text-white active:bg-[var(--color-primary)] w-full px-5 py-3 duration-200">
-          +91 9876543210
-        </a>
+          <a
+            href="tel:+919123735554"
+            className="cursor-pointer text-center text-[var(--color-primary)] active:text-white active:bg-[var(--color-primary)] w-full px-5 py-3 duration-200"
+          >
+            +91 91237 35554
+          </a>
         </div>
       </div>
     );
