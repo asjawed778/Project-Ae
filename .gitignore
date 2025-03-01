@@ -16,6 +16,8 @@ jspm_packages/
 .env
 .env.local
 .env.*.local
+.env.development
+.env.production
 
 # Build files (if you're transpiling your code)
 dist/
