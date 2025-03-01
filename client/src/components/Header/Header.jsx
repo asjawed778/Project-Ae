@@ -33,8 +33,7 @@ export default function Header() {
       navigate("/");
     } catch (err) {
       const error = JSON.parse(err?.message);
-      // toast.error(error.data.message);
-      console.error(error?.data.message);
+      toast.error(error.data.message);
     }
   };
 
@@ -88,8 +87,8 @@ export default function Header() {
               </Link>
             )}
 
-            <a href="tel:+919876543210" className="cursor-pointer">
-              +91 9876543210
+            <a href="tel:+919123735554" className="cursor-pointer">
+              +91 91237 35554
             </a>
           </div>
         </div>
