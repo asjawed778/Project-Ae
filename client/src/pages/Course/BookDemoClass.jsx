@@ -18,26 +18,26 @@ export default function BookDemoClass() {
       <input
         type="text"
         placeholder="Full Name"
-        className="w-full h-10 px-3 py-1 border-t bg-[#F2F4F7] border-gray-300 rounded-md outline-none placeholder:text-neutral-400 focus:ring-1 focus:ring-[var(--alt-secondary-color)]"
+        className="w-full h-10 px-3 py-1 border-t bg-[#F2F4F7] border-gray-300 text-neutral-800 rounded-md outline-none placeholder:text-neutral-400 focus:ring-1 focus:ring-[var(--alt-secondary-color)]"
       />
 
       <input
         type="text"
         placeholder="Education"
-        className="w-full h-10 px-3 py-1 border-t bg-[#F2F4F7] border-gray-300 rounded-md outline-none placeholder:text-neutral-400 focus:ring-1 focus:ring-[var(--alt-secondary-color)]"
+        className="w-full h-10 px-3 py-1 border-t bg-[#F2F4F7] text-neutral-800 border-gray-300 rounded-md outline-none placeholder:text-neutral-400 focus:ring-1 focus:ring-[var(--alt-secondary-color)]"
       />
       {/* Phone Number */}
       <input
         type="number"
         placeholder="Phone No"
-        className="w-full h-10 px-3 py-1 border-t bg-[#F2F4F7] border-gray-300 rounded-md outline-none placeholder:text-neutral-400 focus:ring-1 focus:ring-[var(--alt-secondary-color)]"
+        className="w-full h-10 px-3 py-1 border-t bg-[#F2F4F7] text-neutral-800 border-gray-300 rounded-md outline-none placeholder:text-neutral-400 focus:ring-1 focus:ring-[var(--alt-secondary-color)]"
       />
 
       {/* Email Id */}
       <input
         type="email"
         placeholder="Email Id"
-        className="w-full h-10 px-3 py-1 border-t bg-[#F2F4F7] border-gray-300 rounded-md outline-none placeholder:text-neutral-400 focus:ring-1 focus:ring-[var(--alt-secondary-color)]"
+        className="w-full h-10 px-3 py-1 border-t bg-[#F2F4F7] text-neutral-800 border-gray-300 rounded-md outline-none placeholder:text-neutral-400 focus:ring-1 focus:ring-[var(--alt-secondary-color)]"
       />
 
       {/* Education */}
@@ -46,7 +46,7 @@ export default function BookDemoClass() {
       <input
         type="text"
         placeholder="Interested Course"
-        className="w-full h-10 px-3 py-1 border-t bg-[#F2F4F7] border-gray-300 rounded-md outline-none placeholder:text-neutral-400 focus:ring-1 focus:ring-[var(--alt-secondary-color)]"
+        className="w-full h-10 px-3 py-1 border-t bg-[#F2F4F7] text-neutral-800 border-gray-300 rounded-md outline-none placeholder:text-neutral-400 focus:ring-1 focus:ring-[var(--alt-secondary-color)]"
       />
 
       <section className="flex items-center">
