@@ -216,7 +216,6 @@ export const getFullCourseDetails = asyncHandler(async(req: Request, res: Respon
     res.send(createResponse(course, "Full course details fetched successfully"));
 });
 
-
 export const getIntructorList = asyncHandler(async(req: Request, res: Response) => {
     const instructor = await UserService.getInstructorList();
     res.send(createResponse(instructor, "Instructor List fetched"));
