@@ -5,10 +5,10 @@ import storage from "redux-persist/lib/storage"; // Use sessionStorage if needed
 // Importing Reducers
 import adminCategoryReducer from "./reducers/adminCategoryReducer";
 import authReducer from "./reducers/authReducer";
-import commentReducer from "./reducers/commentReducer";
+// import commentReducer from "./reducers/commentReducer";
 import coursesReducer from "./reducers/coursesReducer";
-import postReducer from "./reducers/postReducer";
-import userPostReducer from "./reducers/userPostReducer";
+// import postReducer from "./reducers/postReducer";
+// import userPostReducer from "./reducers/userPostReducer";
 
 // Importing Apis
 import { apiAuth } from "../services/auth.api";
@@ -26,15 +26,15 @@ const persistConfig = {
 // Combine all the reducers
 const rootReducer = combineReducers({
   auth: authReducer,
-  posts: postReducer,
-  userposts: userPostReducer,
-  comments: commentReducer,
+  // posts: postReducer,
+  // userposts: userPostReducer,
+  // comments: commentReducer,
   categories: adminCategoryReducer,
   courses: coursesReducer,
   [apiAuth.reducerPath]: apiAuth.reducer,
-  [apiComment.reducerPath]: apiComment.reducer,
+  // [apiComment.reducerPath]: apiComment.reducer,
   [apiCourse.reducerPath]: apiCourse.reducer,
-  [apiPost.reducerPath]: apiPost.reducer,
+  // [apiPost.reducerPath]: apiPost.reducer,
 });
 
 // Create a persisted reducer
@@ -50,9 +50,9 @@ export const store = configureStore({
       },
     }).concat(
       apiAuth.middleware,
-      apiComment.middleware,
+      // apiComment.middleware,
       apiCourse.middleware,
-      apiPost.middleware
+      // apiPost.middleware
     ),
 });
 
