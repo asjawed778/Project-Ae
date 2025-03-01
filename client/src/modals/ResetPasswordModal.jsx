@@ -48,30 +48,27 @@ function ResetPasswordModal({
   const resetPasswordSubmitHandler = async (e) => {
     e.preventDefault();
 
-    const { email } = userEmail;
-    setEmail(email);
-
-    await sendForgotPasswordOtp(userEmail);
-
-    toast.success("OTP sent successfully");
-
-    // to close reset modal
-    setResetModal(false);
-
-    // to invoke otp modal
-    setUpdatePasswordModal(true);
-
-    setUserEmail({ email: "" });
+    try {
+      const { email } = userEmail;
+      setEmail(email);
+      const res = await sendForgotPasswordOtp(userEmail);
+      console.log("reset password result", res)
+      if (res?.error) {
+        throw new Error(JSON.stringify(res.error));
+      }
+      toast.success("Email sent successfully");
+      // to close reset modal
+      // setResetModal(false);
+      // // to invoke otp modal
+      // setUpdatePasswordModal(true);
+      setUserEmail({ email: "" });
+    } catch (err) {
+      const error = JSON.parse(err?.message);
+      if (error.status === 404) {
+        toast.error(error.data.message);
+      }
+    }
   };
-
-  // const resetPasswordSubmitHandler = (e) => {
-  //   e.preventDefault();
-
-  //   const { email } = userEmail;
-  //   setEmail(email);
-  //   dispatch(resetPassword(userEmail, setResetModal, setUpdatePasswordModal));
-  //   setUserEmail({ email: "" });
-  // };
 
   return (
     <div
@@ -89,16 +86,17 @@ function ResetPasswordModal({
           <RxCross1 size={20} />
         </button>
 
-        <h2 className="text-2xl font-semibold text-center mb-4">
-          Reset Password
-        </h2>
+        <h2 className="text-2xl font-semibold mb-4">Reset Password</h2>
 
         <form className="space-y-4" onSubmit={resetPasswordSubmitHandler}>
-          <div>
+          <div className="flex flex-col gap-1">
+            <label htmlFor="email" className="text-sm font-semibold">
+              Email
+            </label>
             <input
+              id="email"
               type="email"
-              className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500"
-              placeholder="Email"
+              className="w-full px-2 py-1 border outline-0 rounded focus:border-blue-500"
               maxLength="50"
               value={userEmail.email}
               name="email"
@@ -107,9 +105,9 @@ function ResetPasswordModal({
           </div>
 
           <button
-            className={`w-full p-2 rounded-md text-white ${
+            className={`w-full flex justify-center items-center p-2 rounded-md text-white ${
               isFormValid
-                ? "bg-blue-600 hover:bg-blue-700"
+                ? "bg-primary hover:bg-primary-hover"
                 : "bg-gray-400 cursor-not-allowed"
             }`}
             disabled={!isFormValid}

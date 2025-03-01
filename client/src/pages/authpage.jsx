@@ -2,7 +2,7 @@ import logo from "../../public/logo.svg";
 import googleImage from "../../public/imgs/google.svg";
 import appleImage from "../../public/imgs/apple.svg";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // import './AuthPage.css';
 import SignupModal from "../modals/SignupModal";
@@ -13,14 +13,25 @@ import UpdatePasswordModal from "../modals/UpdatePasswordModal";
 import { Link } from "react-router-dom";
 
 // Initial Page on Screen
-function AuthPage() {
+function AuthPage({reset=false}) {
+
   const [signupModal, setSignupModal] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
   const [otpModal, setOtpModal] = useState(false);
   const [signupData, setSignupData] = useState(null);
-
+  
   const [resetModal, setResetModal] = useState(false);
   const [updatePasswordModal, setUpdatePasswordModal] = useState(false);
+
+  //to invoke the reset passoword modal
+  
+  useEffect(() => {
+    if(reset)
+    {
+      setResetModal(false);
+      setUpdatePasswordModal(true);
+    }
+  },[reset])
 
   // email to send while changing password
   const [email, setEmail] = useState("");

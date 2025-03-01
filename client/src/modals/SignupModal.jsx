@@ -93,9 +93,11 @@ function SignupModal({
       setOtpModal(true);
       reset();
     } catch (err) {
-      console.log("signuperr", err)
       const error = JSON.parse(err.message);
       if (error.status === 409) {
+        toast.error(error.data.message);
+      }
+      if (error.status === 400) {
         toast.error(error.data.message);
       }
     }

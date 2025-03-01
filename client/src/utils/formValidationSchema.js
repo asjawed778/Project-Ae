@@ -41,3 +41,16 @@ export const signinSchema = yup.object({
     .matches(/[\W_]/, "Password must contain at least one special character")
     .matches(/^\S*$/, "Password must not contain spaces"),
 });
+
+export const resetPasswordSchema = yup.object().shape({
+  newPassword: yup
+  .string()
+  .required("Password is required")
+  .min(8, "Password must be at least 8 characters")
+  .max(100, "Password must not exceed 100 characters")
+  .matches(/[A-Z]/, "Password must have at least one uppercase letter")
+  .matches(/[a-z]/, "Password must have at least one lowercase letter")
+  .matches(/[0-9]/, "Password must contain at least one number")
+  .matches(/[\W_]/, "Password must contain at least one special character")
+  .matches(/^\S*$/, "Password must not contain spaces"),
+});

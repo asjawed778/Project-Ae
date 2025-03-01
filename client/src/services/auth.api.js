@@ -37,24 +37,20 @@ export const apiAuth = createApi({
         credentials: "include",
       }),
     }),
-    // logout: builder.mutation({
-    //   query: () => ({
-    //     url: "user/logout",
-    //     method: "POST",
-    //   }),
-    // }),
-    updatePassword: builder.mutation({
-      query: (data) => ({
-        url: "user/update-password",
+    resetPassword: builder.mutation({
+      query: ({data, token}) => ({
+        url: `user/reset-password/${token}`,
         method: "POST",
         body: data,
+        credentials: 'include'
       }),
     }),
     sendForgotPasswordOtp: builder.mutation({
       query: (data) => ({
-        url: "send-forgotPassword-otp",
+        url: "user/send-password-reset-link",
         method: "POST",
         body: data,
+        credentials: "include"
       }),
     }),
     verifyForgotPasswordOtp: builder.mutation({
@@ -71,7 +67,7 @@ export const {
   // Auth
   useLogoutMutation,
   useVerifySignupOtpMutation,
-  useUpdatePasswordMutation,
+  useResetPasswordMutation,
   useVerifyForgotPasswordOtpMutation,
   useSendForgotPasswordOtpMutation,
   useLoginMutation,

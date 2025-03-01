@@ -80,7 +80,12 @@ function LoginModal({
       }
     } catch (err) { 
       const error = JSON.parse(err?.message);
-      toast.error(error.data.message);
+      if (error.status === 401) {
+        toast.error(error.data.message);
+      }
+      if (error.status === 404) {
+        toast.error(error.data.message);
+      }
     }
   };
 
@@ -138,9 +143,9 @@ function LoginModal({
                 type="email"
                 className="w-full outline-0 border px-2 py-1 rounded focus:border-blue-500"
               />
-              {errors?.identifier && (
+              {errors?.email && (
                 <p className="text-red-500 text-xs mt-1">
-                  {errors?.identifier?.message}
+                  {errors?.email?.message}
                 </p>
               )}
             </div>
@@ -170,15 +175,16 @@ function LoginModal({
                   {errors?.password?.message}
                 </p>
               )}
-              <p
-                className="flex justify-end text-xs text-blue-600 cursor-pointer hover:underline text-center"
-                onClick={() => {
+              <div
+                className="flex justify-end text-xs text-blue-600 text-center"
+              >
+                <span onClick={() => {
                   setResetModal(true);
                   setLoginModal(false);
-                }}
-              >
-                Forgot password?
-              </p>
+                }} className="cursor-pointer hover:underline">
+                  Forgot password?
+                </span>
+              </div>
             </div>
 
             <button
