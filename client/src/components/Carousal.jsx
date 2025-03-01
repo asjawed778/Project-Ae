@@ -11,6 +11,7 @@ import {
   useGetAllCategoryQuery,
   useGetCategoryCourseQuery,
 } from "../services/course.api";
+import Button from "./Button/Button";
 
 export default function Carousal() {
   const dispatch = useDispatch();
@@ -76,8 +77,8 @@ export default function Carousal() {
                   }}
                   className={`flex justify-center items-center w-fit px-0 py-2 border-b-2 cursor-pointer ${
                     activeTab === tab._id
-                      ? " border-[var(--color-primary)] text-[var(--color-primary)]"
-                      : " border-transparent text-gray-600 carousel-item"
+                      ? " border-[var(--color-primary)] text-[var(--secondary-heading-color)]"
+                      : " border-transparent text-[var(--alt-secondary-text-color)] carousel-item"
                   }`}
                 >
                   {tab.name}
@@ -109,12 +110,12 @@ export default function Carousal() {
             >
               <img
                 src={course?.thumbnail}
-                alt={course?.courseTitle}
+                alt={course?.title}
                 className="w-[100%] h-40 rounded-lg object-cover"
               />
               <div className="flex flex-col px-5">
                 <h3 className="font-sans text-[var(--color-secondary)]">
-                  {course?.courseTitle}
+                  {course?.title}
                 </h3>
 
                 <hr className="mt-5 border-gray-200" />
@@ -143,9 +144,9 @@ export default function Carousal() {
                     </p>
                   </div>
 
-                  <button className="text-white whitespace-nowrap bg-[var(--color-secondary)] hover:bg-[var(--color-secondary-hover)] active:bg-[var(--color-secondary-active)] px-3 py-1 ml-auto rounded-md duration-200">
+                  <Button className="text-white whitespace-nowrap px-3 py-1 ml-auto rounded-md duration-200">
                     Learn More
-                  </button>
+                  </Button>
                 </div>
               </div>
             </Link>

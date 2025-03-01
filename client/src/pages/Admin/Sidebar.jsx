@@ -58,23 +58,23 @@ export default function Sidebar({ isOpen, setIsOpen, location }) {
 
       {/* Sidebar */}
       <div
-        className={`fixed z-50 inset-y-0 left-0 bg-[var(--color-sidebar-background)] text-white w-64 max-h-full p-4 transition-transform duration-300 ease-in-out 
+        className={`fixed z-50 inset-y-0 left-0 w-64 border-r bg-white border-neutral-300 max-h-full p-4 transition-transform duration-300 ease-in-out 
       ${
         isOpen ? "translate-x-0" : "-translate-x-full"
-      } lg:translate-x-0 lg:static lg:w-80 lg:h-screen`}
+      } lg:translate-x-0 lg:static  lg:h-screen`}
       >
         {/* Close Button this will be only visible on small screen */}
         <p
-          className="lg:hidden flex justify-end ml-auto text-2xl font-thin text-white"
+          className="lg:hidden flex justify-end ml-auto text-2xl font-thin text-black"
           onClick={() => setIsOpen(false)}
         >
           <RxCross2 className="hover:bg-hover-sidebar-background cursor-pointer" />
         </p>
 
         <Link to="/admin">
-          <div className="flex gap-4 items-center text-3xl p-2 hover:bg-[var(--color-hover-sidebar-background)]">
+          <div className="flex gap-4 items-center text-sm p-2 text-neutral-700 hover:bg-neutral-200 ">
             <FiHome />
-            <h2 className="text-lg">Dashboard</h2>
+            <h2>Dashboard</h2>
           </div>
         </Link>
 
@@ -82,11 +82,11 @@ export default function Sidebar({ isOpen, setIsOpen, location }) {
           <div key={index}>
             <div
               onClick={() => toggleDropdown(name)}
-              className="flex items-center justify-between py-2 hover:bg-[var(--color-hover-sidebar-background)] rounded-md cursor-pointer"
+              className="flex items-center justify-between py-2 rounded-md cursor-pointer hover:bg-neutral-200"
             >
-              <div className="flex items-center gap-4 text-3xl px-2">
+              <div className="flex items-center gap-4 text-sm px-2 text-neutral-700  ">
                 {icon}
-                <span className="capitalize text-lg">{name}</span>
+                <span className="capitalize text-sm">{name}</span>
               </div>
               <svg
                 className={`w-4 h-4 mr-2 text-gray-400 transform transition-transform ${
@@ -107,12 +107,12 @@ export default function Sidebar({ isOpen, setIsOpen, location }) {
             </div>
 
             {drawer[name] && (
-              <div className="mt-2 text-white rounded-md">
+              <div className="mt-2 rounded-md">
                 {links.map(({ url, label, icon }, index) => (
                   <Link
                     key={index}
                     to={url}
-                    className={`block px-8 py-2 text-sm hover:bg-[var(--color-hover-sidebar-background)] ${
+                    className={`block px-8 py-2 text-sm hover:bg-neutral-200 ${
                       index === 0
                         ? "rounded-t-md"
                         : index === links.length - 1
@@ -120,14 +120,14 @@ export default function Sidebar({ isOpen, setIsOpen, location }) {
                         : ""
                     }`}
                   >
-                    <div className="flex items-center gap-2">
+                    <div className={`flex items-center text-xs gap-2 text-neutral-700 hover:bg-neutral-200 ${location.pathname === url && "text-primary"}`}>
                       {location.pathname === url ? (
                         <IoMdArrowForward className="mr-2 text-xl" />
                       ) : (
                         <IoIosArrowForward className="mr-2" />
                       )}
                       {icon}
-                      <span className="capitalize">{label}</span>
+                      <span className={`capitalize text-xs`}>{label}</span>
                     </div>
                   </Link>
                 ))}
