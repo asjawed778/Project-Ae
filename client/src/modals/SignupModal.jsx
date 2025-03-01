@@ -1,4 +1,5 @@
-import logo from "../../public/logo.svg";
+import logo from "../../public/logopng.png";
+// import logo from "../../public/logo.svg";
 import google from "../../public/imgs/google.svg";
 import apple from "../../public/imgs/apple.svg";
 
@@ -18,6 +19,7 @@ import { useSendSignupOtpMutation } from "../services/auth.api";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signupSchema } from "../utils/formValidationSchema";
+import Button from "../components/Button/Button";
 
 /**
  * SignupModal Component
@@ -113,7 +115,7 @@ function SignupModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center">
-          <div className="relative h-12 w-28">
+          <div className="relative h-12 w-34">
             <img src={logo} className="h-full w-full absolute" alt="logo" />
           </div>
           <RxCross2
@@ -126,9 +128,9 @@ function SignupModal({
             Start your journey
           </p>
           <h2 className="text-xl font-semibold text-left ">
-            <span className="text-blue-600 font-bold">SignUp</span> to{" "}
-            <span className="font-extrabold hover:text-blue-600">Abilita</span>
-            <span className="text-blue-600 font-extrabold">Edge</span>
+            <span className="font-bold">SignUp</span> to{" "}
+            <span className="text-primary font-extrabold">Praxia </span>
+            <span className="text-primary font-extrabold">Skill</span>
           </h2>
           <form
             className="flex flex-col gap-2 mt-4 text-sm"
@@ -144,7 +146,7 @@ function SignupModal({
                 {...register("name")}
                 id="name"
                 type="text"
-                className="w-full outline-0 border px-2 py-1 rounded focus:border-blue-500"
+                className="w-full outline-0 border px-2 py-1 rounded focus:border-[var(--secondary-color)]"
               />
               {errors?.name && (
                 <p className="text-red-500 text-xs mt-1">
@@ -163,7 +165,7 @@ function SignupModal({
                 })}
                 id="email"
                 type="email"
-                className="w-full outline-0 border px-2 py-1 rounded focus:border-blue-500"
+                className="w-full outline-0 border px-2 py-1 rounded focus:border-[var(--secondary-color)]"
               />
               {errors?.email && (
                 <p className="text-red-500 text-xs mt-1">
@@ -182,7 +184,7 @@ function SignupModal({
                   {...register("password")}
                   id="password"
                   type={!showPassword ? "password" : "text"}
-                  className="w-full outline-0 border px-2 py-1 rounded focus:border-blue-500"
+                  className="w-full outline-0 border px-2 py-1 rounded focus:border-[var(--secondary-color)]"
                 />
                 <div
                   onClick={() => setShowPassword(!showPassword)}
@@ -197,38 +199,13 @@ function SignupModal({
                 </p>
               )}
             </div>
-            {/* <div>
-              <label
-                htmlFor="password"
-                className="text-xs font-semibold mb-0.5"
-              >
-                Confirm Password
-              </label>
-              <div className="relative">
-                <input
-                  {...register("confirmPassword")}
-                  type={!showConfirmPassword ? "password" : "text"}
-                  className="w-full outline-0 border px-2 py-1 rounded focus:border-blue-500"
-                />
-                <div
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="text-sm absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
-                >
-                  {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
-                </div>
-              </div>
-              {errors?.confirmPassword && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors?.confirmPassword?.message}
-                </p>
-              )}
-            </div> */}
+            
             <div className="flex items-center justify-between mt-3">
-              <button
+              <Button
                 type="submit"
                 disabled={isLoading}
                 // disabled={loading}
-                className={`flex items-center justify-center gap-2 py-2 h-8 w-full bg-blue-600 text-xs text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 ${
+                className={`flex items-center justify-center gap-2 py-2 h-8 w-full  text-xs text-white rounded-md  disabled:bg-gray-400 ${
                   isLoading && "cursor-not-allowed"
                 } cursor-pointer`}
               >
@@ -240,18 +217,31 @@ function SignupModal({
                 ) : (
                   "Register"
                 )}
-              </button>
+              </Button>
             </div>
+            <div className="text-xs mb-4">
+            <span>Already have an account?</span>{" "}
+            <span
+              onClick={() => {
+                setSignupModal(false);
+                setLoginModal(true);
+              }}
+              className="text-blue-600 cursor-pointer hover:underline"
+            >
+              Sign in
+            </span>
+          </div>
           </form>
 
-          <div className="h-10 w-full flex items-center relative">
+            {/* temporirily it has been diactivated */}
+          {/* <div className="h-10 w-full flex items-center relative">
             <div className="border-b border-neutral-300 w-full"></div>
             <span className="absolute text-xs text-neutral-700 bg-white p-2 left-1/2 -translate-x-1/2">
               or sign up with
             </span>
-          </div>
+          </div> */}
 
-          <div className="flex items-center justify-center gap-3">
+          {/* <div className="flex items-center justify-center gap-3">
             <div className="flex justify-center items-center border h-9 w-16 relative border-neutral-300 hover:bg-neutral-100 rounded-lg cursor-pointer">
               <img
                 src={apple}
@@ -266,20 +256,9 @@ function SignupModal({
                 alt="google-logo"
               />
             </div>
-          </div>
+          </div> */}
 
-          <div className="text-xs mt-4">
-            <span>Already have an account?</span>{" "}
-            <span
-              onClick={() => {
-                setSignupModal(false);
-                setLoginModal(true);
-              }}
-              className="text-blue-600 cursor-pointer hover:underline"
-            >
-              Sign in
-            </span>
-          </div>
+          
         </div>
       </div>
     </div>

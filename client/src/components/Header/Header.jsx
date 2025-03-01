@@ -1,4 +1,5 @@
-import logo from "../../../public/logo.svg";
+// import logo from "../../../public/logo.svg";
+import logo from "../../../public/logopng.png";
 import { CiSearch } from "react-icons/ci";
 
 import { Link, useNavigate } from "react-router-dom";
@@ -29,76 +30,68 @@ export default function Header() {
       }
       dispatch(logout());
       toast.success("Logged out successfully");
-      navigate("/auth");
+      navigate("/");
     } catch (err) {
       const error = JSON.parse(err?.message);
       // toast.error(error.data.message);
-      console.error(error?.data.message)
+      console.error(error?.data.message);
     }
   };
-  // const handleLogout = async () => {
-  //   dispatch(logoutUser(navigate));
-  // };
 
   return (
-    <nav className="flex w-full items-center justify-between gap-4 h-20 py-4 px-10 sm:px-20 md:px-10">
+    <nav className="flex w-full items-center gap-10 h-[4.5rem] py-4 px-10 sm:px-20 md:px-10">
       {/* Logo */}
       <Link to="/">
         <img
           src={logo}
           alt="logo"
-          className=" lg:w-[200px] md:w-[170px] min-w-[150px] h-[45px]"
+          className=" lg:w-[200px] md:w-[170px] w-[200px] h-auto"
         />
+        {/* <img
+          src={logo}
+          alt="logo"
+          className=" lg:w-[200px] md:w-[170px] min-w-[150px] h-[45px]"
+        /> */}
       </Link>
 
       {/* For Bigger Screen */}
-      <div className="hidden  font-bold md:flex space-x-16">
+      <div className="hidden w-full  font-bold md:flex space-x-16">
         {/* Second Section */}
-        <div className="relative">
+        {/* search bar temporarily deactivated */}
+        {/* <div className="relative">
           <CiSearch className="absolute left-2 top-3 size-6 text-[var(--color-primary)]" />
           <input
             type="text"
             placeholder="Type to search"
             className="font-normal text-lg pl-10 px-2 py-2 border rounded-md outline-none"
           />
-        </div>
+        </div> */}
 
         {/* Third Section */}
-        <div className="flex items-center gap-10">
-          <Link to="/course" className="text-[var(--color-primary)]">
-            Learning
-          </Link>
+        <div className="flex items-center justify-between w-full  font-semibold text-[var(--primary-heading-color)] text-sm">
+          <div className="flex items-center gap-5">
+            <Link to="/course">Learning</Link>
 
-          {/* <Link
-              to=""
-              className="text-[var(--color-primary)]"
-            >
-              Resource
-            </Link> */}
+            <Link to="/blog">Blog</Link>
 
-          <Link to="/blog" className="text-[var(--color-primary)]">
-            Blog
-          </Link>
+            <Link to="">Contact Us</Link>
+          </div>
 
-          {/* <Link
-              to=""
-              className="text-[var(--color-primary)]"
-            >
-              Contact Us
-            </Link> */}
+          <div className="flex items-center gap-5">
+            {accessToken ? (
+              <button onClick={handleLogout} className="cursor-pointer">
+                Logout
+              </button>
+            ) : (
+              <Link to="/auth" className="cursor-pointer">
+                Login/Signup
+              </Link>
+            )}
 
-          {accessToken ? (
-            <button
-              onClick={handleLogout}
-              className="text-[var(--color-primary)] cursor-pointer"
-            >
-              Logout
-            </button>
-          ) : (
-            <Link  to="/auth" className="text-[var(--color-primary)] cursor-pointer">
-              Login
-            </Link>
-          )}
+            <a href="tel:+919876543210" className="cursor-pointer">
+              +91 9876543210
+            </a>
+          </div>
         </div>
       </div>
 
