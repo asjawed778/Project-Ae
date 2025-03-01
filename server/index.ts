@@ -36,7 +36,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(cors({
-  origin: process.env.BASE_URL,
+  origin: [process.env.BASE_URL ?? "http://default-url.com", "http://localhost:3000", "https://praxiaskill.com"],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   credentials: true,
 }));
