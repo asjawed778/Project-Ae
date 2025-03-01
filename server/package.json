@@ -4,8 +4,8 @@
   "scripts": {
     "local": "nodemon",
     "start": "cross-env NODE_ENV=local ts-node ./index.ts",
-    "dev": "pnpm run build && NODE_ENV=development node ./dist/index.js",
-    "prod": "pnpm run build && NODE_ENV=production node ./dist/index.js",
+    "dev": "npm run build && cross-env NODE_ENV=development node ./dist/index.js",
+    "prod": "npm run build && cross-env NODE_ENV=production node ./dist/index.js",
     "build": "npx tsc",
     "lint": "eslint . --ext .ts,.js --max-warnings=0",
     "lint:fix": "eslint --fix --ext .js,.ts .",
