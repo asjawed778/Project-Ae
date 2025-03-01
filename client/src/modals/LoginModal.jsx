@@ -1,4 +1,4 @@
-import logo from "../../public/logo.svg";
+import logo from "../../public/logopng.png";
 import google from "../../public/imgs/google.svg";
 import apple from "../../public/imgs/apple.svg";
 
@@ -13,6 +13,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import validator from "validator";
 
+import Button from "../components/Button/Button";
 import ButtonLoading from "../components/Button/ButtonLoading";
 import { useLoginMutation } from "../services/auth.api";
 import { login as loginReducer } from "../store/reducers/authReducer";
@@ -78,7 +79,7 @@ function LoginModal({
         navigate("/");
         reset();
       }
-    } catch (err) { 
+    } catch (err) {
       const error = JSON.parse(err?.message);
       if (error.status === 401) {
         toast.error(error.data.message);
@@ -99,7 +100,7 @@ function LoginModal({
         onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
       >
         <div className="flex justify-between items-center">
-          <div className="relative h-12 w-28">
+          <div className="relative h-12 w-34">
             <img src={logo} className="h-full w-full absolute" alt="logo" />
           </div>
           <RxCross2
@@ -108,23 +109,12 @@ function LoginModal({
           />
         </div>
         <div className="p-6 flex flex-col w-[80%] mx-auto">
-          <h2 className="text-xl font-semibold text-left ">
-            <span className="text-blue-600 font-bold">SignIn</span> to{" "}
-            <span className="font-extrabold hover:text-blue-600">Abilita</span>
-            <span className="text-blue-600 font-extrabold">Edge</span>
+          <h2 className="text-xl font-semibold text-left">
+            <span className=" font-bold">SignIn</span> to{" "}
+            <span className=" text-primary font-extrabold ">Praxia </span>
+            <span className="text-primary font-extrabold">Skill</span>
           </h2>
-          <p className="text-neutral-700 text-xs">
-            <span>Don't have an account?</span>{" "}
-            <span
-              onClick={() => {
-                setLoginModal(false);
-                setSignupModal(true);
-              }}
-              className="text-blue-600 cursor-pointer hover:underline"
-            >
-              SignUp
-            </span>
-          </p>
+          
 
           <form
             className="flex flex-col gap-2 mt-4 text-sm"
@@ -141,7 +131,7 @@ function LoginModal({
                 })}
                 id="email"
                 type="email"
-                className="w-full outline-0 border px-2 py-1 rounded focus:border-blue-500"
+                className="w-full outline-0 border px-2 py-1 rounded focus:border-[var(--secondary-color)]"
               />
               {errors?.email && (
                 <p className="text-red-500 text-xs mt-1">
@@ -161,7 +151,7 @@ function LoginModal({
                   {...register("password")}
                   id="password"
                   type={!showPassword ? "password" : "text"}
-                  className="w-full outline-0 border px-2 py-1 rounded focus:border-blue-500"
+                  className="w-full outline-0 border px-2 py-1 rounded focus:border-[var(--secondary-color)]"
                 />
                 <div
                   onClick={() => setShowPassword(!showPassword)}
@@ -175,27 +165,41 @@ function LoginModal({
                   {errors?.password?.message}
                 </p>
               )}
-              <div
-                className="flex justify-end text-xs text-blue-600 text-center"
-              >
-                <span onClick={() => {
-                  setResetModal(true);
-                  setLoginModal(false);
-                }} className="cursor-pointer hover:underline">
+              <div className="flex justify-end text-xs text-[var(--alt-secondary-color)] hover:text-[var(--secondary-color)] text-center">
+                <span
+                  onClick={() => {
+                    setResetModal(true);
+                    setLoginModal(false);
+                  }}
+                  className="cursor-pointer hover:underline"
+                >
                   Forgot password?
                 </span>
               </div>
             </div>
 
-            <button
+            <Button
+              type="submit"
               className={`py-2 h-8 w-full flex justify-center items-center rounded-md text-white cursor-pointer
-                     bg-blue-600 hover:bg-blue-700
                      disabled:bg-gray-400 ${isLoading && "cursor-not-allowed"}
                 `}
               disabled={isLoading}
             >
               {isLoading ? <ButtonLoading /> : <p>Submit</p>}
-            </button>
+            </Button>
+
+            <p className="text-neutral-700 text-xs">
+            <span>Don't have an account?</span>{" "}
+            <span
+              onClick={() => {
+                setLoginModal(false);
+                setSignupModal(true);
+              }}
+              className="text-blue-600 cursor-pointer hover:underline"
+            >
+              SignUp
+            </span>
+          </p>
           </form>
 
           <div className="h-10 w-full flex items-center relative">
