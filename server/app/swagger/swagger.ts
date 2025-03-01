@@ -1,4 +1,5 @@
 import userRoute from './userRoute.json';
+import categoryRoute from './categoryRoutes.json';
 
 const swaggerDocument = {
     openapi: "3.0.0",
@@ -18,6 +19,7 @@ const swaggerDocument = {
     ],
     paths: {
         ...userRoute,
+        ...categoryRoute
     },
     
 };

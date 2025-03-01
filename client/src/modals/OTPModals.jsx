@@ -1,26 +1,30 @@
-import { useEffect, useRef, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 import ButtonLoading from "../components/Button/ButtonLoading";
-import { verifySignupOTP } from "../services/operations/authApi";
-
+import { useVerifySignupOtpMutation } from "../services/auth.api";
+import { login as loginReducer } from "../store/reducers/authReducer";
+// import { verifySignupOTP } from "../services/operations/authApi";
 
 /**
  * OTPModal Component - Handles OTP verification for signup.
- * 
+ *
  * @param {Object} props - Component properties.
  * @param {boolean} props.otpModal - State to control the visibility of the modal.
  * @param {Function} props.setOtpModal - Function to update modal visibility state.
  * @param {Object} props.signupData - User data including email and other details.
  */
 function OTPModal({ otpModal, setOtpModal, signupData }) {
+  const [verifySignupOtp, { isLoading, error }] = useVerifySignupOtpMutation();
+
   const otpInputRefs = useRef([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [isOtpComplete, setIsOtpComplete] = useState(false);
 
   useEffect(() => {
@@ -50,7 +54,6 @@ function OTPModal({ otpModal, setOtpModal, signupData }) {
     }
   };
 
-
   /**
    * Handles input changes for OTP fields and moves focus accordingly.
    * @param {Event} e - Input event.
@@ -71,7 +74,7 @@ function OTPModal({ otpModal, setOtpModal, signupData }) {
     setIsOtpComplete(otpValues.length === 6);
   };
 
-   /**
+  /**
    * Handles backspace key to move focus backward.
    * @param {KeyboardEvent} e - Key down event.
    * @param {number} index - Index of the current input field.
@@ -90,12 +93,43 @@ function OTPModal({ otpModal, setOtpModal, signupData }) {
    * Handles OTP submission.
    * @param {Event} e - Form submission event.
    */
-  const otpSubmitHandler = (e) => {
+  const otpSubmitHandler = async (e) => {
     e.preventDefault();
     const otpValues = otpInputRefs.current.map((ref) => ref.value).join("");
-    const userRegisterData = { ...signupData, otp: otpValues };
-    dispatch(verifySignupOTP(userRegisterData, setOtpModal, navigate));
+    const {email} = signupData
+    const userRegisterData = { email, otp: otpValues };
+    try {
+      const res = await verifySignupOtp(userRegisterData);
+      if (res?.error) {
+        throw new Error(JSON.stringify(res.error));
+      }
+      const accessToken = res.data.data.accessToken;
+      const refreshToken = res.data.data.refreshToken;
+      const user = res.data.data.user;
+
+      if (res?.data.success) {
+        dispatch(loginReducer({ accessToken, refreshToken, user }))
+        toast.success("User Registerd successfully");
+        setOtpModal(false);
+        navigate("/");
+      }
+    } catch (err) {
+      const error = JSON.parse(err?.message);
+      if (error.status === 401) {
+        toast.error(error.data.message);
+      }
+      if (error.status === 404) {
+        toast.error(error.data.message);
+      }
+    }
   };
+
+  // const otpSubmitHandler = (e) => {
+  //   e.preventDefault();
+  //   const otpValues = otpInputRefs.current.map((ref) => ref.value).join("");
+  //   const userRegisterData = { ...signupData, otp: otpValues };
+  //   dispatch(verifySignupOTP(userRegisterData, setOtpModal, navigate));
+  // };
 
   return (
     <div
@@ -138,14 +172,15 @@ function OTPModal({ otpModal, setOtpModal, signupData }) {
         </div>
 
         <button
-          className={`w-full p-2 rounded-md text-white ${
+          className={`w-full flex justify-center items-center p-2 rounded-md text-white ${
             isOtpComplete
               ? "bg-blue-600 hover:bg-blue-700"
               : "bg-gray-400 cursor-not-allowed"
           }`}
           disabled={!isOtpComplete}
         >
-          {loading ? <ButtonLoading /> : <p>Submit</p>}
+          {isLoading ? <ButtonLoading /> : <p>Submit</p>}
+          {/* {loading ? <ButtonLoading /> : <p>Submit</p>} */}
         </button>
       </form>
     </div>

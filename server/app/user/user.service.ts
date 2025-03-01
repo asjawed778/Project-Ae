@@ -72,7 +72,6 @@ export const getUserByEmail = async (email: string) => {
 };
 
 
-
 export const updateRefreshToken = async (id: string, refreshToken: string): Promise<Omit<IUser, "password" | "refreshToken" | "resetPasswordToken"> | null>  => {
     const user = await UserSchema.findByIdAndUpdate(id,
         { refreshToken },
@@ -103,6 +102,25 @@ export const updatePassword = async(userId: string, newPassword: string): Promis
     return omit(user?.toObject() as IUser, ["password", "refreshToken", "resetPasswordToken"]);
 }
 
+export const getInstructorList = async (): Promise<Pick<IUser, "_id" | "name" | "email" | "role" | "profilePic">[]> => {
+    const instructors = await UserSchema.find({ role: "INSTRUCTOR" })
+        .select("_id name email role profilePic")
+        .lean(); 
+
+    return instructors as Pick<IUser, "_id" | "name" | "email" | "role" | "profilePic">[];
+};
+
+export const getInstructorById = async (instructorId: string): Promise<Pick<IUser, "_id" | "name" | "email" | "role" | "profilePic"> | null> => {
+    const instructor = await UserSchema.findOne(
+      { _id: instructorId, role: "INSTRUCTOR" } 
+    )
+      .select("_id name email role profilePic")
+      .lean();
+  
+    return instructor;
+};
+  
+
 /**
  * Updates the reset password token for a user.
  * 
@@ -126,7 +144,6 @@ export const updateResetToken = async(userId: string, token: string) => {
  */
 export const resetPassword = async(userId: string, token: string, newPassword: string) => {
     const user = await UserSchema.findById(userId);
-    console.log(user);
     if(!user?.resetPasswordToken) {
         throw createHttpError(401, "Token expired or invalid");
     }

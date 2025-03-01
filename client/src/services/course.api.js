@@ -1,13 +1,146 @@
-import { SERVER_URL } from "./api";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { authBaseQuery } from "./api";
 
-// add courses in Admin
-export const addCourseEndpoints = {
-  GET_ALL_CATEGORY: SERVER_URL + `/course/get-all-category`,
-  ADD_COURSES: SERVER_URL + `/course/add-course`,
-  GET_ALL_COURSES: SERVER_URL + `/course/get-all-course`,
-  GET_COURSE_BY_CATEGORY: (categoryId) =>
-    SERVER_URL + `/course/get-category-course/${categoryId}`,
-  GET_FULL_COURSE_DETAILS: (courseId) =>
-    SERVER_URL + `/course/get-full-course-details/${courseId}`,
-  ADD_CATEGORY: SERVER_URL + `course/add-category`,
-};
+export const apiCourse = createApi({
+  reducerPath: "apiCourse",
+  baseQuery: authBaseQuery,
+  endpoints: (builder) => ({
+    // Courses APIs
+    uploadThumbnail: builder.mutation({
+      query: (file) => {
+        const formData = new FormData();
+        formData.append("thumbnail", file);
+        const accessToken = localStorage.getItem("accessToken");
+
+        return {
+          url: "course/thumbnail",
+          method: "POST",
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // Send token in Authorization header
+          },
+          credentials: "include",
+        };
+      },
+    }),
+    uploadBrouchure: builder.mutation({
+      query: (file) => {
+        const formData = new FormData();
+        formData.append("brouchure", file);
+        const accessToken = localStorage.getItem("accessToken");
+
+        return {
+          url: "course/brouchure",
+          method: "POST",
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // Send token in Authorization header
+          },
+          credentials: "include",
+        };
+      },
+    }),
+    uploadDetails: builder.mutation({
+      query: (data) => {
+        return {
+          url: "course/details",
+          method: "POST",
+          body: data,
+          credentials: "include",
+        };
+      },
+    }),
+    uploadAdditionalDetails: builder.mutation({
+      query: ({ data, id }) => {
+        return {
+          url: `course/additional-details/${id}`,
+          method: "PUT",
+          body: data,
+          credentials: "include",
+        };
+      },
+    }),
+    uploadCourseStructure: builder.mutation({
+      query: ({ data, id }) => {
+        return {
+          url: `course/structure/${id}`,
+          method: "PUT",
+          body: data,
+          credentials: "include",
+        };
+      },
+    }),
+    publishCourse: builder.mutation({
+      query: ({ id }) => {
+        return {
+          url: `course/publish/${id}`,
+          method: "POST",
+          credentials: "include",
+        };
+      },
+    }),
+    getDropdownOptions: builder.query({
+      query: (endpoint) => ({
+        url: endpoint,
+        method: "GET",
+        credentials: "include",
+      }),
+    }),
+    getAllCategory: builder.query({
+      query: () => ({
+        url: "course/category",
+        method: "GET",
+      }),
+    }),
+    addCategory: builder.mutation({
+      query: (data) => ({
+        url: "course/category",
+        method: "POST",
+        body: data,
+        credentials: "include"
+      }),
+    }),
+    addCourse: builder.mutation({
+      query: (data) => ({
+        url: "course/add-course",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    getAllCourse: builder.query({
+      query: () => ({
+        url: `course/get-all-course`,
+        method: "GET",
+      }),
+    }),
+    getCategoryCourse: builder.query({
+      query: (categoryId) => ({
+        url: `course/published/${categoryId}`,
+        method: "GET",
+      }),
+    }),
+    getFullCourseDetails: builder.query({
+      query: (courseId) => ({
+        url: `course/all-details/${courseId}`, 
+        method: "GET",
+      }),
+    }),
+  }),
+});
+
+export const {
+  // Courses
+  useUploadThumbnailMutation,
+  useUploadBrouchureMutation,
+  useUploadDetailsMutation,
+  useUploadAdditionalDetailsMutation,
+  useUploadCourseStructureMutation,
+  usePublishCourseMutation,
+  useGetDropdownOptionsQuery,
+  useGetAllCategoryQuery,
+  useAddCategoryMutation,
+  useAddCourseMutation,
+  useGetAllCourseQuery,
+  useGetCategoryCourseQuery,
+  useGetFullCourseDetailsQuery,
+} = apiCourse;

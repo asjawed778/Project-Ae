@@ -26,8 +26,7 @@ export interface ICourse extends BaseSchema {
 
     courseMode: CourseEnum.CourseMode;
 
-    trailerVideo?: string; 
-    studentsEnrolled?: number;
+    trailerVideo?: string;
     
     sections: mongoose.Schema.Types.ObjectId[];
     isDraft: boolean;
@@ -43,11 +42,11 @@ export interface ISection extends BaseSchema {
 
 export interface ISubSection extends BaseSchema {
     title: string;
-    description: string;
-    video: string;
+    video?: string;
+    pdf?: string;
+    image?: string;
     resources?: string[];
     isPreview: boolean;
-    isCompleted: boolean;
 }
 
 export interface IRatingAndReviews extends BaseSchema {
@@ -77,3 +76,4 @@ export interface ICourseLifeCycle extends BaseSchema {
     UNPUBLISHED: mongoose.Schema.Types.ObjectId[];
     TERMINATED: mongoose.Schema.Types.ObjectId[];
 }
+
