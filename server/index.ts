@@ -4,6 +4,7 @@ import morgan from "morgan";
 import http from "http";
 import cookieParser from "cookie-parser";
 import cors from 'cors';
+import fileUpload from "express-fileupload";
 
 import { initDB } from "./app/common/services/database.service";
 import { initPassport } from "./app/common/services/passport-jwt.service";
@@ -29,8 +30,8 @@ const port = Number(process.env.PORT) ?? 5000;
 
 const app: Express = express();
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser());
@@ -39,6 +40,16 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   credentials: true,
 }));
+
+
+app.use(fileUpload({
+  useTempFiles: true,
+  tempFileDir: '/tmp/',
+  limits: { fileSize: 50 * 1024 * 1024 },
+  abortOnLimit: true,
+  safeFileNames: true,
+}));
+
 
 import swaggerDocument from "./app/swagger/swagger";
 

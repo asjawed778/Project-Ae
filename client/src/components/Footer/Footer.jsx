@@ -1,16 +1,16 @@
-import logo from "../../../public/logo.svg";
+import logo from "../../../public/logopng.png";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#1f2737] flex flex-col gap-20 px-4 py-8 md:px-14 md:py-10">
+    <footer className="bg-[#1f2737] flex flex-col gap-7 px-4 py-8 md:px-14 md:py-10">
       {/* Top component */}
       <div className="flex flex-col items-start gap-8 md:flex-row md:items-start md:justify-between md:gap-16 lg:gap-36">
         {/* Logo */}
-        <img src={logo} alt="logo" />
+        <img src={logo} className="w-34 h-12" alt="logo" />
 
         {/* Program Section */}
         <ul className="text-white flex flex-col gap-5 mx-auto text-left">
-          <li className="text-xl font-semibold mb-2">AbilitaEdge Program</li>
+          <li className="text-xl font-semibold mb-2">Praxia Skill Program</li>
           <li>MERN Stack Website</li>
           <li>Android Development</li>
           <li>Frontend Development</li>

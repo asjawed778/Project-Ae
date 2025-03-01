@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { RxCross1 } from "react-icons/rx";
-import { useDispatch } from "react-redux";
+import { toast } from "react-hot-toast";
+// import { useDispatch } from "react-redux";
 
 import ButtonLoading from "../components/Button/ButtonLoading";
-import { resetPassword } from "../services/operations/authApi";
+import { useSendForgotPasswordOtpMutation } from "../services/auth.api";
+// import { resetPassword } from "../services/operations/authApi";
 
 /**
  * ResetPasswordModal Component - Handles resetting the password by sending a reset email.
- * 
+ *
  * @param {Object} props - Component properties.
  * @param {Function} props.setEmail - Function to update the user's email state.
  * @param {boolean} props.resetModal - State to control the visibility of the modal.
@@ -20,9 +22,11 @@ function ResetPasswordModal({
   setResetModal,
   setUpdatePasswordModal,
 }) {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+  const [sendForgotPasswordOtp, { isLoading }] =
+    useSendForgotPasswordOtpMutation();
 
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [userEmail, setUserEmail] = useState({ email: "" });
 
   const isFormValid = userEmail.email.trim() !== "";
@@ -37,18 +41,33 @@ function ResetPasswordModal({
     setUserEmail({ email: e.target.value });
   };
 
-
   /**
    * Handles the form submission to request a password reset.
    * @param {Event} e - Form submission event.
    */
-  const resetPasswordSubmitHandler = (e) => {
+  const resetPasswordSubmitHandler = async (e) => {
     e.preventDefault();
 
-    const { email } = userEmail;
-    setEmail(email);
-    dispatch(resetPassword(userEmail, setResetModal, setUpdatePasswordModal));
-    setUserEmail({ email: "" });
+    try {
+      const { email } = userEmail;
+      setEmail(email);
+      const res = await sendForgotPasswordOtp(userEmail);
+      console.log("reset password result", res)
+      if (res?.error) {
+        throw new Error(JSON.stringify(res.error));
+      }
+      toast.success("Email sent successfully");
+      // to close reset modal
+      // setResetModal(false);
+      // // to invoke otp modal
+      // setUpdatePasswordModal(true);
+      setUserEmail({ email: "" });
+    } catch (err) {
+      const error = JSON.parse(err?.message);
+      if (error.status === 404) {
+        toast.error(error.data.message);
+      }
+    }
   };
 
   return (
@@ -67,16 +86,17 @@ function ResetPasswordModal({
           <RxCross1 size={20} />
         </button>
 
-        <h2 className="text-2xl font-semibold text-center mb-4">
-          Reset Password
-        </h2>
+        <h2 className="text-2xl font-semibold mb-4">Reset Password</h2>
 
         <form className="space-y-4" onSubmit={resetPasswordSubmitHandler}>
-          <div>
+          <div className="flex flex-col gap-1">
+            <label htmlFor="email" className="text-sm font-semibold">
+              Email
+            </label>
             <input
+              id="email"
               type="email"
-              className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500"
-              placeholder="Email"
+              className="w-full px-2 py-1 border outline-0 rounded focus:border-blue-500"
               maxLength="50"
               value={userEmail.email}
               name="email"
@@ -85,14 +105,14 @@ function ResetPasswordModal({
           </div>
 
           <button
-            className={`w-full p-2 rounded-md text-white ${
+            className={`w-full flex justify-center items-center p-2 rounded-md text-white ${
               isFormValid
-                ? "bg-blue-600 hover:bg-blue-700"
+                ? "bg-primary hover:bg-primary-hover"
                 : "bg-gray-400 cursor-not-allowed"
             }`}
             disabled={!isFormValid}
           >
-            {loading ? <ButtonLoading /> : <p>Submit</p>}
+            {isLoading ? <ButtonLoading /> : <p>Submit</p>}
           </button>
         </form>
       </div>
