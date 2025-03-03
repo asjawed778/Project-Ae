@@ -7,11 +7,7 @@ export const apiCourse = createApi({
   endpoints: (builder) => ({
     // Courses APIs
     uploadThumbnail: builder.mutation({
-      query: (file) => {
-        const formData = new FormData();
-        formData.append("thumbnail", file);
-        const accessToken = localStorage.getItem("accessToken");
-
+      query: ({formData, accessToken}) => {
         return {
           url: "course/thumbnail",
           method: "POST",
@@ -24,11 +20,7 @@ export const apiCourse = createApi({
       },
     }),
     uploadBrouchure: builder.mutation({
-      query: (file) => {
-        const formData = new FormData();
-        formData.append("brouchure", file);
-        const accessToken = localStorage.getItem("accessToken");
-
+      query: ({formData, accessToken}) => {
         return {
           url: "course/brouchure",
           method: "POST",

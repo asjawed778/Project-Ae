@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   accessToken: localStorage.getItem("accessToken") || null,
   refreshToken: localStorage.getItem("refreshToken") || null,
-  user: null,
+  user: JSON.parse(localStorage.getItem("user")) || {},  //localstorage only stores string
 };
 
 export const authSlice = createSlice({
@@ -17,13 +17,13 @@ export const authSlice = createSlice({
       state.user = actions.payload.user;
       localStorage.setItem("accessToken", actions.payload.accessToken);
       localStorage.setItem("refreshToken", actions.payload.refreshToken);
+      localStorage.setItem("user", JSON.stringify(actions.payload.user));
     },
     logout: (state, actions) => {
       state.accessToken = null;
       state.refreshToken = null;
       state.user = null;
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
+      localStorage.clear()
     },
   },
 });
