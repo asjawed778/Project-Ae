@@ -4,6 +4,7 @@ import morgan from "morgan";
 import http from "http";
 import cookieParser from "cookie-parser";
 import cors from 'cors';
+import path from "path";
 import fileUpload from "express-fileupload";
 
 import { initDB } from "./app/common/services/database.service";
@@ -28,8 +29,13 @@ declare global {
 
 const port = Number(process.env.PORT) ?? 5000;
 
+
 const app: Express = express();
 
+const clientBuildPath = path.join(__dirname, "../client/dist");
+app.use(express.static(clientBuildPath));
+
+app.use(bodyParser.json());
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(express.json());
@@ -53,6 +59,7 @@ app.use(fileUpload({
 
 import swaggerDocument from "./app/swagger/swagger";
 
+
 const initApp = async (): Promise<void> => {
   // init mongodb
   await initDB();
@@ -72,10 +79,16 @@ const initApp = async (): Promise<void> => {
  
   // error handler
   app.use(errorHandler);
+  app.get("*", (req: Request, res: Response) => {
+    res.sendFile(path.join(clientBuildPath, "index.html"));
+  });
+
   http.createServer(app).listen(port, () => {
     console.log("Server is runnuing on port", port);
     console.log(`Swagger docs available at http://localhost:${port}/api-docs`);
   });
+
+  
 };
 
 void initApp();
