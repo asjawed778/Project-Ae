@@ -124,13 +124,6 @@ function OTPModal({ otpModal, setOtpModal, signupData }) {
     }
   };
 
-  // const otpSubmitHandler = (e) => {
-  //   e.preventDefault();
-  //   const otpValues = otpInputRefs.current.map((ref) => ref.value).join("");
-  //   const userRegisterData = { ...signupData, otp: otpValues };
-  //   dispatch(verifySignupOTP(userRegisterData, setOtpModal, navigate));
-  // };
-
   return (
     <div
       id="otp-modal-overlay"
@@ -174,13 +167,12 @@ function OTPModal({ otpModal, setOtpModal, signupData }) {
         <button
           className={`w-full flex justify-center items-center p-2 rounded-md text-white ${
             isOtpComplete
-              ? "bg-blue-600 hover:bg-blue-700"
+              ? "bg-primary hover:bg-primary-hover"
               : "bg-gray-400 cursor-not-allowed"
           }`}
           disabled={!isOtpComplete}
         >
           {isLoading ? <ButtonLoading /> : <p>Submit</p>}
-          {/* {loading ? <ButtonLoading /> : <p>Submit</p>} */}
         </button>
       </form>
     </div>

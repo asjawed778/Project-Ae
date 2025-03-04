@@ -137,7 +137,6 @@ export default function CourseStructure({
               </button>
             )}
 
-            {/* <div className="bg-white h-5 w-full" /> */}
           </div>
         ))}
 
@@ -161,7 +160,6 @@ export default function CourseStructure({
           <Button onClick={handlePrev}>Previous</Button>
 
           {/* Submit Button */}
-          {/* <Button type="submit">Save and Next</Button> */}
           <Button
             type="submit"
             className={`flex items-center justify-center disabled:bg-gray-400 w-40 ${

@@ -3,12 +3,9 @@
 @import "tailwindcss";
 
 @theme {
-  /* --color-primary: #0766c6;
-  --color-primary-hover: #0a7be0; */
   --color-primary: #ED1C25;
   --color-primary-hover: #F0484E;
   --color-primary-active: #F4767B;
-  /* --color-primary-active: #0555a4; */
   --color-secondary: #0b7077;
   --color-secondary-hover: #0d858d;
   --color-secondary-active: #095a5f;

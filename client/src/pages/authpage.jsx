@@ -1,15 +1,11 @@
 import logo from "../../public/logopng.png";
-// import logo from "../../public/logo.svg";
 import googleImage from "../../public/imgs/google.svg";
 import appleImage from "../../public/imgs/apple.svg";
-// import { FaArrowLeft } from "react-icons/fa";
 import { FaArrowLeft } from "react-icons/fa6";
-import { IoHome } from "react-icons/io5";
 
 
 import { useEffect, useState } from "react";
 
-// import './AuthPage.css';
 import SignupModal from "../modals/SignupModal";
 import OTPModal from "../modals/OTPModals";
 import LoginModal from "../modals/LoginModal";
@@ -55,10 +51,6 @@ function AuthPage({reset=false}) {
 
   return (
     <>
-      {/* <div onClick={() => navigate("/")} className="absolute left-5 top-3 flex gap-2 items-center">
-        <FaArrowLeft className="text-md" />
-        <IoHome className="text-xl" />
-      </div> */}
       <div onClick={() => navigate("/")} className="absolute left-5 top-3 font-semibold flex gap-2 items-center cursor-pointer text-[var(--alt-secondary-color)] hover:text-[var(--secondary-color)]">
         <FaArrowLeft />
         <span className="mb-1">Back to home</span>

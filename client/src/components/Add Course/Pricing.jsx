@@ -121,7 +121,6 @@ export default function Pricing({ currentStep, handleNext, handlePrev, courseId 
         <Button onClick={handlePrev}>Previous</Button>
 
         {/* Submit Button */}
-        {/* <Button type="submit">Submit</Button> */}
         <Button
             type="submit"
             className={`flex items-center justify-center disabled:bg-gray-400 w-40 ${

@@ -43,25 +43,3 @@ const Basic = forwardRef(
 );
 
 export default Basic;
-
-/*
-
-      <InputField
-        id="pdf"
-        type="pdf"
-        placeholder={"Enter PDF"}
-        {...register("pdf")}
-      >
-        Select PDF
-      </InputField>
-
-      <InputField
-        id="image"
-        type="image"
-        placeholder={"Enter Image"}
-        {...register("image")}
-      >
-        Select Image
-      </InputField>
-
-*/
