@@ -3,11 +3,14 @@ import { forwardRef, useEffect, useState } from "react";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { RxCross2 } from "react-icons/rx";
 import { useUploadBrouchureMutation } from "../../services/course.api";
+import { useSelector } from "react-redux";
 
 const Pdf = forwardRef(({ id, onChange =() => {}, setvalue , ...rest }, ref) => {
   const [file, setFile] = useState(null);
   const [pdfUrl, setPdfUrl] = useState(null);
   const [error, setError] = useState("")
+
+  const { accessToken } = useSelector((store) => store.auth);
 
   const [uploadBrouchure, { isLoading, isError, error: uploadError }] =
     useUploadBrouchureMutation();
@@ -15,7 +18,10 @@ const Pdf = forwardRef(({ id, onChange =() => {}, setvalue , ...rest }, ref) => 
 
     const uploadPdf = async (file) => {
       try {
-        const result = await uploadBrouchure(file).unwrap();
+        const formData = new FormData();
+        formData.append("brouchure", file);
+        const result = await uploadBrouchure({formData, accessToken}).unwrap();
+        console.log(result)
         const brouchureUrl = result?.data?.url;
         setvalue("brouchure", brouchureUrl);
       } catch (err) {
@@ -68,7 +74,7 @@ const Pdf = forwardRef(({ id, onChange =() => {}, setvalue , ...rest }, ref) => 
     <div className="group flex items-center gap-5">
       <div className="relative">
         <div className="flex gap-3">
-        <p className="text-green-600">Uploaded: {file?.name}</p>
+        {!isLoading && <p className="text-green-600">Uploaded: {file?.name}</p>}
         <button type="button" onClick={removePdf} className="cursor-pointer ">
           <RxCross2 className="size-5" />
         </button>

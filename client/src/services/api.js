@@ -5,16 +5,25 @@ const baseURL = `${import.meta.env.VITE_BE_URL}/api/`;
 
 export const publicBaseQuery = fetchBaseQuery({
   baseUrl: baseURL,
-  credentials: "include"
+  prepareHeaders: (headers, { getState }) => {
+    const state = getState();
+    const accessToken = state?.auth?.accessToken
+    
+    if (accessToken) {
+      headers.set("Authorization", `Bearer ${accessToken}`);
+    }
+
+    return headers;
+  },
+  credentials: "include",
 });
 
 export const privateBaseQuery = fetchBaseQuery({
   baseUrl: baseURL,
   prepareHeaders: (headers, { getState }) => {
     const state = getState();
-
-    // Skip setting the accessToken for the /refresh-token endpoint
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = state?.auth?.accessToken
+    
     if (accessToken) {
       headers.set("Authorization", `Bearer ${accessToken}`);
     }
