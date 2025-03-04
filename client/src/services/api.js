@@ -5,16 +5,25 @@ const baseURL = `${import.meta.env.VITE_BE_URL}/api/`;
 
 export const publicBaseQuery = fetchBaseQuery({
   baseUrl: baseURL,
-  credentials: "include"
+  prepareHeaders: (headers, { getState }) => {
+    const state = getState();
+    const accessToken = state?.auth?.accessToken
+    
+    if (accessToken) {
+      headers.set("Authorization", `Bearer ${accessToken}`);
+    }
+
+    return headers;
+  },
+  credentials: "include",
 });
 
 export const privateBaseQuery = fetchBaseQuery({
   baseUrl: baseURL,
   prepareHeaders: (headers, { getState }) => {
     const state = getState();
-
-    // Skip setting the accessToken for the /refresh-token endpoint
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = state?.auth?.accessToken
+    
     if (accessToken) {
       headers.set("Authorization", `Bearer ${accessToken}`);
     }
@@ -31,21 +40,4 @@ export const authBaseQuery = async (args, api, extraOptions) => {
   }
 
   return result;
-
-  // import axios from "axios";
-  // import Cookies from "js-cookie";
-
-  // export const token = Cookies.get("token");
-  // export const SERVER_URL = `${import.meta.env.VITE_BE_URL}/api/v1`;
-  // export const axiosInstance = axios.create({});
-
-  // export const apiConnector = (method, url, bodyData, headers, params) => {
-  //   return axiosInstance({
-  //     method: `${method}`,
-  //     url: `${url}`,
-  //     data: bodyData ? bodyData : null,
-  //     headers: headers ? headers : null,
-  //     params: params ? params : null,
-  //   });
-  // };
 };

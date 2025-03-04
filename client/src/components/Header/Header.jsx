@@ -8,7 +8,6 @@ import { toast } from "react-hot-toast";
 import { logout } from "../../store/reducers/authReducer";
 import HamNavbar from "./HamNavbar";
 import { useLogoutMutation } from "../../services/auth.api";
-// import { logoutUser } from "../../services/operations/authApi";
 
 export default function Header() {
   const { accessToken } = useSelector((store) => store.auth);
@@ -19,9 +18,8 @@ export default function Header() {
 
   const handleLogout = async () => {
     try {
-      const accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
-        throw new Error("No access token found.");
+        localStorage.clear();
       }
 
       const result = await logoutUser(accessToken);
@@ -32,9 +30,9 @@ export default function Header() {
       toast.success("Logged out successfully");
       navigate("/");
     } catch (err) {
+      console.log(err)
       const error = JSON.parse(err?.message);
-      // toast.error(error.data.message);
-      console.error(error?.data.message);
+      toast.error(error.data.message);
     }
   };
 
@@ -88,8 +86,8 @@ export default function Header() {
               </Link>
             )}
 
-            <a href="tel:+919876543210" className="cursor-pointer">
-              +91 9876543210
+            <a href="tel:+919123735554" className="cursor-pointer">
+              +91 91237 35554
             </a>
           </div>
         </div>

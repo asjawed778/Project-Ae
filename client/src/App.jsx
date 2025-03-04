@@ -17,7 +17,6 @@ const HomePage = lazy(() => import("./pages/Home page/homepage"));
 const BlogPage = lazy(() => import("./pages/Blog/landingpage"));
 const AdminPage = lazy(() => import("./pages/Admin/adminpage"));
 const CourseLandingPage = lazy(() => import("./pages/Course/landingpage"));
-// const UserPostPage = lazy(() => import("./pages/Post/userpostpage"))
 const SinglePost = lazy(() => import("./pages/Single_Post/landingpage"));
 const AddCourse = lazy(() => import("./pages/Admin/Course/index"));
 const ManageCourse = lazy(() => import("./pages/Admin/Course/ManageCourse"));
@@ -51,14 +50,7 @@ function App() {
               </LazyComponent>
             }
           />
-          {/* <Route
-            path="/user"
-            element={
-              <LazyComponent>
-                <UserPostPage />
-              </LazyComponent>
-            }
-          /> */}
+        
           <Route
             path="/course/:id"
             element={

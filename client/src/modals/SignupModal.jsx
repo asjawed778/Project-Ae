@@ -15,7 +15,6 @@ import { useDispatch } from "react-redux";
 
 import ButtonLoading from "../components/Button/ButtonLoading";
 import { useSendSignupOtpMutation } from "../services/auth.api";
-// import { sendSignupOTP } from "../services/operations/authApi";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signupSchema } from "../utils/formValidationSchema";
@@ -56,8 +55,6 @@ function SignupModal({
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  // const [loading, setLoading] = useState(false);
 
   if (!signupModal) return null;
 
@@ -204,12 +201,10 @@ function SignupModal({
               <Button
                 type="submit"
                 disabled={isLoading}
-                // disabled={loading}
                 className={`flex items-center justify-center gap-2 py-2 h-8 w-full  text-xs text-white rounded-md  disabled:bg-gray-400 ${
                   isLoading && "cursor-not-allowed"
                 } cursor-pointer`}
               >
-                {/* {loading ? <><ButtonLoading /> </> : "Register"} */}
                 {isLoading ? (
                   <>
                     <ButtonLoading />{" "}

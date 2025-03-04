@@ -1,4 +1,3 @@
-import backgroundImage from "../../../public/imgs/slider/Artboard.png";
 import backgroundVideo from "../../../public/video/background_video.mp4"
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -40,16 +39,6 @@ function HomePage() {
       animate="visible"
       variants={containerVariants}
     >
-      {/* Main Section */}
-      {/* <motion.div
-        style={{
-          backgroundImage: `url(${backgroundImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-        className="w-full flex flex-col md:flex-row items-center justify-around p-4"
-        variants={itemVariants}
-      > */}
       <motion.div className="relative w-full flex flex-col md:flex-row items-center justify-around p-4">
         {/* Background Video */}
         <video

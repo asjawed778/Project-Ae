@@ -89,7 +89,7 @@ export default function Carousal() {
 
       <div className="relative w-[80%]">
         <hr className="border-gray-200" />
-        {coursesAll.length !== 0 && (
+        {coursesAll?.length !== 0 && (
           <Link
             to="/course"
             className="absolute right-0 -top-3 font-bold text-xs text-[var(--color-primary)] bg-white px-5"
@@ -101,7 +101,7 @@ export default function Carousal() {
 
       {/* Scrollable Course Cards */}
       {!(allCategoriesLoader || categoriesCourseLoader) ? (
-        <div className="flex items-center flex-wrap md:flex-nowrap gap-5 p-4 mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-10 p-4 mx-auto md:mx-0">
           {coursesAll?.map((course, index) => (
             <Link
               key={index}

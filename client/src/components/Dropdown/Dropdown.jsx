@@ -2,7 +2,7 @@ import { forwardRef, useState } from "react";
 import { useGetDropdownOptionsQuery } from "../../services/course.api";
 import { ImSpinner2 } from "react-icons/im";
 
-const Dropdown = forwardRef(({ endpoint, label, required, placeholder = "Select an option", className = "", ...rest }, ref) => {
+const Dropdown = forwardRef(({ endpoint, label, required,showLabel=true , placeholder = "Select an option", className = "", ...rest }, ref) => {
   const [fetchData, setFetchData] = useState(false);
   const { data: options, error, isLoading } = useGetDropdownOptionsQuery(endpoint, { skip: !fetchData });
 
@@ -12,11 +12,11 @@ const Dropdown = forwardRef(({ endpoint, label, required, placeholder = "Select 
 
   return (
     <div className="relative">
-      <label className="block mb-1.5">
+      {showLabel && <label className="block mb-2">
         {label} {required && <span className="text-red-600">*</span>}
-      </label>
+      </label>}
       <select
-        className={`mt-1 block w-full p-2 border bg-white border-gray-300 rounded-md focus:outline-none ${className}`}
+        className={`block p-2 border bg-white border-gray-300 rounded-md focus:outline-none ${className}`}
         onClick={handleClick} // Trigger API call
         ref={ref} // Accept ref for react-hook-form
         {...rest}
