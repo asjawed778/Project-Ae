@@ -1,11 +1,9 @@
 import { useState } from "react";
 import { RxCross1 } from "react-icons/rx";
 import { toast } from "react-hot-toast";
-// import { useDispatch } from "react-redux";
 
 import ButtonLoading from "../components/Button/ButtonLoading";
 import { useSendForgotPasswordOtpMutation } from "../services/auth.api";
-// import { resetPassword } from "../services/operations/authApi";
 
 /**
  * ResetPasswordModal Component - Handles resetting the password by sending a reset email.
@@ -22,11 +20,9 @@ function ResetPasswordModal({
   setResetModal,
   setUpdatePasswordModal,
 }) {
-  // const dispatch = useDispatch();
   const [sendForgotPasswordOtp, { isLoading }] =
     useSendForgotPasswordOtpMutation();
 
-  // const [loading, setLoading] = useState(false);
   const [userEmail, setUserEmail] = useState({ email: "" });
 
   const isFormValid = userEmail.email.trim() !== "";
@@ -57,10 +53,6 @@ function ResetPasswordModal({
         throw new Error(JSON.stringify(res.error));
       }
       toast.success("Email sent successfully");
-      // to close reset modal
-      // setResetModal(false);
-      // // to invoke otp modal
-      // setUpdatePasswordModal(true);
       setUserEmail({ email: "" });
     } catch (err) {
       const error = JSON.parse(err?.message);

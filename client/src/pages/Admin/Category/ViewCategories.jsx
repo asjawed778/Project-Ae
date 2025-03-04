@@ -1,31 +1,21 @@
 import { useEffect, useState } from "react";
 
-// import { getAllCategory } from "../../../services/operations/addCourses";
 import { useDispatch, useSelector } from "react-redux";
 import { setCategories } from "../../../store/reducers/adminCategoryReducer";
 import { useGetAllCategoryQuery } from "../../../services/course.api";
 import Button from "../../../components/Button/Button";
 
 const ViewCategories = () => {
-  // const [loading, setLoading] = useState(true);
   const { data: allCategories, isLoading, error } = useGetAllCategoryQuery();
   const dispatch = useDispatch();
 
   const categories = useSelector((state) => state.categories.categories);
-  console.log("categories", categories)
-  console.log("cats", allCategories)
 
   useEffect(() => {
     if (allCategories?.success) {
       dispatch(setCategories(allCategories?.data || []));
     }
   }, [allCategories]);
-  // useEffect(() => {
-  //   setLoading(true);
-  //   const result = getAllCategory();
-  //   result(dispatch);
-  //   setLoading(false);
-  // }, []);
 
   return (
     <div className="p-6 max-w-6xl mx-auto">

@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import HambergIcon from "../../../public/imgs/slider/menu.png";
 import { useState } from "react";
 import { FiHome } from "react-icons/fi";
 import { HiOutlineDesktopComputer } from "react-icons/hi";

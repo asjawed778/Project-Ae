@@ -10,9 +10,7 @@ import coursesReducer from "./reducers/coursesReducer";
 
 // Importing Apis
 import { apiAuth } from "../services/auth.api";
-import { apiComment } from "../services/comment.api";
 import { apiCourse } from "../services/course.api";
-import { apiPost } from "../services/post.api";
 
 // Persist configuration
 const persistConfig = {
@@ -24,15 +22,10 @@ const persistConfig = {
 // Combine all the reducers
 const rootReducer = combineReducers({
   auth: authReducer,
-  // posts: postReducer,
-  // userposts: userPostReducer,
-  // comments: commentReducer,
   categories: adminCategoryReducer,
   courses: coursesReducer,
   [apiAuth.reducerPath]: apiAuth.reducer,
-  // [apiComment.reducerPath]: apiComment.reducer,
   [apiCourse.reducerPath]: apiCourse.reducer,
-  // [apiPost.reducerPath]: apiPost.reducer,
 });
 
 // Create a persisted reducer
@@ -48,9 +41,7 @@ export const store = configureStore({
       },
     }).concat(
       apiAuth.middleware,
-      // apiComment.middleware,
       apiCourse.middleware,
-      // apiPost.middleware
     ),
 });
 
