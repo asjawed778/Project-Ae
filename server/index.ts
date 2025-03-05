@@ -12,7 +12,7 @@ import { initPassport } from "./app/common/services/passport-jwt.service";
 import { loadConfig } from "./app/common/helper/config.hepler";
 import { type IUser } from "./app/user/user.dto";
 import errorHandler from "./app/common/middleware/error-handler.middleware";
-import routes from "./app/routes";
+import routes from "./app/routes"; 
 import swaggerUi from "swagger-ui-express";
 import apiLimiter from "./app/common/middleware/rate-limit.middleware";
  
@@ -79,6 +79,8 @@ const initApp = async (): Promise<void> => {
  
   // error handler
   app.use(errorHandler);
+
+  // serve client build files test
   app.get("*", (req: Request, res: Response) => {
     res.sendFile(path.join(clientBuildPath, "index.html"));
   });

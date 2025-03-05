@@ -49,9 +49,7 @@ export const getAllCourseCategory = async () => {
 };
 
 export const getCourseCategoryById = async (categoryId: string) => {
-    console.log(categoryId);
     const result = await courseCategorySchema.findById(categoryId);
-    console.log(result)
     if (!result) {
         throw createHttpError(404, "Course category not found");
     }
