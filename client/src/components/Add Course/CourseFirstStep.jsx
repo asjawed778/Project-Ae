@@ -92,7 +92,7 @@ const CourseFirstStep = ({ currentStep, handleNext, handlePrev, setCourseId }) =
               <option value="">Select Language</option>
               <option value="HINDI">Hindi</option>
               <option value="ENGLISH">English</option>
-              <option value="HINGLISH">Hindi + English</option>
+              <option value="ENGLISH_HINDI">Hindi + English</option>
             </select>
             {errors?.language && (
               <p className="text-red-600 text-xs ml-1 -mt-1.5">
