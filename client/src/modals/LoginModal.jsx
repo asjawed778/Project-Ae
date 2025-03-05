@@ -2,11 +2,10 @@ import logo from "../../public/logopng.png";
 import google from "../../public/imgs/google.svg";
 import apple from "../../public/imgs/apple.svg";
 
-import { RxCross1, RxCross2 } from "react-icons/rx";
+import { RxCross2 } from "react-icons/rx";
 import { FiEye } from "react-icons/fi";
 import { FiEyeOff } from "react-icons/fi";
 
-import Cookies from "js-cookie";
 import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
@@ -73,8 +72,6 @@ function LoginModal({
         const user = res.data.data.user;
 
         dispatch(loginReducer({ accessToken, refreshToken, user }));
-        // Cookies.set("accessToken", accessToken, { expires: 7 }); // Token valid for 7 days
-        // Cookies.set("refreshToken", refreshToken, { expires: 7 }); // Token valid for 7 days
         toast.success("User Login successfully");
         navigate("/");
         reset();

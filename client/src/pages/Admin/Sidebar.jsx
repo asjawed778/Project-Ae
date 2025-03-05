@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import HambergIcon from "../../../public/imgs/slider/menu.png";
 import { useState } from "react";
 import { FiHome } from "react-icons/fi";
 import { HiOutlineDesktopComputer } from "react-icons/hi";
@@ -11,6 +10,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import { IoMdArrowForward } from "react-icons/io";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { RxCross2 } from "react-icons/rx";
+import { FaQuestion } from "react-icons/fa";
 
 const sections = [
   {
@@ -18,19 +18,20 @@ const sections = [
     icon: <HiOutlineDesktopComputer />,
     links: [
       { url: "/admin/add-course", label: "Add Course", icon: <FiUpload /> },
-      { url: "/admin/manage-course", label: "Manage Courses", icon: <BsFillPersonCheckFill /> },
-      { url: "/admin/view-course", label: "View Courses", icon: <FaEye /> },
+      { url: "/admin/manage-course", label: "Courses", icon: <FaEye /> },
+      { url: "/admin/add-category", label: "Category", icon: <BsFillPersonCheckFill /> },
+      { url: "/admin/", label: "Enquiry", icon: <FaQuestion /> },
     ],
   },
-  {
-    name: "category",
-    icon: <MdOutlineDashboard />,
-    links: [
-      { url: "/admin/add-category", label: "Add Category", icon: <FiUpload /> },
-      { url: "/admin/manage-categories", label: "Manage Categories", icon: <BsFillPersonCheckFill /> },
-      { url: "/admin/view-categories", label: "View Categories", icon: <FaEye /> },
-    ],
-  },
+  // {
+  //   name: "category",
+  //   icon: <MdOutlineDashboard />,
+  //   links: [
+  //     { url: "/admin/add-category", label: "Add Category", icon: <FiUpload /> },
+  //     { url: "/admin/manage-categories", label: "Manage Categories", icon: <BsFillPersonCheckFill /> },
+  //     { url: "/admin/view-categories", label: "View Categories", icon: <FaEye /> },
+  //   ],
+  // },
 ];
 
 

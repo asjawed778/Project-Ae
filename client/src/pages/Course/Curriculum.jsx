@@ -5,7 +5,6 @@ import { ImFilesEmpty } from "react-icons/im";
 import { useEffect, useState } from "react";
 import Button from "../../components/Button/Button";
 export default function Curriculum({ specificCourse }) {
-  // console.log("specific", specificCourse)
   const [expandedLessons, setExpandedLessons] = useState({});
   const [lessonsData, setLessonsData] = useState([]);
 
@@ -18,7 +17,7 @@ export default function Curriculum({ specificCourse }) {
   };
 
   function courseData() {
-    return specificCourse?.sections.map((section) => ({
+    return specificCourse?.sections?.map((section) => ({
       title: section.title,
       description: section.description,
       totalLessons: section.subSections.length,

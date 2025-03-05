@@ -2,7 +2,6 @@ import { RxCross2 } from "react-icons/rx";
 
 import { toast } from "react-hot-toast";
 import { useEffect, useRef, useState } from "react";
-// import { useDispatch } from "react-redux";
 
 import ButtonLoading from "../components/Button/ButtonLoading";
 import { useResetPasswordMutation } from "../services/auth.api";
@@ -12,7 +11,6 @@ import { resetPasswordSchema } from "../utils/formValidationSchema";
 import { useNavigate, useParams } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
-// import { updatePassword } from "../services/operations/authApi";
 
 /**
  * UpdatePasswordModal Component
