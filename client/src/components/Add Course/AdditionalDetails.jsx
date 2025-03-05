@@ -4,7 +4,7 @@ import required from "../../../public/imgs/required.svg";
 
 import { useFieldArray, useForm, Controller } from "react-hook-form";
 
-import { CKEditor } from "@ckeditor/ckeditor5-react";
+import JoditEditor from "jodit-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 import InputField from "../Input Field";
@@ -16,6 +16,7 @@ import { RxCross2 } from "react-icons/rx";
 import { FaPlus } from "react-icons/fa6";
 import { useUploadAdditionalDetailsMutation } from "../../services/course.api";
 import ButtonLoading from "../Button/ButtonLoading";
+
 
 export default function AdditionalDetails({
   currentStep,
@@ -67,17 +68,17 @@ export default function AdditionalDetails({
     appendKeypoint("");
   };
 
-  const onSubmit = async(formData) => {
+  const onSubmit = async (formData) => {
     try {
-      const {tags} = formData
+      const { tags } = formData
       const newTags = tags.map((tag) => tag.value)
 
-      const data = {...formData, tags:newTags};
-      console.log("submitted data", data) 
+      const data = { ...formData, tags: newTags };
+      console.log("submitted data", data)
       const id = `${courseId}`;
-      const result = await uploadAdditionalDetails({data, id});
+      const result = await uploadAdditionalDetails({ data, id });
       console.log("Result after submitting Second Step:", result);
-      if (result?.error) {   
+      if (result?.error) {
         throw new Error(result.error.data.message);
       }
       handleNext();
@@ -206,16 +207,22 @@ export default function AdditionalDetails({
             <Controller
               name="description"
               control={control}
-              render={({ field }) => (
-                <CKEditor
-                  editor={ClassicEditor}
-                  data={field.value}
-                  onChange={(event, editor) => field.onChange(editor.getData())}
-                  config={{
-                    licenseKey: license_key,
-                  }}
-                />
-              )}
+              render={({ field }) => {
+                const editor = useRef(null);
+                return (
+                  <JoditEditor
+                    ref={editor}
+                    value={field.value}
+                    onBlur={(newContent) => field.onChange(newContent)}
+                    onChange={() => { }}
+                    config={{
+                      minHeight: 350,
+                      width: "100%",
+                      placeholder: "Start typing here...",
+                    }}
+                  />
+                );
+              }}
             />
           </div>
           {errors?.description && (
@@ -296,13 +303,12 @@ export default function AdditionalDetails({
         <Button onClick={handlePrev}>Previous</Button>
         {/* <Button type="submit">Save and Next</Button> */}
         <Button
-            type="submit"
-            className={`flex items-center justify-center disabled:bg-gray-400 w-40 ${
-              isLoading && "cursor-not-allowed"
+          type="submit"
+          className={`flex items-center justify-center disabled:bg-gray-400 w-40 ${isLoading && "cursor-not-allowed"
             }`}
-          >
-            {isLoading ? <ButtonLoading /> : <p>Save and Next</p>}
-          </Button>
+        >
+          {isLoading ? <ButtonLoading /> : <p>Save and Next</p>}
+        </Button>
       </div>
     </form>
   );
