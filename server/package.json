@@ -1,6 +1,7 @@
 {
   "name": "template",
   "private": true,
+  "homepage": "/",
   "scripts": {
     "local": "nodemon",
     "start": "cross-env NODE_ENV=local ts-node ./index.ts",
