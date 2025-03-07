@@ -11,7 +11,8 @@
     "lint:fix": "eslint --fix --ext .js,.ts .",
     "format": "prettier . -w",
     "format:check": "prettier . --check",
-    "postinstall": "husky install"
+    "postinstall": "husky install",
+    "prepare": "husky install"
   },
   "lint-staged": {
     "**/*.{js,ts}": [

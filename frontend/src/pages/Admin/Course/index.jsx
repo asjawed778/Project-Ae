@@ -1,11 +1,11 @@
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import Button from "../../../components/Button/Button";
-import CourseDetails from "../../../components/Add Course/AdditionalDetails";
-import CourseFirstStep from "../../../components/Add Course/CourseFirstStep";
-import CourseStructure from "../../../components/Add Course/CourseStructure";
-import CourseContent from "../../../components/Add Course/CourseContent";
-import Pricing from "../../../components/Add Course/Pricing";
+import AdditionalDetails from "./Add Course/AdditionalDetails";
+import CourseFirstStep from "./Add Course/CourseFirstStep";
+import CourseStructure from "./Add Course/CourseStructure";
+import CourseContent from "./Add Course/CourseContent";
+import Pricing from "./Add Course/Pricing";
 
 const AddCourse = () => {
   const [courseId, setCourseId] = useState(null);
@@ -106,7 +106,7 @@ const AddCourse = () => {
           </div>
         )}
         {currentStep === 2 && (
-          <CourseDetails
+          <AdditionalDetails
             currentStep={currentStep}
             handleNext={handleNext}
             handlePrev={handlePrev}

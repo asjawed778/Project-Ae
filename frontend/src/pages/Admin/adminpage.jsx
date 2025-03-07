@@ -1,4 +1,4 @@
-import AddCourse from "./Course/AddCourse";
+// import AddCourse from "./Course/AddCourse";
 
 const adminpage = () => {
   return (
