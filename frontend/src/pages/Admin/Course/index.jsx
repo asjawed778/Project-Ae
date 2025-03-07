@@ -18,25 +18,11 @@ const AddCourse = () => {
     formState: { errors },
   } = useForm();
 
-  const inputRef = useRef(null);
-  const handleDobFocus = () => {
-    if (inputRef.current) {
-      inputRef.current.showPicker(); // Native API to show the picker
-    }
-  };
+ 
 
   const onSubmit = (data) => {
     console.log("Form data: ", data);
   };
-
-  //   const handleFileChange = (e) => {
-  //     const file = e.target.files[0];
-  //     if (file) {
-  //       setFileName(file.name);
-  //     } else {
-  //       setFileName("");
-  //     }
-  //   };
 
   const handleNext = async () => {
     const isValid = await trigger();
