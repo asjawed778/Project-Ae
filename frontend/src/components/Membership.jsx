@@ -1,4 +1,4 @@
-import girl1 from "../../public/imgs/girl1.png";
+import girl1 from "/imgs/girl1.png";
 
 export default function Membership() {
   return (

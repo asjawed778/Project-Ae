@@ -1,5 +1,5 @@
-import user from "../../public/imgs/slider/user_icon2.png";
-import clock from "../../public/imgs/slider/language2.png";
+import user from "/imgs/slider/user_icon2.png";
+import clock from "/imgs/slider/language2.png";
 
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";

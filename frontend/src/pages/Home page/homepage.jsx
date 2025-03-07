@@ -1,4 +1,4 @@
-import backgroundVideo from "../../../public/video/background_video.mp4"
+import backgroundVideo from "/video/background_video.mp4"
 import { useState } from "react";
 import { motion } from "framer-motion";
 import BookDemoClass from "../Course/BookDemoClass";

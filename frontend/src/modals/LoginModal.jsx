@@ -1,6 +1,6 @@
-import logo from "../../public/logopng.png";
-import google from "../../public/imgs/google.svg";
-import apple from "../../public/imgs/apple.svg";
+import logo from "/logopng.png";
+import google from "/imgs/google.svg";
+import apple from "/imgs/apple.svg";
 
 import { RxCross2 } from "react-icons/rx";
 import { FiEye } from "react-icons/fi";
